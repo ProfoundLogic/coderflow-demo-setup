@@ -7,7 +7,7 @@
     {
       "name": "ibmi-agentic",
       "url": "https://github.com/ProfoundLogic/ibmi-agentic.git",
-      "branch": "master",
+      "branch": "main",
       "allow_branch_selection": true,
       "remote_provider": {
         "provider": "github-coderflow-demo-server",
