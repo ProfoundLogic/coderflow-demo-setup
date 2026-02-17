@@ -1,0 +1,33 @@
+setup.json
+
+# Secrets and credentials
+.secrets.json
+*.secrets.json
+oidc.json
+jira.json
+license.json
+smtp-config.json
+.env
+# Task data
+tasks/
+
+# Agent configurations (credentials)
+.claude/
+.claude.json
+.claude.json.backup
+.codex/
+.gemini/
+.gemini.json
+
+# Dependencies and caches
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+.temp*
+
+# Generated Dockerfiles
+**/Dockerfile
+

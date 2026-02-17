@@ -1,0 +1,59 @@
+{
+  "name": "ibmi-agentic",
+  "description": "IBM i agentic coding test environment",
+  "image_name": "ibmi-development",
+  "default_agent": "claude",
+  "repos": [
+    {
+      "name": "ibmi-agentic",
+      "url": "https://github.com/ProfoundLogic/ibmi-agentic.git",
+      "branch": "master",
+      "allow_branch_selection": true,
+      "remote_provider": {
+        "provider": "github-coderflow-demo-server",
+        "credential_mode": "app"
+      },
+      "clone_auto": true,
+      "description": "Example repo for traditional 5250 and RPGOA development"
+    }
+  ],
+  "docker_config": {
+    "pre_clone_instructions": "",
+    "post_clone_instructions": "# Run touch-only build to create dummy build files.\nRUN cd /workspace/ibmi-agentic && \\\n    CODERMAKE_LICENSE_PATH=/home/coder/.codermake/license.json IBMI_BUILD_LIBRARY=container_setup_build IBMI_HOST=dummy IBMI_USER=dummy codermake -t && \\\n    chown -R coder:coder /workspace"
+  },
+  "screenRenderUrl": "https://idev.profoundlogic.com:8103/profoundui/genie",
+  "application_server": {
+    "enabled": true,
+    "name": "Genie",
+    "proxy": "https://idev.profoundlogic.com:8103",
+    "basic_auth": {
+      "user_property": "ibmi_dev_user",
+      "password_property": "ibmi_dev_password"
+    },
+    "proxy_headers": {
+      "X-Agentic-Task-Lib": "${IBMI_BUILD_LIBRARY}"
+    },
+    "launch_urls": [
+      {
+        "name": "Genie",
+        "path": "/profoundui/auth/genie",
+        "description": "Profound UI Genie"
+      },
+      {
+        "name": "Genie (Classic 5250 Skin)",
+        "path": "/profoundui/auth/genie?skin=classic",
+        "description": "Profound UI Genie with Classic 5250 Skin"
+      }
+    ],
+    "qa_url": "https://idev.profoundlogic.com:8103"
+  },
+  "rebuild_schedule": {
+    "enabled": true,
+    "interval_hours": 24
+  },
+  "skills": [
+    "ibmi-interactive-session",
+    "sql",
+    "codermake"
+  ]
+}

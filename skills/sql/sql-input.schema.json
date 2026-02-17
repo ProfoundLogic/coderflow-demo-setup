@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/profoundlogic/aitool/schemas/sql-input.schema.json",
+  "type": "object",
+  "title": "SQL Tool Input",
+  "description": "Input parameters for executing SQL statements",
+  "properties": {
+    "connection": {
+      "type": "string",
+      "description": "Named connection from config file (optional, uses defaultConnection if omitted)",
+      "examples": [
+        "dev-ibmi",
+        "prod-ibmi"
+      ]
+    },
+    "sql": {
+      "type": "string",
+      "description": "SQL query to execute (required)",
+      "minLength": 1,
+      "examples": [
+        "SELECT * FROM customers",
+        "SELECT * FROM orders WHERE id = ?",
+        "INSERT INTO logs (message) VALUES (?)",
+        "UPDATE customers SET status = ? WHERE id = ?",
+        "DELETE FROM temp_table WHERE created < ?"
+      ]
+    },
+    "format": {
+      "type": "string",
+      "enum": [
+        "json",
+        "table"
+      ],
+      "default": "json",
+      "description": "Output format (optional, default: json)"
+    },
+    "params": {
+      "type": "array",
+      "description": "Parameter values for ? markers in SQL (optional)",
+      "items": {},
+      "examples": [
+        [123],
+        [123, "active"],
+        ["2025-01-01", "2025-12-31"],
+        ["John Doe", "john@example.com", true]
+      ]
+    },
+    "quiet": {
+      "type": "boolean",
+      "default": false,
+      "description": "Suppress progress output (optional, default: false)"
+    },
+    "timeout": {
+      "type": "number",
+      "default": 30000,
+      "minimum": 1000,
+      "maximum": 600000,
+      "description": "Query timeout in milliseconds (optional, default: 30000, max: 600000)"
+    }
+  },
+  "required": [
+    "sql"
+  ],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "sql": "SELECT * FROM QIWS.QCUSTCDT"
+    },
+    {
+      "connection": "dev-ibmi",
+      "sql": "SELECT * FROM customers WHERE id = ?",
+      "params": [123]
+    },
+    {
+      "sql": "SELECT * FROM orders",
+      "format": "table",
+      "quiet": true
+    },
+    {
+      "connection": "dev-ibmi",
+      "sql": "SELECT * FROM customers WHERE created > ? AND status = ?",
+      "params": ["2025-01-01", "A"],
+      "timeout": 60000
+    }
+  ]
+}

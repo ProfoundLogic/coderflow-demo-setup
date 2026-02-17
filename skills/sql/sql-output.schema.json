@@ -1,0 +1,259 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/profoundlogic/aitool/schemas/sql-output.schema.json",
+  "type": "object",
+  "title": "SQL Tool Output",
+  "description": "Output from SQL statement execution",
+  "oneOf": [
+    {
+      "type": "object",
+      "title": "Success Response",
+      "description": "Successful SQL execution result",
+      "required": [
+        "success",
+        "data",
+        "metadata"
+      ],
+      "properties": {
+        "success": {
+          "const": true,
+          "description": "Indicates successful execution"
+        },
+        "data": {
+          "type": "object",
+          "description": "Query result data",
+          "required": [
+            "rows",
+            "rowCount",
+            "fields"
+          ],
+          "properties": {
+            "rows": {
+              "type": "array",
+              "description": "Query result rows (array of objects)",
+              "items": {
+                "type": "object"
+              },
+              "examples": [
+                [
+                  {
+                    "CUSNUM": 123,
+                    "LSTNAM": "Doe",
+                    "CITY": "Dallas"
+                  },
+                  {
+                    "CUSNUM": 456,
+                    "LSTNAM": "Smith",
+                    "CITY": "Houston"
+                  }
+                ]
+              ]
+            },
+            "rowCount": {
+              "type": "integer",
+              "description": "Number of rows returned",
+              "minimum": 0,
+              "examples": [
+                0,
+                1,
+                100
+              ]
+            },
+            "fields": {
+              "type": "array",
+              "description": "Field metadata for each column",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "type"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Field name",
+                    "examples": [
+                      "CUSNUM",
+                      "LSTNAM",
+                      "CITY"
+                    ]
+                  },
+                  "type": {
+                    "type": "string",
+                    "description": "Field type (provider-specific)",
+                    "examples": [
+                      "CHAR",
+                      "VARCHAR",
+                      "DECIMAL",
+                      "INTEGER",
+                      "DATE",
+                      "TIMESTAMP"
+                    ]
+                  },
+                  "length": {
+                    "type": "integer",
+                    "description": "Field length (for string and decimal types)",
+                    "minimum": 0,
+                    "examples": [
+                      8,
+                      15,
+                      255
+                    ]
+                  },
+                  "scale": {
+                    "type": "integer",
+                    "description": "Decimal scale (for decimal types)",
+                    "minimum": 0,
+                    "examples": [
+                      0,
+                      2,
+                      4
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "metadata": {
+          "type": "object",
+          "description": "Execution metadata",
+          "required": [
+            "executionTime",
+            "provider",
+            "timestamp"
+          ],
+          "properties": {
+            "executionTime": {
+              "type": "integer",
+              "description": "Query execution time in milliseconds",
+              "minimum": 0,
+              "examples": [
+                145,
+                523,
+                1250
+              ]
+            },
+            "provider": {
+              "type": "string",
+              "description": "Database provider used",
+              "examples": [
+                "ibmi",
+                "mssql",
+                "postgres",
+                "mysql"
+              ]
+            },
+            "timestamp": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Execution timestamp (ISO 8601 format)",
+              "examples": [
+                "2025-01-15T10:30:00Z",
+                "2025-10-16T14:25:30.123Z"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "title": "Error Response",
+      "description": "Error response from SQL execution",
+      "required": [
+        "success",
+        "error"
+      ],
+      "properties": {
+        "success": {
+          "const": false,
+          "description": "Indicates execution failure"
+        },
+        "error": {
+          "type": "object",
+          "description": "Error details",
+          "required": [
+            "code",
+            "message"
+          ],
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "Error code indicating the type of error that occurred",
+              "enum": [
+                "INPUT_PARSE_ERROR",
+                "INPUT_VALIDATION_ERROR",
+                "INPUT_MISSING_REQUIRED",
+                "INPUT_INVALID_TYPE",
+                "INPUT_INVALID_VALUE",
+                "CONFIG_FILE_NOT_FOUND",
+                "CONFIG_PARSE_ERROR",
+                "CONFIG_VALIDATION_ERROR",
+                "CONFIG_MISSING_CONNECTION",
+                "CONFIG_INVALID_REFERENCE",
+                "CONFIG_MUTUALLY_EXCLUSIVE",
+                "CONFIG_MISSING_REQUIRED",
+                "CONFIG_INVALID_DEFAULT",
+                "CONNECTION_FAILED",
+                "CONNECTION_REFUSED",
+                "CONNECTION_HOST_UNREACHABLE",
+                "CONNECTION_NETWORK_ERROR",
+                "CONNECTION_SSL_ERROR",
+                "CONNECTION_CLOSED",
+                "SQL_SYNTAX_ERROR",
+                "SQL_EXECUTION_ERROR",
+                "SQL_OBJECT_NOT_FOUND",
+                "SQL_CONSTRAINT_VIOLATION",
+                "SQL_PARAMETER_ERROR",
+                "AUTH_FAILED",
+                "AUTH_INVALID_CREDENTIALS",
+                "AUTH_PERMISSION_DENIED",
+                "AUTH_KEY_ERROR",
+                "AUTH_PASSWORD_REQUIRED",
+                "TIMEOUT_CONNECTION",
+                "TIMEOUT_EXECUTION",
+                "TIMEOUT_READ",
+                "INTERNAL_ERROR",
+                "UNKNOWN_ERROR"
+              ],
+              "examples": [
+                "SQL_SYNTAX_ERROR",
+                "CONFIG_MISSING_CONNECTION",
+                "CONNECTION_REFUSED",
+                "AUTH_INVALID_CREDENTIALS"
+              ]
+            },
+            "message": {
+              "type": "string",
+              "description": "Human-readable error message",
+              "minLength": 1,
+              "examples": [
+                "Table MYTABLE not found",
+                "Connection 'prod' not found in configuration",
+                "Failed to connect to database: Connection refused",
+                "Authentication failed for user@host"
+              ]
+            },
+            "details": {
+              "type": "object",
+              "description": "Additional error context (optional)",
+              "properties": {},
+              "additionalProperties": true,
+              "examples": [
+                {
+                  "sql": "SELECT * FROM MYTABLE",
+                  "sqlState": "42S02"
+                },
+                {
+                  "name": "prod",
+                  "availableConnections": ["dev", "test"]
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
+}

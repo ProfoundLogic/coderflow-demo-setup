@@ -1,0 +1,38 @@
+{
+  "version": "1.0.0",
+  "skills": {
+    "sql": {
+      "source": "@profoundlogic/aitool",
+      "sourceType": "npm",
+      "npmPackage": "@profoundlogic/aitool",
+      "version": "1.1.1",
+      "npmRegistry": null,
+      "catalogId": "sql",
+      "importedAt": "2026-02-12T22:30:42.775Z",
+      "importedBy": "drusso",
+      "flags": {}
+    },
+    "ibmi-interactive-session": {
+      "source": "@profoundlogic/aitool",
+      "sourceType": "npm",
+      "npmPackage": "@profoundlogic/aitool",
+      "version": "1.1.1",
+      "npmRegistry": null,
+      "catalogId": "ibmi-interactive-session",
+      "importedAt": "2026-02-12T22:31:01.505Z",
+      "importedBy": "drusso",
+      "flags": {}
+    },
+    "codermake": {
+      "source": "@profoundlogic/codermake",
+      "sourceType": "npm",
+      "npmPackage": "@profoundlogic/codermake",
+      "version": "1.2.0",
+      "npmRegistry": null,
+      "catalogId": "codermake",
+      "importedAt": "2026-02-17T20:34:59.324Z",
+      "importedBy": "drusso",
+      "flags": {}
+    }
+  }
+}
