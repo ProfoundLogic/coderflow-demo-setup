@@ -54,6 +54,9 @@
   "skills": [
     "ibmi-interactive-session",
     "sql",
-    "codermake"
+    "codermake",
+    "code-comments-best-practices",
+    "ibmi-program-documentation",
+    "rpg-coderflow"
   ]
 }
