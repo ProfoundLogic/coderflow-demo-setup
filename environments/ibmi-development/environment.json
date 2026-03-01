@@ -37,7 +37,8 @@
       {
         "name": "Genie",
         "path": "/profoundui/auth/genie",
-        "description": "Profound UI Genie"
+        "description": "Profound UI Genie",
+        "primary": true
       },
       {
         "name": "Genie (Classic 5250 Skin)",
