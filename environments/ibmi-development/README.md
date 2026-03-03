@@ -4,41 +4,41 @@ This environment is for traditional IBM i / RPG application development using th
 
 ## Features
 
-- Agent can develop traditional IBM i applications and build onto a remote IBM i system via [codermake](https://www.npmjs.com/package/@profoundlogic/codermake)
-- Agent can operate TN5250 interactive sessions via Profound UI / Genie to perform ad hoc exploratory tests to verify its work and get real time feedback.
-- Agent can run SQL queries against IBM i via [aitool](https://www.npmjs.com/package/@profoundlogic/aitool)
-- Agent produces a comprehensive summary of work done, including TN5250 screen renderings.
-- Human developer can review agents' work interactively via Profound UI / Genie and give feedback.
+-   Agent can develop traditional IBM i applications and build onto a remote IBM i system via [codermake](https://www.npmjs.com/package/@profoundlogic/codermake)
+-   Agent can operate TN5250 interactive sessions via Profound UI / Genie to perform ad hoc exploratory tests to verify its work and get real time feedback.
+-   Agent can run SQL queries against IBM i via [aitool](https://www.npmjs.com/package/@profoundlogic/aitool)
+-   Agent produces a comprehensive summary of work done, including TN5250 screen renderings.
+-   Human developer can review agents' work interactively via Profound UI / Genie and give feedback.
 
 ## Agentic Coding Environment
 
-The agentic coding envrionment consists of two layers:
-- A **base environment** on IBM i that consists of one or more libraries with programs and data. The base environment is built on IBM i, periodically updated by humans, and is on the library list for all agentic coding tasks.
-- A **task library** is automatically created on IBM i for each Coder task. Agents build changed sources into the task library, which is added to the top of the library list, above the base environment.
+The agentic coding environment consists of two layers:
 
-## IBM i Agentic User Profile and Libary Lists
+-   A **base environment** on IBM i that consists of one or more libraries with programs and data. The base environment is built on IBM i, periodically updated by humans, and is on the library list for all agentic coding tasks.
+-   A **task library** is automatically created on IBM i for each Coder task. Agents build changed sources into the task library, which is added to the top of the library list, above the base environment.
+
+## IBM i Agentic User Profile and Library Lists
 
 Each Coder environment is associated with an IBM i user profile that is used by Coder tasks:
-- The user profile should be **non-privileged**, and should only have the minimum authorities needed to run the application.
-- The user profile should be dedicated to this purpose, i.e. only used for 1 Coder environment and nothing else.
-- The base library list is inherited from the user's JOBD.
+
+-   The user profile should be **non-privileged**, and should only have the minimum authorities needed to run the application.
+-   The user profile should be dedicated to this purpose, i.e. only used for 1 Coder environment and nothing else.
+-   The base library list is inherited from the user's JOBD.
 
 ## Setup
 
 Use these steps to set up the environment:
 
-### 1. Build Base Environment
+### 1\. Build Base Environment
 
 On IBM i, clone a copy of the [ibmi-agentic](https://github.com/ProfoundLogic/ibmi-agentic) repo and build the base environment and test data as explained in the repo's README notes. Use a new/unique library name that is dedicated to this environment.
 
-### 2. Select and Configure Profound UI / Genie Instance
+### 2\. Select and Configure Profound UI / Genie Instance
 
 Select a Profound UI instance to use for agent exploration, screen renderings, and human testing/feedback. Make note of the instance port and installation library. Don't use an instance that is likely to be disturbed/changed by others.
 
-- Enter the Genie URL (e.g. `https://myibmi.mycompany.com:8080/profoundui/genie`) in **Overview->Environment Information-> Screen Render URL**
-- Enter the base URL (e.g. `https://myibmi.mycompany.com:8080`) in **Server->App Server->Proxy URL** and **Server-App Server->QA URL**. 
-
-Use the fully qualified host/domain name. HTTPS is required.
+-   Version 6.37.0 or higher is required.
+-   HTTPS is required.
 
 These directives must be added to the PUI instance configuration `httpd.conf`:
 
@@ -47,80 +47,24 @@ SetEnv PUI_ALLOW_AGENTIC_TASK_LIB 1
 SetEnv PUI_ALLOW_CODERFLOW_PROXY 1
 ```
 
-### 3. Create IBM i Agentic User Profile
+### 3\. Adjust IBM i Connection Details and Create IBM i User Profile  
 
-On IBM i, create the agentic user profile for this environment. Use a new/unique user profile that is dedicated to this environment. The examples below show user profile `XXAGENT`; replace with the chosen profile name.
+On the **Connections** tab, there is a pre-defined IBM i connection named **dev**. Edit the connection and make these changes:
 
-Create the user profile with a command like this, filling in the unique profile name, a password, your PUI installation library, and a meaningful text description:
+-   Change the host name to your IBM i host name.
+-   Change the IBM i user profile name to the desired value. This should be a new/unique agentic coding user profile that is created for and only used with this environment.
+-   Enter the desired password for the IBM i user profile.
+-   Click on the **How to set up IBM i user profile** link and use the example commands to create the IBM i user profile.
+    -   Make sure that the user profile's JOBD or initial program sets the appropriate base library list.
+    -   Make sure that the user profile's initial program is or calls the PUISETENV program. The version of the program in the Profound UI instance installation library you selected above should be used.
+-   Click **Generate Key Pair** to generate an SSH key pair for authenticating as the IBM i user profile.
+-   Click **Install Public Key on Remote** to install the public key on IBM i.
+-   Edit the **PUI Base URL field** and enter the Profound UI base URL for the instance you selected at step 2. For example: `https://myibmi.mycompany.com:8080`
+-   Click on the **Test SQL** and **Test SSH** buttons to test the connection. Correct any problems.
+-   Click **Save Connection** to save the connection, and then click **Save** at the top of the **Environment Management** page to persist the changes.
+-   Sign on to a TN5250 session as the agentic user profile and verify that the application menu appears and the application functions normally. Correct any issues.
 
-```
-CRTUSRPRF USRPRF(XXAGENT) PASSWORD(CHOOSE_ONE) USRCLS(*USER) INLPGM(YOUR_PUI_INSTALL_LIB/PUISETENV) INLMNU(MENU) LMTCPB(*YES) TEXT('Meaningful Description') SPCAUT(*NONE) JOBD(XXAGENT/XXAGENT)
-```
-
-Create the user's home directory:
-
-```
-CRTDIR DIR('/home/xxagent')
-CHGOWN OBJ('/home/xxagent') NEWOWN(XXAGENT)
-QSH CMD('chmod 755 /home/xxagent')
-```
-
-Create a library named after the user profile to hold his job description:
-
-```
-CRTLIB LIB(XXAGENT) TYPE(*TEST) AUT(*EXCLUDE) TEXT('Library for XXAGENT User')
-CHGOBJOWN OBJ(XXAGENT) OBJTYPE(*LIB) NEWOWN(XXAGENT)
-```
-
-Duplicate `QGPL/QDFTJOBD` into the user's library and set the library list to the base environment library you chose at step 1:
-
-```
-CRTDUPOBJ OBJ(QDFTJOBD) FROMLIB(QGPL) OBJTYPE(*JOBD) TOLIB(XXAGENT) NEWOBJ(XXAGENT)
-
-CHGOBJOWN OBJ(XXAGENT/XXAGENT) OBJTYPE(*JOBD) NEWOWN(XXAGENT)
-
-CHGJOBD JOBD(XXAGENT/XXAGENT) INLLIBL(YOUR_BASE_LIB QGPL QTEMP)
-```
-
-Sign on to a TN5250 session as the agentic user profile and verify that the application menu appears and the application functions normally. Correct any issues.
-
-### 4. Set Up SSH Key Authentication for IBM i User Profile
-
-Run these commands on the system where Coder is running. Change to this environment directory, where this README file is located. For example:
-
-```
-cd ~/coderflow-demo-setup/environments/ibmi-development
-```
-
-Then generate the key pair into this directory:
-
-```
-ssh-keygen -f ./ibmi_dev_key
-```
-
-Press enter when prompted for a passphrase to create the key without one. This will generate a private key file `imbi_key` and corresponding public key `ibmi_dev_key.pub`.
-
-Then connect to IBM i via SSH as the agentic user and install the public key:
-
-```
-ssh-copy-id -i ./ibmi_dev_key xxagent@ibmi_host_name
-```
-
-Enter the agentic user's password when prompted to sign on and install the public key.
-
-Then verify that you can now connect to SSH with the private key and no password:
-
-```
-ssh -i ./ibmi_dev_key xxagent@ibmi_host_name
-```
-
-### 5. Set Up Secrets
-
-Copy the `.secrets.example.json` file to `.secrets.json` in this environment directory. This will populate the **Secrets** section with the required secrets. Replace the dummy values with real ones.
-
-**Note:** When specifying PUI server URL, make sure to use the fully qualified PUI server base URL, e.g. `https://myibmi.mycompany.com:8080`.
-
-### 6. Build the Environment
+### 4\. Build the Environment
 
 Build the environment using the option in the **Build** section.
 

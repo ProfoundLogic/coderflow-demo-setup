@@ -3,6 +3,7 @@ setup.json
 # Secrets and credentials
 .secrets.json
 *.secrets.json
+.connection-secrets/
 oidc.json
 jira.json
 license.json
