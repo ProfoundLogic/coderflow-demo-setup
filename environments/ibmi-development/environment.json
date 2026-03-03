@@ -17,44 +17,48 @@
       "description": "Example repo for traditional 5250 and RPGOA development"
     }
   ],
-  "docker_config": {
-    "pre_clone_instructions": "",
-    "post_clone_instructions": "# Run touch-only build to create dummy build files.\nRUN cd /workspace/ibmi-agentic && \\\n    CODERMAKE_LICENSE_PATH=/home/coder/.codermake/license.json IBMI_BUILD_LIBRARY=container_setup_build IBMI_HOST=dummy IBMI_USER=dummy codermake -t && \\\n    chown -R coder:coder /workspace"
-  },
-  "screenRenderUrl": "https://idev.profoundlogic.com:8103/profoundui/genie",
-  "application_server": {
-    "enabled": true,
-    "name": "Genie",
-    "proxy": "https://idev.profoundlogic.com:8103",
-    "basic_auth": {
-      "user_property": "ibmi_dev_user",
-      "password_property": "ibmi_dev_password"
-    },
-    "proxy_headers": {
-      "X-Agentic-Task-Lib": "${IBMI_BUILD_LIBRARY}"
-    },
-    "launch_urls": [
-      {
-        "name": "Genie",
-        "path": "/profoundui/auth/genie",
-        "description": "Profound UI Genie",
-        "primary": true
-      },
-      {
-        "name": "Genie (Classic 5250 Skin)",
-        "path": "/profoundui/auth/genie?skin=classic",
-        "description": "Profound UI Genie with Classic 5250 Skin"
-      }
-    ],
-    "qa_url": "https://idev.profoundlogic.com:8103"
-  },
   "rebuild_schedule": {
     "enabled": true,
     "interval_hours": 24
   },
   "skills": [
-    "ibmi-interactive-session",
     "sql",
-    "codermake"
-  ]
+    "codermake",
+    "ibmi-interactive-session"
+  ],
+  "external_connections": [
+    {
+      "name": "dev",
+      "type": "ibmi",
+      "description": "IBM i Development Server",
+      "available_for": [
+        "tasks"
+      ],
+      "config": {
+        "host": "idev.profoundlogic.com",
+        "user": "aidemo",
+        "features": [
+          "sql",
+          "build",
+          "interactive"
+        ],
+        "pui_base_url": "https://idev.profoundlogic.com:8103",
+        "build_repo": "ibmi-agentic",
+        "build_library_prefix": "AITSK"
+      },
+      "id": "44e3d948-61a6-4782-84d4-c94586b5757d"
+    }
+  ],
+  "application_server": {
+    "launch_urls": [
+      {
+        "name": "Genie (5250 Skin)",
+        "path": "/profoundui/auth/genie?skin=classic",
+        "description": "Genie w/Classic Skin"
+      }
+    ],
+    "enabled": true,
+    "name": "",
+    "qa_url": "https://idev.profoundlogic.com:8103"
+  }
 }
