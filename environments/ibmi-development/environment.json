@@ -24,7 +24,8 @@
   "skills": [
     "sql",
     "codermake",
-    "ibmi-interactive-session"
+    "ibmi-interactive-session",
+    "ibmi-clcmd"
   ],
   "external_connections": [
     {
@@ -40,7 +41,9 @@
         "features": [
           "sql",
           "build",
-          "interactive"
+          "interactive",
+          "ssh",
+          "sync"
         ],
         "pui_base_url": "https://idev.profoundlogic.com:8103",
         "build_repo": "ibmi-agentic",
