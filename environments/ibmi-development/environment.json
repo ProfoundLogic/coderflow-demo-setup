@@ -45,6 +45,7 @@
           "ssh",
           "sync"
         ],
+        "sync_credentials": "prompt",
         "pui_base_url": "https://idev.profoundlogic.com:8103",
         "build_repo": "ibmi-agentic",
         "build_library_prefix": "AITSK"
