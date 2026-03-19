@@ -67,5 +67,12 @@
     "enabled": true,
     "name": "",
     "qa_url": "https://idev.profoundlogic.com:8103"
+  },
+  "standardInstructions": {
+    "outputRequirements": true,
+    "screenshotGuidelines": false,
+    "ibmiOutputRequirements": true,
+    "ibmiExploratoryVerification": true,
+    "ibmiDatabaseSql": true
   }
 }
