@@ -1,0 +1,219 @@
+{
+  "title": "Migrate .NET option to IBM i",
+  "description": "Migrates specific .NET application option to IBM i",
+  "parameters": [
+    {
+      "name": "feature_name",
+      "required": true,
+      "description": "The .NET feature to migrate to IBM i",
+      "label": "Feature Name",
+      "prompt": {
+        "type": "list",
+        "label": "Select Feature to Migrate",
+        "multiSelect": true,
+        "options": [
+          {
+            "value": "Open Contracts",
+            "label": "Open Contracts"
+          },
+          {
+            "value": "Contracts History",
+            "label": "Contracts History"
+          },
+          {
+            "value": "Tickets",
+            "label": "Tickets"
+          },
+          {
+            "value": "Invoices",
+            "label": "Invoices"
+          },
+          {
+            "value": "Open Purchase Contracts",
+            "label": "Open Purchase Contracts"
+          },
+          {
+            "value": "Purchase Contracts History",
+            "label": "Purchase Contracts History"
+          },
+          {
+            "value": "Open Sale Contracts",
+            "label": "Open Sale Contracts"
+          },
+          {
+            "value": "Sale Contracts History",
+            "label": "Sale Contracts History"
+          },
+          {
+            "value": "Settlements",
+            "label": "Settlements"
+          },
+          {
+            "value": "Open Settlements",
+            "label": "Open Settlements"
+          },
+          {
+            "value": "Settlement History",
+            "label": "Settlement History"
+          },
+          {
+            "value": "Payments",
+            "label": "Payments"
+          },
+          {
+            "value": "Payment History",
+            "label": "Payment History"
+          },
+          {
+            "value": "Credit Memos",
+            "label": "Credit Memos"
+          },
+          {
+            "value": "Debit Memos",
+            "label": "Debit Memos"
+          },
+          {
+            "value": "Accounts Receivable",
+            "label": "Accounts Receivable"
+          },
+          {
+            "value": "Accounts Payable",
+            "label": "Accounts Payable"
+          },
+          {
+            "value": "Customer Balance",
+            "label": "Customer Balance"
+          },
+          {
+            "value": "Customer Contacts",
+            "label": "Customer Contacts"
+          },
+          {
+            "value": "Customer Addresses",
+            "label": "Customer Addresses"
+          },
+          {
+            "value": "Customer Notes",
+            "label": "Customer Notes"
+          },
+          {
+            "value": "Customer Documents",
+            "label": "Customer Documents"
+          },
+          {
+            "value": "Order History",
+            "label": "Order History"
+          },
+          {
+            "value": "Open Orders",
+            "label": "Open Orders"
+          },
+          {
+            "value": "Purchase Orders",
+            "label": "Purchase Orders"
+          },
+          {
+            "value": "Sales Orders",
+            "label": "Sales Orders"
+          },
+          {
+            "value": "Shipments",
+            "label": "Shipments"
+          },
+          {
+            "value": "Shipment History",
+            "label": "Shipment History"
+          },
+          {
+            "value": "Delivery Tickets",
+            "label": "Delivery Tickets"
+          },
+          {
+            "value": "Weight Tickets",
+            "label": "Weight Tickets"
+          },
+          {
+            "value": "Pricing",
+            "label": "Pricing"
+          },
+          {
+            "value": "Price History",
+            "label": "Price History"
+          },
+          {
+            "value": "Quotes",
+            "label": "Quotes"
+          },
+          {
+            "value": "Quote History",
+            "label": "Quote History"
+          },
+          {
+            "value": "Claims",
+            "label": "Claims"
+          },
+          {
+            "value": "Claim History",
+            "label": "Claim History"
+          },
+          {
+            "value": "Returns",
+            "label": "Returns"
+          },
+          {
+            "value": "Return History",
+            "label": "Return History"
+          },
+          {
+            "value": "Inventory",
+            "label": "Inventory"
+          },
+          {
+            "value": "Inventory Transactions",
+            "label": "Inventory Transactions"
+          },
+          {
+            "value": "Warehouse Receipts",
+            "label": "Warehouse Receipts"
+          },
+          {
+            "value": "Storage History",
+            "label": "Storage History"
+          },
+          {
+            "value": "Positions",
+            "label": "Positions"
+          },
+          {
+            "value": "Position Detail",
+            "label": "Position Detail"
+          },
+          {
+            "value": "Margin Detail",
+            "label": "Margin Detail"
+          },
+          {
+            "value": "Futures",
+            "label": "Futures"
+          },
+          {
+            "value": "Options Contracts",
+            "label": "Options Contracts"
+          },
+          {
+            "value": "Hedge Summary",
+            "label": "Hedge Summary"
+          },
+          {
+            "value": "Freight",
+            "label": "Freight"
+          },
+          {
+            "value": "Freight History",
+            "label": "Freight History"
+          }
+        ]
+      }
+    }
+  ]
+}

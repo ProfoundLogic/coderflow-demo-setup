@@ -74,5 +74,8 @@
     "ibmiOutputRequirements": true,
     "ibmiExploratoryVerification": true,
     "ibmiDatabaseSql": true
+  },
+  "memory": {
+    "enabled": false
   }
 }
