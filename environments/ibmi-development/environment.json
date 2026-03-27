@@ -28,7 +28,9 @@
     "sql",
     "codermake",
     "ibmi-interactive-session",
-    "ibmi-clcmd"
+    "ibmi-clcmd",
+    "jira",
+    "email"
   ],
   "external_connections": [
     {

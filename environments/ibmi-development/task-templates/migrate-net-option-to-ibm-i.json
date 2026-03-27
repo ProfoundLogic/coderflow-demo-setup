@@ -1,9 +1,8 @@
 {
   "title": "Migrate .NET option to IBM i",
   "description": "Migrates specific .NET application option to IBM i",
-  "parameters": [
-    {
-      "name": "feature_name",
+  "parameters": {
+    "feature_name": {
       "required": true,
       "description": "The .NET feature to migrate to IBM i",
       "label": "Feature Name",
@@ -215,5 +214,5 @@
         ]
       }
     }
-  ]
+  }
 }
