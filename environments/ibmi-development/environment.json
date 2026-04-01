@@ -30,7 +30,8 @@
     "ibmi-interactive-session",
     "ibmi-clcmd",
     "jira",
-    "email"
+    "email",
+    "confluence"
   ],
   "external_connections": [
     {

@@ -7,6 +7,7 @@ allowed-tools:
 argument-hint: create | get <key> | comment <key> | transition <key> | assign <key> | search <jql>
 ---
 
+
 # JIRA Skill
 
 Interact with JIRA issues using the Atlassian REST API v3.
@@ -127,6 +128,18 @@ bash ~/.claude/skills/jira/jira.sh user-search "gary"
 ```bash
 bash ~/.claude/skills/jira/jira.sh myself
 ```
+
+## Ticket Lifecycle Rules
+
+When working on a Jira ticket, follow this lifecycle:
+
+1. **Starting work:** Transition the ticket to **"In Progress"** when you begin coding.
+2. **While working:** Add comments that describe progress, such as what changes were made, what was built, and what remains to be done (testing, code review, commit, etc.). Comments should reflect the current state honestly — do not say work is "completed" or "done" until the ticket is actually finished end-to-end.
+3. **Completing work:** Only transition a ticket to **"Done"** after all of the following are true:
+   - Code changes are committed
+   - Tests have been run and passed
+   - Any required verification (e.g., exploratory testing on IBM i) is complete
+4. **Never skip ahead:** Do not transition a ticket to "Done" just because the source code edit and build succeeded. Testing and committing are required steps before a ticket is done.
 
 ## Tips
 
