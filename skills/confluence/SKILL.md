@@ -8,6 +8,7 @@ allowed-tools:
 argument-hint: <describe what you want to do, e.g. create a page in CPP space or search for pages about deployments>
 ---
 
+
 # Confluence Page Manager
 
 Create, read, update, delete, and search Confluence pages in the Profound Logic Atlassian instance.
@@ -24,8 +25,10 @@ Each CoderFlow user must configure their own values for these secrets. If either
 Build the auth header for every API call:
 
 ```bash
-AUTH=$(echo -n "${CONFLUENCE_EMAIL}:${CONFLUENCE_API_TOKEN}" | base64)
+AUTH=$(echo -n "${CONFLUENCE_EMAIL}:${CONFLUENCE_API_TOKEN}" | base64 -w 0)
 ```
+
+**Important:** Always use `base64 -w 0` to prevent line breaks in the encoded string, which cause HTTP/2 protocol errors.
 
 ## Base URL
 
@@ -203,6 +206,124 @@ Confluence uses XHTML-based "storage format":
 | Status | `<ac:structured-macro ac:name="status"><ac:parameter ac:name="colour">Green</ac:parameter><ac:parameter ac:name="title">DONE</ac:parameter></ac:structured-macro>` |
 | Horizontal rule | `<hr />` |
 | Image (attached) | `<ac:image><ri:attachment ri:filename="image.png" /></ac:image>` |
+
+
+## Confluence Macros (Structured Macros)
+
+Common macros for building rich Confluence pages. All use the `<ac:structured-macro>` element.
+
+### Children Macro
+
+Lists all child pages of the current page. Useful for parent/hub pages.
+
+```xml
+<ac:structured-macro ac:name="children">
+  <ac:parameter ac:name="all">true</ac:parameter>
+  <ac:parameter ac:name="sort">title</ac:parameter>
+</ac:structured-macro>
+```
+
+Parameters:
+- `all` — `true` to show all descendants, `false` for direct children only (default: `false`)
+- `sort` — Sort order: `title`, `creation`, `modified` (default: `title`)
+- `reverse` — `true` to reverse sort order
+- `style` — `h2`–`h6` to style links as headings
+- `excerpt` — `none`, `simple-inline`, `rich-content` to include page excerpts
+- `first` — Limit number of children displayed (e.g. `10`)
+- `page` — Page to list children of (defaults to current page). Use page title to reference another page.
+
+### Excerpt Macro
+
+Defines a snippet of content that can be reused/displayed elsewhere (e.g. by the Children macro with `excerpt` parameter).
+
+```xml
+<ac:structured-macro ac:name="excerpt">
+  <ac:parameter ac:name="atlassian-macro-output-type">BLOCK</ac:parameter>
+  <ac:rich-text-body><p>This text will appear as the page excerpt.</p></ac:rich-text-body>
+</ac:structured-macro>
+```
+
+### Table of Contents Macro
+
+Generates a table of contents from headings on the page.
+
+```xml
+<ac:structured-macro ac:name="toc">
+  <ac:parameter ac:name="printable">true</ac:parameter>
+  <ac:parameter ac:name="style">disc</ac:parameter>
+  <ac:parameter ac:name="maxLevel">3</ac:parameter>
+  <ac:parameter ac:name="minLevel">1</ac:parameter>
+  <ac:parameter ac:name="type">list</ac:parameter>
+</ac:structured-macro>
+```
+
+### Expand Macro
+
+Creates a collapsible/expandable section.
+
+```xml
+<ac:structured-macro ac:name="expand">
+  <ac:parameter ac:name="title">Click to expand</ac:parameter>
+  <ac:rich-text-body><p>Hidden content here</p></ac:rich-text-body>
+</ac:structured-macro>
+```
+
+### Panel Macro
+
+Displays content in a colored panel box.
+
+```xml
+<ac:structured-macro ac:name="panel">
+  <ac:parameter ac:name="title">Panel Title</ac:parameter>
+  <ac:parameter ac:name="borderStyle">solid</ac:parameter>
+  <ac:parameter ac:name="borderColor">#ccc</ac:parameter>
+  <ac:parameter ac:name="bgColor">#fff</ac:parameter>
+  <ac:rich-text-body><p>Panel content</p></ac:rich-text-body>
+</ac:structured-macro>
+```
+
+### Note / Warning / Tip Macros
+
+Similar to the Info macro. All use the same structure:
+
+```xml
+<ac:structured-macro ac:name="note"><ac:rich-text-body><p>Warning text</p></ac:rich-text-body></ac:structured-macro>
+<ac:structured-macro ac:name="warning"><ac:rich-text-body><p>Critical warning</p></ac:rich-text-body></ac:structured-macro>
+<ac:structured-macro ac:name="tip"><ac:rich-text-body><p>Helpful tip</p></ac:rich-text-body></ac:structured-macro>
+```
+
+### Page Properties / Page Properties Report Macros
+
+Store structured metadata on a page and report on it from a parent page.
+
+```xml
+<!-- On child pages: define properties -->
+<ac:structured-macro ac:name="details">
+  <ac:rich-text-body>
+    <table><tbody>
+      <tr><th>Owner</th><td>Name</td></tr>
+      <tr><th>Status</th><td>In Progress</td></tr>
+      <tr><th>Due Date</th><td>2026-04-15</td></tr>
+    </tbody></table>
+  </ac:rich-text-body>
+</ac:structured-macro>
+
+<!-- On parent page: generate report from child page properties -->
+<ac:structured-macro ac:name="detailssummary">
+  <ac:parameter ac:name="firstcolumn">Owner</ac:parameter>
+  <ac:parameter ac:name="headings">Owner,Status,Due Date</ac:parameter>
+</ac:structured-macro>
+```
+
+### Include Page Macro
+
+Embed the content of another page inline.
+
+```xml
+<ac:structured-macro ac:name="include">
+  <ac:parameter ac:name=""><ri:content-entity ri:content-id="PAGE_ID" /></ac:parameter>
+</ac:structured-macro>
+```
 
 ## Known Spaces (Reference Only)
 
