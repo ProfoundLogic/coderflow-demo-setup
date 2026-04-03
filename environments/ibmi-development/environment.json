@@ -31,7 +31,9 @@
     "ibmi-clcmd",
     "jira",
     "email",
-    "confluence"
+    "confluence",
+    "pdf",
+    "ejs-screen-designer"
   ],
   "external_connections": [
     {
@@ -49,10 +51,12 @@
           "build",
           "interactive",
           "ssh",
-          "sync"
+          "sync",
+          "ejs-display-files"
         ],
         "sync_credentials": "prompt",
         "pui_base_url": "https://idev.profoundlogic.com:8103",
+        "pui_htdocs_path": "/home/DRUSSO/puidist/htdocs",
         "build_repo": "ibmi-agentic",
         "build_library_prefix": "AITSK"
       },
@@ -69,7 +73,10 @@
     ],
     "enabled": true,
     "name": "",
-    "qa_url": "https://idev.profoundlogic.com:8103"
+    "qa_url": "https://idev.profoundlogic.com:8103",
+    "basic_auth": {
+      "user_property": "rbetancourt"
+    }
   },
   "standardInstructions": {
     "outputRequirements": true,

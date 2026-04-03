@@ -1,0 +1,28 @@
+{
+  "id": "1775144580606-1f296f1e",
+  "name": "Daily Spool File Analysis",
+  "description": "Daily Spool File Analysis - 11:45am",
+  "environment": "ibmi-development",
+  "enabled": false,
+  "schedule": "45 11 * * *",
+  "targetType": "task",
+  "agent": {
+    "name": "claude",
+    "effortLevel": null,
+    "reasoningLevel": null
+  },
+  "task": {
+    "name": "Daily Spool File Analysis",
+    "instructions": "email it ONLY to rbetancourt@profoundlogic.com",
+    "taskType": "daily-spoolfile-report",
+    "parameters": {},
+    "skills": []
+  },
+  "deployment": null,
+  "settings": {
+    "retainHistoryDays": 30
+  },
+  "createdAt": "2026-04-02T15:43:00.606Z",
+  "createdBy": "rbetancourt",
+  "updatedAt": "2026-04-02T15:52:34.431Z"
+}

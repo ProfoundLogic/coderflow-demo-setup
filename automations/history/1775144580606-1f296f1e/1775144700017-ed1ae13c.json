@@ -1,0 +1,13 @@
+{
+  "runId": "1775144700017-ed1ae13c",
+  "automationId": "1775144580606-1f296f1e",
+  "targetType": "task",
+  "environment": "ibmi-development",
+  "taskId": "1775144700026-odnmmdy3p",
+  "deploymentId": null,
+  "deploymentProfile": null,
+  "triggeredAt": "2026-04-02T15:45:00.017Z",
+  "triggeredBy": "schedule",
+  "status": "completed",
+  "finishedAt": "2026-04-02T11:49:09-04:00"
+}
