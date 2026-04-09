@@ -1,0 +1,19 @@
+{
+  "title": "Document a Program",
+  "description": "Produce markdown documentation of an RPG or CL Program",
+  "parameters": {
+    "source_file": {
+      "required": true,
+      "type": "files",
+      "label": "Select RPG or CL source to document",
+      "description": "Source to be documented",
+      "prompt": {
+        "type": "files",
+        "label": "Select RPG or CL source to document",
+        "multiSelect": true,
+        "path": "/workspace/ibmi-agentic/src",
+        "pattern": "*.{rpg,rpgle,sqlrpgle,cl,clle}"
+      }
+    }
+  }
+}

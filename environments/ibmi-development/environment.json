@@ -87,5 +87,14 @@
   },
   "memory": {
     "enabled": false
-  }
+  },
+  "template_order": [
+    "daily-spoolfile-report.md",
+    "migrate-net-option-to-ibm-i.md",
+    "document-a-program.md"
+  ],
+  "deployment_profile_order": [
+    "build-and-promote"
+  ],
+  "timezone": "gjones"
 }

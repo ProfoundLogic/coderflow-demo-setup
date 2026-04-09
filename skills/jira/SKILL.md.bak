@@ -18,7 +18,7 @@ The following environment variables must be available at runtime. They should be
 
 | Variable | Description | Example |
 |----------|-------------|---------|
-| `JIRA_BASE_URL` | Your Atlassian instance URL | `https://yourcompany.atlassian.net` |
+| `JIRA_BASE_URL` | Your Atlassian instance URL | `https://plogic.atlassian.net` |
 | `JIRA_EMAIL` | Atlassian account email | `user@company.com` |
 | `JIRA_API_TOKEN` | Atlassian API token (generate at id.atlassian.com) | `ATATT3x...` |
 
@@ -34,14 +34,14 @@ Run it with: `bash ~/.claude/skills/jira/jira.sh <action> [args...]`
 
 ### Get an Issue
 ```bash
-bash ~/.claude/skills/jira/jira.sh get PROJ-123
+bash ~/.claude/skills/jira/jira.sh get GJA-123
 ```
 
 ### Create an Issue
 ```bash
 bash ~/.claude/skills/jira/jira.sh create '{
   "fields": {
-    "project": {"key": "PROJ"},
+    "project": {"key": "GJA"},
     "summary": "Issue title here",
     "description": {
       "type": "doc",
@@ -60,7 +60,7 @@ bash ~/.claude/skills/jira/jira.sh create '{
 
 ### Update an Issue
 ```bash
-bash ~/.claude/skills/jira/jira.sh update PROJ-123 '{
+bash ~/.claude/skills/jira/jira.sh update GJA-123 '{
   "fields": {
     "summary": "Updated title",
     "description": {
@@ -77,35 +77,35 @@ bash ~/.claude/skills/jira/jira.sh update PROJ-123 '{
 
 ### Add a Comment
 ```bash
-bash ~/.claude/skills/jira/jira.sh comment PROJ-123 "This is my comment text"
+bash ~/.claude/skills/jira/jira.sh comment GJA-123 "This is my comment text"
 ```
 
 ### Transition an Issue (Change Status)
 First, list available transitions:
 ```bash
-bash ~/.claude/skills/jira/jira.sh transitions PROJ-123
+bash ~/.claude/skills/jira/jira.sh transitions GJA-123
 ```
 
 Then transition by name or ID:
 ```bash
-bash ~/.claude/skills/jira/jira.sh transition PROJ-123 "In Progress"
-bash ~/.claude/skills/jira/jira.sh transition PROJ-123 31
+bash ~/.claude/skills/jira/jira.sh transition GJA-123 "In Progress"
+bash ~/.claude/skills/jira/jira.sh transition GJA-123 31
 ```
 
 ### Assign an Issue
 By email:
 ```bash
-bash ~/.claude/skills/jira/jira.sh assign PROJ-123 user@example.com
+bash ~/.claude/skills/jira/jira.sh assign GJA-123 user@example.com
 ```
 
 By account ID:
 ```bash
-bash ~/.claude/skills/jira/jira.sh assign PROJ-123 615afb5dd9820f0070a0864e
+bash ~/.claude/skills/jira/jira.sh assign GJA-123 615afb5dd9820f0070a0864e
 ```
 
 ### Search with JQL
 ```bash
-bash ~/.claude/skills/jira/jira.sh search "project = PROJ AND status = 'To Do' ORDER BY created DESC"
+bash ~/.claude/skills/jira/jira.sh search "project = GJA AND status = 'To Do' ORDER BY created DESC"
 ```
 
 ### List Projects
@@ -115,8 +115,8 @@ bash ~/.claude/skills/jira/jira.sh projects
 
 ### Get Project Details & Statuses
 ```bash
-bash ~/.claude/skills/jira/jira.sh project PROJ
-bash ~/.claude/skills/jira/jira.sh statuses PROJ
+bash ~/.claude/skills/jira/jira.sh project GJA
+bash ~/.claude/skills/jira/jira.sh statuses GJA
 ```
 
 ### Search for Users

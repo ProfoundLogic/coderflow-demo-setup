@@ -1,0 +1,3 @@
+# Webhook delivery history and tokens contain secrets
+history/
+tokens/
