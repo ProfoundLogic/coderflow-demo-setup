@@ -166,6 +166,20 @@ else: sys.exit(1)
     response=$(jira_api GET "/rest/api/3/myself")
     parse_response "$response"
     ;;
+  link)
+    SOURCE_KEY="$1"
+    LINK_TYPE="$2"
+    TARGET_KEY="$3"
+    # JIRA API semantics for "Blocks" link type:
+    #   inwardIssue  = the blocker (the ticket that must be done first)
+    #   outwardIssue = the blocked ticket (the one that waits)
+    # This is counterintuitive but matches JIRA's internal model.
+    # Usage: link A blocks B  =>  A must be done before B
+    CAPITALIZED_TYPE="$(echo "${LINK_TYPE}" | sed 's/^./\U&/')"
+    response=$(jira_api POST "/rest/api/3/issueLink" \
+      -d "{\"type\": {\"name\": \"${CAPITALIZED_TYPE}\"}, \"inwardIssue\": {\"key\": \"$SOURCE_KEY\"}, \"outwardIssue\": {\"key\": \"$TARGET_KEY\"}}")
+    parse_response "$response" && echo "{\"success\": true, \"message\": \"${SOURCE_KEY} ${LINK_TYPE} ${TARGET_KEY}\"}"
+    ;;
   help|*)
     cat << 'HELP'
 JIRA CLI - Usage: jira.sh <action> [args...]
@@ -181,8 +195,10 @@ JIRA CLI - Usage: jira.sh <action> [args...]
   projects                         List projects
   project <key>                    Project details
   statuses <key>                   Project statuses
+  link <key1> blocks <key2>        Link: key1 blocks key2
   user-search <query>              Find users
   myself                           Current user
 HELP
     ;;
 esac
+

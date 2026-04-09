@@ -8,6 +8,7 @@ argument-hint: create | get <key> | comment <key> | transition <key> | assign <k
 ---
 
 
+
 # JIRA Skill
 
 Interact with JIRA issues using the Atlassian REST API v3.
@@ -129,6 +130,21 @@ bash ~/.claude/skills/jira/jira.sh user-search "gary"
 bash ~/.claude/skills/jira/jira.sh myself
 ```
 
+### Link Issues (Dependencies)
+```bash
+bash ~/.claude/skills/jira/jira.sh link PROJ-100 blocks PROJ-101
+```
+
+This creates a "Blocks" link where PROJ-100 blocks PROJ-101 (PROJ-100 must be done first).
+
+The word order matches natural language: `link A blocks B` means "A blocks B" — A must be completed before B can start. On the JIRA ticket, A will show "blocks PROJ-101" and B will show "is blocked by PROJ-100".
+
+**JIRA API direction semantics (for reference):** The underlying JIRA REST API `issueLink` endpoint uses `inwardIssue` and `outwardIssue` fields whose meaning is counterintuitive. For the "Blocks" link type (outward="blocks", inward="is blocked by"):
+- `inwardIssue` = the **blocker** (the ticket that must be completed first)
+- `outwardIssue` = the **blocked ticket** (the one that waits)
+
+The helper script handles this automatically — just use the natural word order: `link A blocks B`. Do **not** call the REST API directly for issue links; always use the helper script to avoid direction mistakes.
+
 ## Ticket Lifecycle Rules
 
 When working on a Jira ticket, follow this lifecycle:
@@ -148,3 +164,4 @@ When working on a Jira ticket, follow this lifecycle:
 - When assigning by email, the script automatically resolves the email to an account ID.
 - JQL queries should be single-quoted to avoid shell interpretation.
 - Use `statuses <project-key>` to discover valid status names for a project before transitioning.
+
