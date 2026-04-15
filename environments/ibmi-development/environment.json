@@ -14,7 +14,8 @@
         "credential_mode": "app"
       },
       "clone_auto": true,
-      "description": "Example repo for traditional 5250 and RPGOA development"
+      "description": "Example repo for traditional 5250 and RPGOA development",
+      "ibmiImportEnabled": false
     }
   ],
   "rebuild_schedule": {
@@ -73,10 +74,7 @@
     ],
     "enabled": true,
     "name": "",
-    "qa_url": "https://idev.profoundlogic.com:8103",
-    "basic_auth": {
-      "user_property": "rbetancourt"
-    }
+    "qa_url": "https://idev.profoundlogic.com:8103"
   },
   "standardInstructions": {
     "outputRequirements": true,
