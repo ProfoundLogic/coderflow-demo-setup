@@ -1,0 +1,77 @@
+<div class="screen" data-screen="{{SCREEN}}">
+
+  <header class="brandbar">
+    <div class="brandbar__inner">
+      <span class="brandbar__title">{{TITLE}}</span>
+      <nav class="brandbar__nav" aria-label="Breadcrumb">
+        <span class="brandbar__crumb">{{CRUMB1}}</span>
+        <span class="brandbar__sep">/</span>
+        <span class="brandbar__crumb brandbar__crumb--current">{{CRUMB2}}</span>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+
+    <div class="titlebar">
+      <h1 class="title">{{TITLE}}</h1>
+    </div>
+
+    <section class="toolbar" role="search">
+      {{ TOOLBAR INPUTS — find/filter fields go here.
+         Each input must have name="<fieldname>" matching a JSON manifest field.
+         Wrap the search button with onclick="pui.submit({action: 'SEARCH'})". }}
+      <button type="button" onclick="pui.submit({action: 'SEARCH'})" class="btn btn--primary">Search</button>
+    </section>
+
+    <% if (typeof msg !== 'undefined' && msg && msg.trim()) { %>
+      <div class="alert"><%= msg %></div>
+    <% } %>
+
+    <div class="card card--table">
+      <table class="table" data-sortable-table>
+        <thead>
+          <tr>
+            {{ COLUMN HEADERS — one <th> per visible column.
+               For sortable columns, wrap the label in a <button class="sort">. }}
+          </tr>
+        </thead>
+        <tbody>
+          <% if (typeof {{SFLNAME}} !== 'undefined' && {{SFLNAME}} && {{SFLNAME}}.length > 0) { %>
+            <% {{SFLNAME}}.forEach(function(row) { %>
+              <tr class="row" data-rrn="<%= row._rrn %>">
+                <td>
+                  {{ HIDDEN SOPT INPUT — REQUIRED.
+                     Per references/pui-submit-contract.md, the hidden input
+                     must exist for Profound UI's serializer to read overrides. }}
+                  <input type="hidden" name="{{SFLNAME}}.sopt.<%= row._rrn %>" value="<%= row.sopt %>">
+                  {{ Row content cells go here }}
+                </td>
+              </tr>
+            <% }); %>
+          <% } else { %>
+            <tr class="row row--empty">
+              <td colspan="{{COLUMN_COUNT}}">
+                <div class="empty">
+                  <p>No records to display.</p>
+                </div>
+              </td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+
+    <input type="hidden" name="action" value="">
+
+  </main>
+
+  <footer class="actionbar">
+    <div class="actionbar__inner">
+      <div class="actionbar__buttons">
+        <button type="button" onclick="pui.submit({action: 'EXIT'})" data-fkey="F3" class="btn btn--ghost">Exit</button>
+      </div>
+    </div>
+  </footer>
+
+</div>

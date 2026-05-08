@@ -1,0 +1,26 @@
+<div class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-{{SCREEN}}-title">
+  <div class="modal" data-screen="{{SCREEN}}">
+
+    <header class="modal__head">
+      <h2 id="modal-{{SCREEN}}-title">{{TITLE}}</h2>
+      <button type="button" onclick="pui.submit({action: 'CANCEL'})" class="modal__close" aria-label="Close">&times;</button>
+    </header>
+
+    <div class="modal__body">
+
+      <% if (typeof msg !== 'undefined' && msg && msg.trim()) { %>
+        <div class="alert alert--error"><%= msg %></div>
+      <% } %>
+
+      {{ MODAL FIELDS — output and input fields, same pattern as plain screen. }}
+
+    </div>
+
+    <footer class="modal__foot">
+      <input type="hidden" name="action" value="">
+      <button type="button" onclick="pui.submit({action: 'CANCEL'})" class="btn btn--ghost">Cancel</button>
+      <button type="button" onclick="pui.submit({action: 'OK'})" class="btn btn--primary">OK</button>
+    </footer>
+
+  </div>
+</div>

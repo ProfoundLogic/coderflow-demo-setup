@@ -1,0 +1,29 @@
+{
+  "type": "ejs",
+  "formats": {
+    "{{CTLRECNAME}}": {
+      "description": "{{CTL_DESCRIPTION}}",
+      "template": "/profoundui/userdata/ui/{{BUNDLE}}/{{SCREEN}}.ejs",
+      "css": ["/profoundui/userdata/ui/{{BUNDLE}}/{{SCREEN}}.css?v=1"],
+      "js":  ["/profoundui/userdata/ui/{{BUNDLE}}/{{SCREEN}}.js?v=1"],
+      "fields": {
+        "action":   { "type": "char",  "length": 10 },
+        "msg":      { "type": "char",  "length": 78 },
+        "sflclear": { "type": "char",  "length":  1 }
+        /* ADDITIONAL CONTROL-FORMAT FIELDS — find/filter inputs, headers,
+           hidden housekeeping fields. See references/conversion-rules.md. */
+      },
+      "subfiles": {
+        "{{SFLNAME}}": {
+          "description": "{{SFL_DESCRIPTION}}",
+          "clear": "sflclear",
+          "fields": {
+            /* SUBFILE FIELDS — one per data column. Always include "sopt"
+               (1A or 2A char) for selection, plus the row's display fields.
+               Type map: char/zoned/packed/decimals as in conversion-rules.md. */
+          }
+        }
+      }
+    }
+  }
+}
