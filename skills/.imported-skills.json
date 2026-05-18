@@ -16,12 +16,13 @@
       "source": "@profoundlogic/codermake",
       "sourceType": "npm",
       "npmPackage": "@profoundlogic/codermake",
-      "version": "1.2.0",
+      "version": "1.7.0",
       "npmRegistry": null,
       "catalogId": "codermake",
       "importedAt": "2026-03-03T02:22:19.364Z",
       "importedBy": "drusso",
-      "flags": {}
+      "flags": {},
+      "updatedAt": "2026-05-08T22:19:24.034Z"
     },
     "ibmi-interactive-session": {
       "source": "@profoundlogic/aitool",
@@ -42,6 +43,17 @@
       "npmRegistry": null,
       "catalogId": "ibmi-clcmd",
       "importedAt": "2026-03-08T23:26:57.834Z",
+      "importedBy": "alex",
+      "flags": {}
+    },
+    "pui-rdf-designer": {
+      "source": "@profoundlogic/aitool",
+      "sourceType": "npm",
+      "npmPackage": "@profoundlogic/aitool",
+      "version": "1.1.5",
+      "npmRegistry": null,
+      "catalogId": "pui-rdf-designer",
+      "importedAt": "2026-05-13T19:55:34.056Z",
       "importedBy": "alex",
       "flags": {}
     }

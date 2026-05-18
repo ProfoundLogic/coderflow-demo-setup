@@ -5,7 +5,7 @@ description: Build IBM i objects from source code.
 
 # codermake
 
-codermake is a Make-based build tool for IBM i projects. It compiles RPG, CL, DDS, and SQL source into IBM i objects (programs, modules, service programs, files, menus, message files, binding directories) either locally on IBM i or remotely via SSH.
+codermake is a Make-based build tool for IBM i projects. It compiles RPG, COBOL, CL, DDS, and SQL source into IBM i objects (programs, modules, service programs, files, menus, message files, binding directories) either locally on IBM i or remotely via SSH.
 
 ## Key constraints
 
@@ -103,11 +103,22 @@ mymod.module: mymod.rpgle
 # Link modules into a program
 mypgm.pgm: mod1.module mod2.module
 
+# Link with automatic BNDSRVPGM parameter
+calc.pgm: calc.module utils.srvpgm
+
+# Link with automatic BNDDIR parameter
+calcd.pgm: calcd.module | app.bnddir
+
 # Create a service program from modules + export list
 mysrvpgm.srvpgm: mymod.module mymod.exports
+
+# Create a service program without export list (exports all procedures)
+mysrvpgm.srvpgm: mymod.module
 ```
 
-The `.exports` file is a text file listing exported procedure symbols:
+When `.srvpgm` or `.bnddir` appear as prerequisites (normal or order-only) on `.pgm` or `.srvpgm` targets built via CRTPGM/CRTSRVPGM, the corresponding `BNDSRVPGM()` and `BNDDIR()` parameters are automatically added to the command. This only applies to module-based targets — for source-based programs (e.g., CRTBNDRPG), `.srvpgm` and `.bnddir` prerequisites are build-ordering dependencies only.
+
+The `.exports` (or `.bnd`) file is a text file listing exported procedure symbols:
 
 ```
 STRPGMEXP PGMLVL(*CURRENT) SIGNATURE(*GEN)
@@ -124,12 +135,15 @@ ENDPGMEXP
 | `.rpgle` | `.module` | Module (*MODULE) | `CRTRPGMOD` |
 | `.sqlrpgle` | `.pgm` | Program (*PGM) | `CRTSQLRPGI OBJTYPE(*PGM)` |
 | `.sqlrpgle` | `.module` | Module (*MODULE) | `CRTSQLRPGI OBJTYPE(*MODULE)` |
+| `.cblle` | `.pgm` | Program (*PGM) | `CRTBNDCBL` |
+| `.cblle` | `.module` | Module (*MODULE) | `CRTCBLMOD` |
 | `.clle` | `.pgm` | Program (*PGM) | `CRTBNDCL` |
 | `.clle` | `.module` | Module (*MODULE) | `CRTCLMOD` |
 | `.clp` / `.cl` | `.pgm` | Program (*PGM) | `CRTCLPGM` |
 | `.proc.sql` | `.pgm` | SQL Procedure (*PGM) | `RUNSQLSTM` |
 | `.module` (1+) | `.pgm` | Program (*PGM) | `CRTPGM` |
-| `.module` + `.exports` | `.srvpgm` | Service Program (*SRVPGM) | `CRTSRVPGM` |
+| `.module` + `.exports` or `.bnd` | `.srvpgm` | Service Program (*SRVPGM) | `CRTSRVPGM EXPORT(*SRCFILE)` |
+| `.module` (no exports) | `.srvpgm` | Service Program (*SRVPGM) | `CRTSRVPGM EXPORT(*ALL)` |
 | `.dspf` | `.file` | Display File (*FILE) | `CRTDSPF` |
 | `.json` (RDF) | `.file` | Display File (*FILE) | `CRTDSPF` |
 | `.pf` | `.file` | Physical File (*FILE) | `CRTPF` |
@@ -137,6 +151,7 @@ ENDPGMEXP
 | `.prtf` | `.file` | Printer File (*FILE) | `CRTPRTF` |
 | `.table.sql` | `.file` | SQL Table (*FILE) | `RUNSQLSTM` |
 | `.index.sql` | `.file` | SQL Index (*FILE) | `RUNSQLSTM` |
+| `.view.sql` | `.file` | SQL View (*FILE) | `RUNSQLSTM` |
 | `.file` + `.msgf` | `.menu` | Menu (*MENU) | `CRTMNU` |
 | `.msgf` (CL src) | `.msgf` | Message File (*MSGF) | `CRTMSGF` / `ADDMSGD` |
 | `.bnddir` (CL src) | `.bnddir` | Binding Dir (*BNDDIR) | `CRTBNDDIR` / `ADDBNDDIRE` |

@@ -24,6 +24,16 @@ mypgm.pgm: mypgm.sqlrpgle
 
 **CL command:** `CRTSQLRPGI OBJ(LIB/MYPGM) OBJTYPE(*PGM) SRCSTMF('src/mypgm.sqlrpgle')`
 
+### ILE COBOL program from .cblle
+
+Compiles an ILE COBOL source file into a bound program.
+
+```makefile
+mypgm.pgm: mypgm.cblle
+```
+
+**CL command:** `CRTBNDCBL PGM(LIB/MYPGM) SRCSTMF('src/mypgm.cblle')`
+
 ### ILE CL program from .clle
 
 Compiles an ILE CL source file into a bound program.
@@ -56,13 +66,17 @@ getcount.pgm: getcount.proc.sql
 
 ### Program from modules
 
-Links one or more compiled modules into a program. All prerequisites must be `.module` targets.
+Links one or more compiled modules into a program. Prerequisites include `.module` targets, and optionally `.srvpgm` and `.bnddir` (normal or order-only) for automatic binding.
 
 ```makefile
 mypgm.pgm: mod1.module mod2.module
+calc.pgm: calc.module utils.srvpgm
+calcd.pgm: calcd.module | app.bnddir
 ```
 
 **CL command:** `CRTPGM PGM(LIB/MYPGM) MODULE(LIB/MOD1 LIB/MOD2)`
+
+When `.srvpgm` prerequisites are present, `BNDSRVPGM(name ...)` is appended. When `.bnddir` prerequisites are present (normal or order-only), `BNDDIR(name ...)` is appended.
 
 ## Modules (.module)
 
@@ -84,6 +98,14 @@ mymod.module: mymod.sqlrpgle
 
 **CL command:** `CRTSQLRPGI OBJ(LIB/MYMOD) OBJTYPE(*MODULE) SRCSTMF('src/mymod.sqlrpgle')`
 
+### ILE COBOL module from .cblle
+
+```makefile
+mymod.module: mymod.cblle
+```
+
+**CL command:** `CRTCBLMOD MODULE(LIB/MYMOD) SRCSTMF('src/mymod.cblle')`
+
 ### ILE CL module from .clle
 
 ```makefile
@@ -94,7 +116,9 @@ mymod.module: mymod.clle
 
 ## Service programs (.srvpgm)
 
-A service program is created from one or more modules plus an export list (`.exports` file). The export list defines which procedures are visible to callers.
+A service program is created from one or more modules, optionally with an export list (`.exports` or `.bnd` file). The export list defines which procedures are visible to callers.
+
+### With export list
 
 ```makefile
 mymod.module: mymod.rpgle
@@ -103,9 +127,30 @@ mysrvpgm.srvpgm: mymod.module mysrvpgm.exports
 
 **CL command:** `CRTSRVPGM SRVPGM(LIB/MYSRVPGM) MODULE(LIB/MYMOD) EXPORT(*SRCFILE) SRCSTMF('src/mysrvpgm.exports')`
 
-### .exports file format
+### Without export list (export all)
 
-The exports file is a plain text file with the following structure:
+When no `.exports` or `.bnd` file is listed, all procedures are exported:
+
+```makefile
+mymod.module: mymod.rpgle
+mysrvpgm.srvpgm: mymod.module
+```
+
+**CL command:** `CRTSRVPGM SRVPGM(LIB/MYSRVPGM) MODULE(LIB/MYMOD) EXPORT(*ALL)`
+
+### Binding dependencies
+
+Service programs can also depend on other service programs or binding directories for automatic binding:
+
+```makefile
+mysrvpgm.srvpgm: mymod.module mysrvpgm.exports dep.srvpgm
+```
+
+This appends `BNDSRVPGM(DEP)` to the CRTSRVPGM command. `.bnddir` prerequisites (normal or order-only) append `BNDDIR(name)`.
+
+### .exports / .bnd file format
+
+The exports file (using either `.exports` or `.bnd` extension) is a plain text file with the following structure:
 
 ```
 STRPGMEXP PGMLVL(*CURRENT) SIGNATURE(*GEN)
@@ -189,6 +234,16 @@ empname.file: empname.index.sql employee.file
 ```
 
 **CL command:** `RUNSQLSTM SRCSTMF('src/empname.index.sql') COMMIT(*NONE) DFTRDBCOL(LIB)`
+
+### SQL view from .view.sql
+
+Creates a SQL view by running a DDL script. Typically depends on the tables it references.
+
+```makefile
+empview.file: empview.view.sql employee.file
+```
+
+**CL command:** `RUNSQLSTM SRCSTMF('src/empview.view.sql') COMMIT(*NONE) DFTRDBCOL(LIB)`
 
 ## Menus (.menu)
 
