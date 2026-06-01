@@ -85,7 +85,7 @@
     "ibmiDatabaseSql": true
   },
   "memory": {
-    "enabled": false
+    "enabled": true
   },
   "template_order": [
     "daily-spoolfile-report.md",
@@ -95,5 +95,12 @@
   "deployment_profile_order": [
     "build-and-promote"
   ],
-  "timezone": "gjones"
+  "timezone": "gjones",
+  "tasks": {
+    "defaultShared": true
+  },
+  "updatedAt": "2026-06-01T15:37:21.493Z",
+  "updatedBy": "bmay",
+  "updatedByName": "Brian May",
+  "updatedById": "user_1767620279635_lw6uhpnxl"
 }
