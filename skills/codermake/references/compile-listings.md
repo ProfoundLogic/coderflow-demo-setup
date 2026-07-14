@@ -98,7 +98,7 @@ CPD7344   30   Keyword REF not valid for this type of file.
 
 DDS errors typically reference a specific record format and line within the source.
 
-## SQL DDL listings (.table.sql, .index.sql, .proc.sql)
+## SQL DDL listings (.table.sql, .index.sql, .view.sql, .proc.sql)
 
 SQL DDL statements executed via `RUNSQLSTM` produce SQL messages:
 

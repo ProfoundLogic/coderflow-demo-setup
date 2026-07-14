@@ -1,0 +1,18 @@
+{
+  "$comment": "Manual catalog additions for widgets and properties NOT present in the open-source profoundui-client runtime (e.g. PLS custom widget kits, newer commercial widgets). Loaded and merged on top of properties.json by the validator and the widget-MD generator. Entries should be minimal but accurate — at minimum 'category' and 'appliesTo' so the validator recognizes them. Add more metadata (help, choices, default) as it becomes available.",
+
+  "widgets": [
+    "option buttons"
+  ],
+
+  "properties": {
+    "options": {
+      "category": "Field Settings",
+      "default": "blank",
+      "multOccur": true,
+      "help": "Comma- or whitespace-separated list of option values rendered by the widget. Multi-occurrence — additional entries are stored as 'options 2', 'options 3', etc. Format observed in the wild: '2=Update  4=Delete  5=Display' (numeric code = label).",
+      "appliesTo": ["option buttons"],
+      "_extensionSource": "Observed in PLS custom widget kit (prof-src/userdata/widget_sets.json) and real RDFs."
+    }
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://profoundlogic.com/schemas/pui-rdf.schema.json",
+  "title": "Profound UI Rich Display File",
+  "description": "Structural schema for a Profound UI Rich Display File saved as JSON. This schema validates file shape only — it does not validate property names or values against the widget property catalog. Use the skill's validator for that level of checking.",
+  "type": "object",
+  "required": ["text", "formats"],
+  "properties": {
+    "text": {
+      "type": "string",
+      "description": "Human-readable description of the display file."
+    },
+    "formats": {
+      "type": "array",
+      "minItems": 1,
+      "description": "One or more record formats. Each is a DDS-style screen layout.",
+      "items": { "$ref": "#/$defs/format" }
+    },
+    "keywords": {
+      "type": "array",
+      "description": "File-level DDS keywords (e.g. INDARA).",
+      "items": { "type": "string" }
+    },
+    "long name aliases": {
+      "type": "boolean",
+      "description": "Whether long field-name aliases are enabled. Usually true."
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "format": {
+      "type": "object",
+      "required": ["screen", "items"],
+      "properties": {
+        "screen": { "$ref": "#/$defs/screenMeta" },
+        "items": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/item" }
+        },
+        "dspf record layout": { "$ref": "#/$defs/dspfRecordLayout" }
+      },
+      "additionalProperties": true
+    },
+    "screenMeta": {
+      "type": "object",
+      "required": ["record format name"],
+      "properties": {
+        "record format name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "DDS record format name."
+        },
+        "overlay": {
+          "type": "string",
+          "enum": ["true", "false"],
+          "description": "DDS OVERLAY keyword. String, not real boolean."
+        },
+        "overlay range": {
+          "type": "string",
+          "pattern": "^\\d+-\\d+$",
+          "description": "Row range the format occupies, e.g. \"1-20\"."
+        },
+        "onload": {
+          "type": "string",
+          "description": "JavaScript run when the format renders."
+        }
+      },
+      "additionalProperties": true
+    },
+    "item": {
+      "type": "object",
+      "required": ["id", "field type"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Unique element id within the file."
+        },
+        "field type": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Widget type. See reference/widgets/ for the list."
+        },
+        "layout": {
+          "type": "string",
+          "description": "Id of a parent layout item (if this item is nested in a layout)."
+        },
+        "container": {
+          "type": "string",
+          "pattern": "^\\d+$",
+          "description": "1-based slot index inside the parent layout."
+        },
+        "grid": {
+          "type": "string",
+          "description": "Id of a parent grid item (if this item is a column template in a grid)."
+        },
+        "column": {
+          "type": "string",
+          "pattern": "^\\d+$",
+          "description": "0-based column index inside the parent grid."
+        }
+      },
+      "additionalProperties": true
+    },
+    "dspfRecordLayout": {
+      "type": "object",
+      "description": "Map of record-format-name -> ordered list of field buffer-position entries.",
+      "additionalProperties": {
+        "type": "array",
+        "items": { "$ref": "#/$defs/bufferField" }
+      }
+    },
+    "bufferField": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Field name. May be \"*inNN\" for legacy indicator-style references."
+        },
+        "inBufPos": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "1-based input buffer position. Omit for output-only fields."
+        },
+        "outBufPos": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "1-based output buffer position. Omit for input-only fields."
+        }
+      },
+      "additionalProperties": true
+    },
+    "boundFieldValue": {
+      "description": "A property value that is a data binding to an IBM i program field. Different data types use different keys, but all share fieldName.",
+      "type": "object",
+      "required": ["fieldName", "dataType"],
+      "properties": {
+        "fieldName": {
+          "type": "string",
+          "description": "Field name. Supports \"NN\", \"NNN\", \"*inNN\" for indicators (N prefix negates). Any string for named fields."
+        },
+        "dataType": {
+          "type": "string",
+          "enum": ["char", "varchar", "zoned", "packed", "integer", "date", "time", "timestamp", "indicator", "expression", "graphic"]
+        },
+        "formatting": {
+          "type": "string",
+          "enum": ["Text", "Number", "Date", "Time", "Timestamp", "Indicator"]
+        },
+        "designValue": { "type": "string" },
+        "dataLength": { "type": "string" },
+        "decPos": { "type": "string" },
+        "indFormat": {
+          "type": "string",
+          "enum": ["1 / 0", "true / false", "Custom Values"]
+        },
+        "customTrue": { "type": "string" },
+        "customFalse": { "type": "string" }
+      },
+      "additionalProperties": true
+    }
+  }
+}

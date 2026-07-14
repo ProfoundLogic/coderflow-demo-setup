@@ -1,0 +1,32 @@
+{
+  "image_name": "demo-environment",
+  "default_agent": "claude",
+  "repos": [
+    {
+      "name": "drusso-ibmi-source",
+      "url": "https://github.com/ProfoundLogic/drusso-ibmi-source.git",
+      "branch": "main",
+      "allow_branch_selection": true,
+      "remote_provider": {
+        "provider": "github-coderflow-demo-server",
+        "credential_mode": "user"
+      },
+      "read_only": false,
+      "clone_auto": true,
+      "ibmiImportEnabled": true
+    }
+  ],
+  "standardInstructions": {
+    "outputRequirements": true,
+    "screenshotGuidelines": false,
+    "ibmiOutputRequirements": false,
+    "ibmiExploratoryVerification": false,
+    "ibmiDatabaseSql": false
+  },
+  "description": "Demo",
+  "skills": [],
+  "memory": {
+    "enabled": false
+  },
+  "external_connections": []
+}

@@ -1,0 +1,16 @@
+{
+  "runId": "1776450307601-67ccc29e",
+  "automationId": "1775144580606-1f296f1e",
+  "targetType": "task",
+  "environment": "ibmi-development",
+  "taskId": null,
+  "deploymentId": null,
+  "deploymentProfile": null,
+  "triggeredAt": "2026-04-17T18:25:07.600Z",
+  "triggeredBy": "manual",
+  "webhookId": null,
+  "webhookDeliveryId": null,
+  "status": "failed",
+  "finishedAt": "2026-04-17T18:25:07.627Z",
+  "error": "Background task server URL is not configured. Set CODERFLOW_INTERNAL_URL or CODERFLOW_SERVER_URL to a URL that task containers can reach."
+}

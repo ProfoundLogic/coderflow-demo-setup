@@ -21,7 +21,7 @@
   ],
   "rebuild_schedule": {
     "enabled": true,
-    "interval_hours": 24
+    "cron": "57 3 * * *"
   },
   "skills": [
     "code-comments-best-practices",
@@ -35,7 +35,8 @@
     "email",
     "confluence",
     "pdf",
-    "ejs-screen-designer"
+    "ejs-screen-designer",
+    "ibmi-documentation"
   ],
   "external_connections": [
     {
@@ -48,6 +49,7 @@
       "config": {
         "host": "idev.profoundlogic.com",
         "user": "aidemo",
+        "preflight_required": true,
         "features": [
           "sql",
           "build",
@@ -75,14 +77,18 @@
     ],
     "enabled": true,
     "name": "",
-    "qa_url": "https://idev.profoundlogic.com:8103"
+    "qa_url": "https://idev.profoundlogic.com:8103",
+    "basic_auth": {
+      "user_property": "gjones"
+    }
   },
   "standardInstructions": {
     "outputRequirements": true,
     "screenshotGuidelines": false,
     "ibmiOutputRequirements": true,
     "ibmiExploratoryVerification": true,
-    "ibmiDatabaseSql": true
+    "ibmiDatabaseSql": true,
+    "credentialHandling": true
   },
   "memory": {
     "enabled": true
@@ -99,8 +105,8 @@
   "tasks": {
     "defaultShared": true
   },
-  "updatedAt": "2026-06-01T15:37:21.493Z",
-  "updatedBy": "bmay",
-  "updatedByName": "Brian May",
-  "updatedById": "user_1767620279635_lw6uhpnxl"
+  "updatedAt": "2026-07-14T12:29:49.668Z",
+  "updatedBy": "gjones",
+  "updatedByName": "Gary Jones",
+  "updatedById": "user_1767620328397_iectw4bix"
 }

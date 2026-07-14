@@ -1,0 +1,106 @@
+{
+  "text": "Subfile (grid) with two bound columns",
+  "formats": [
+    {
+      "screen": {
+        "record format name": "subctl",
+        "overlay": "true",
+        "overlay range": "1-23"
+      },
+      "items": [
+        {
+          "id": "grid",
+          "field type": "grid",
+          "record format name": "sfl",
+          "number of columns": "2",
+          "subfile size": "10",
+          "number of rows": "10",
+          "column widths": "200,300",
+          "column headings": "Customer #,Name",
+          "has header": "true",
+          "display subfile": {
+            "fieldName": "70",
+            "dataType": "expression",
+            "formatting": "Indicator",
+            "indFormat": "true / false"
+          },
+          "display control record": {
+            "fieldName": "71",
+            "dataType": "expression",
+            "formatting": "Indicator",
+            "indFormat": "true / false"
+          },
+          "clear subfile": {
+            "fieldName": "72",
+            "dataType": "expression",
+            "formatting": "Indicator",
+            "indFormat": "true / false"
+          },
+          "subfile end": {
+            "fieldName": "N70",
+            "dataType": "expression",
+            "formatting": "Indicator",
+            "indFormat": "true / false"
+          },
+          "left": "20px",
+          "top": "20px",
+          "width": "500px",
+          "height": "300px"
+        },
+        {
+          "id": "sCustNo",
+          "field type": "output field",
+          "value": {
+            "fieldName": "scustno",
+            "dataLength": "6",
+            "decPos": "0",
+            "numSep": "false",
+            "zeroBalance": "true",
+            "numBlankFill": "false",
+            "zeroFill": "true",
+            "noExtraSpaces": "false",
+            "curSym": "",
+            "dataType": "zoned",
+            "formatting": "Number",
+            "negNum": "-999.00",
+            "units": "",
+            "designValue": "[scustno]"
+          },
+          "grid": "grid",
+          "column": "0"
+        },
+        {
+          "id": "sCustName",
+          "field type": "output field",
+          "value": {
+            "fieldName": "scustname",
+            "dataLength": "40",
+            "trimLeading": "false",
+            "trimTrailing": "true",
+            "blankFill": "false",
+            "rjZeroFill": "false",
+            "dataType": "char",
+            "formatting": "Text",
+            "textTransform": "none",
+            "designValue": "[scustname]"
+          },
+          "grid": "grid",
+          "column": "1"
+        }
+      ],
+      "dspf record layout": {
+        "subctl": [
+          { "name": "*in70", "outBufPos": 1 },
+          { "name": "*in71", "outBufPos": 2 },
+          { "name": "*in72", "outBufPos": 3 }
+        ],
+        "sfl": [
+          { "name": "scustno", "outBufPos": 1 },
+          { "name": "scustname", "outBufPos": 7 }
+        ]
+      }
+    }
+  ],
+  "keywords": ["INDARA"],
+  "long name aliases": true
+}

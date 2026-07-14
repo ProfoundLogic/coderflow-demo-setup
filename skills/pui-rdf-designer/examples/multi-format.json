@@ -1,0 +1,105 @@
+{
+  "text": "Customer-name screen with conditional error message and a function-key footer",
+  "formats": [
+    {
+      "screen": {
+        "record format name": "main",
+        "overlay": "true",
+        "overlay range": "1-20"
+      },
+      "items": [
+        {
+          "id": "panel",
+          "field type": "panel",
+          "left": "20px",
+          "top": "20px",
+          "width": "400px",
+          "height": "150px",
+          "header text": "Customer"
+        },
+        {
+          "id": "lblName",
+          "field type": "output field",
+          "value": "Name:",
+          "left": "10px",
+          "top": "20px",
+          "layout": "panel",
+          "container": "1"
+        },
+        {
+          "id": "custName",
+          "field type": "textbox",
+          "value": {
+            "fieldName": "custname",
+            "dataLength": "40",
+            "trimLeading": "false",
+            "trimTrailing": "true",
+            "blankFill": "false",
+            "rjZeroFill": "false",
+            "dataType": "char",
+            "formatting": "Text",
+            "textTransform": "none",
+            "designValue": "[custname]"
+          },
+          "left": "100px",
+          "top": "20px",
+          "width": "200px",
+          "layout": "panel",
+          "container": "1"
+        },
+        {
+          "id": "errorMsg",
+          "field type": "output field",
+          "value": "Name is required",
+          "color": "red",
+          "visibility": {
+            "fieldName": "50",
+            "dataType": "expression",
+            "formatting": "Indicator",
+            "indFormat": "true / false"
+          },
+          "left": "10px",
+          "top": "60px",
+          "layout": "panel",
+          "container": "1"
+        }
+      ],
+      "dspf record layout": {
+        "main": [
+          { "name": "*in50", "outBufPos": 1 },
+          { "name": "custname", "inBufPos": 1, "outBufPos": 2 }
+        ]
+      }
+    },
+    {
+      "screen": {
+        "record format name": "fkey",
+        "overlay": "true",
+        "overlay range": "23-23"
+      },
+      "items": [
+        {
+          "id": "btnExit",
+          "field type": "graphic button",
+          "value": "Exit",
+          "shortcut key": "F3",
+          "response": {
+            "fieldName": "*in03",
+            "dataType": "indicator",
+            "formatting": "Indicator",
+            "indFormat": "1 / 0"
+          },
+          "left": "20px",
+          "top": "440px"
+        }
+      ],
+      "dspf record layout": {
+        "fkey": [
+          { "name": "*in03", "inBufPos": 1 }
+        ]
+      }
+    }
+  ],
+  "keywords": ["INDARA"],
+  "long name aliases": true
+}

@@ -1,0 +1,24 @@
+{
+  "text": "Minimal RDF — one output field on one format",
+  "formats": [
+    {
+      "screen": {
+        "record format name": "main"
+      },
+      "items": [
+        {
+          "id": "title",
+          "field type": "output field",
+          "value": "Hello, world!",
+          "left": "20px",
+          "top": "20px"
+        }
+      ],
+      "dspf record layout": {
+        "main": []
+      }
+    }
+  ],
+  "keywords": [],
+  "long name aliases": true
+}

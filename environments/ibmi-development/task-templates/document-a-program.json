@@ -11,9 +11,13 @@
         "type": "files",
         "label": "Select RPG or CL source to document",
         "multiSelect": true,
-        "path": "/workspace/ibmi-agentic/src",
+        "path": "/workspace/ibmi-agentic/cfdemo",
         "pattern": "*.{rpg,rpgle,sqlrpgle,cl,clle}"
       }
     }
-  }
+  },
+  "updatedAt": "2026-07-14T12:28:04.738Z",
+  "updatedBy": "gjones",
+  "updatedByName": "Gary Jones",
+  "updatedById": "user_1767620328397_iectw4bix"
 }
