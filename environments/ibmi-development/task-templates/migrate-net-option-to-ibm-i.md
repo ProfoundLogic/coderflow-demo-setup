@@ -85,17 +85,15 @@ The original .NET app calculates totals for the **current page only** (not the
 
 The server runs locally in the dev container. **Do not deploy to test** — test everything locally first:
 
-\# Start the backend (port 3000, auth disabled for dev)
-cd /workspace/myscoular/server
-DISABLE\_AUTH=1 node index.js &
+\# Start the backend (port 3000, auth disabled for dev) cd /workspace/myscoular/server DISABLE\_AUTH=1 node index.js &
 
 # Start the frontend (port 4200, proxies /api to localhost:3000)
-cd /workspace/myscoular/client
-API\_TARGET=http://localhost:3000 npx ng serve --host 0.0.0.0 --port 4200 --proxy-config proxy.conf.json
+
+cd /workspace/myscoular/client API\_TARGET=[http://localhost:3000](http://localhost:3000) npx ng serve --host 0.0.0.0 --port 4200 --proxy-config proxy.conf.json
 
 Test API routes directly with curl before testing in the browser:
 
-curl -s "http://localhost:3000/api/<route>?param=value" | node -e "const d=JSON.parse(require('fs').readFileSync('/dev/stdin','utf8')); console.log(JSON.stringify(d, null, 2))"
+curl -s "[http://localhost:3000/api/](http://localhost:3000/api/)?param=value" | node -e "const d=JSON.parse(require('fs').readFileSync('/dev/stdin','utf8')); console.log(JSON.stringify(d, null, 2))"
 
 Restart the server after every backend change (`kill` the old process, re-run `node index.js`).
 
@@ -103,5 +101,4 @@ Restart the server after every backend change (`kill` the old process, re-run 
 
 Both must pass with zero errors:
 
-cd /workspace/myscoular/client && npx tsc --noEmit
-cd /workspace/myscoular/client && npx ng build
+cd /workspace/myscoular/client && npx tsc --noEmit cd /workspace/myscoular/client && npx ng build
