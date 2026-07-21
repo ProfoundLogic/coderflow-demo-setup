@@ -64,9 +64,87 @@ function customize() {
 
 **Field ids are not portable.** The exact `D_row_col`/`I_row_col` ids (and the row/col numbers passed to `moveElement`) depend on the display's column width and exact field layout — a skin built for an 80-col signon screen and one built for a 132-col signon screen need *separate* blocks with different ids (compare `Gradient/custom.js` field ids like `D_1_23`/`I_6_53` against `Gradient/adjusted columns custom.js`'s `D_1_22`/`I_6_52` — every id is shifted by one column). When adapting this pattern to a new skin/screen, get the real field ids from the actual screen (ask the user for a screen capture or field dump) rather than reusing another skin's ids verbatim.
 
-## 2. Function-key → side menu / action panel
+## 2. Function-key → side menu / action panel (or a spaced-out horizontal bar)
 
-Several skins (Hybrid family) replace the row of function-key buttons with a styled vertical side panel, built dynamically from whatever function keys the *current* screen actually has:
+Genie renders every `"Fnn=Text"` function-key prompt as its own `<input type="button">`, positioned with inline absolute `top`/`left` matching that prompt's original column on the 5250 screen, plus an inline `padding` Genie computes itself. Two consequences that matter before you touch these buttons at all:
+
+- **They don't reflow off each other.** If a skin's CSS makes buttons visually wider (more padding, bigger font) than the blank space that existed between prompts on the original green-screen text, the next button — already fixed in place — simply overlaps or touches with no gap, no matter what `margin` you add in CSS. This is *the* cause of "crowded/overlapping function key buttons" reports; margin/padding tweaks in the stylesheet cannot fix it, because the buttons never participate in normal document flow to begin with.
+- **`input.fkey` is not guaranteed to exist.** This pattern (and the Hybrid family code below) reads the function key off an `input.fkey` property. On at least one real PUI/Genie build this property was simply absent on every button, so any code gating on `input.fkey == null` silently skips every single button — no error, just a no-op. The button's own label text already encodes the key unambiguously (`"F3=Exit"`, `"F16=System main menu"`), so robust code should prefer `.fkey` when present but fall back to parsing it out of `.value`:
+  ```js
+  let fkey = input.fkey;
+  if (fkey == null) {
+    const m = /^(Enter|Help|F\d{1,2})=/.exec(input.value);
+    if (m == null) continue;
+    fkey = m[1];
+  }
+  ```
+
+**Fixing the crowding (or building a side menu) means rebuilding these buttons yourself** — hide Genie's originals and render your own, either as a vertical side panel (Hybrid family, below) or a horizontal flex-wrapped bar in the same location (simpler when the user just wants breathing room, not a layout change):
+
+```js
+function fkeyRank(fkey) {
+  if (fkey == "Enter") return -2;
+  if (fkey == "Help") return -1;
+  const m = /^F(\d{1,2})$/.exec(fkey);
+  return m == null ? 999 : parseInt(m[1], 10);
+}
+
+function rebuildFkeyBar() {
+  const screenDiv = getObj("5250");
+  if (screenDiv == null) return;
+  const oldBar = getObj("mcnyFkeyBar");
+  if (oldBar != null && oldBar.parentNode != null) oldBar.parentNode.removeChild(oldBar);
+
+  const inputs = screenDiv.getElementsByTagName("input");
+  const found = [];
+  const seen = {};
+  // Genie does NOT insert these buttons into the DOM in left-to-right/ascending
+  // order. Anchor position using the MINIMUM top/left across every candidate
+  // (not just whichever is first in DOM order) or the bar shifts away from
+  // where the original leftmost/topmost button was.
+  let topPx = null, leftPx = null;
+  for (let i = 0; i < inputs.length; i++) {
+    const input = inputs[i];
+    if (input.type != "button") continue;
+    if (input.id.indexOf("W") != -1) continue;   // buttons inside windows: leave in place
+    let fkey = input.fkey;
+    if (fkey == null) {
+      const m = /^(Enter|Help|F\d{1,2})=/.exec(input.value);
+      if (m == null) continue;
+      fkey = m[1];
+    }
+    const t = parseInt(input.style.top, 10) || 0, l = parseInt(input.style.left, 10) || 0;
+    if (topPx == null || t < topPx) topPx = t;
+    if (leftPx == null || l < leftPx) leftPx = l;
+    input.style.visibility = "hidden";           // hide the original; we render our own
+    if (seen[input.value] == true) continue;     // de-dupe identical labels
+    seen[input.value] = true;
+    found.push({ fkey: fkey, text: input.value });
+  }
+  if (found.length == 0) return;
+  // Sort ascending by F-key number - DOM order is not reliable either.
+  found.sort(function(a, b) { return fkeyRank(a.fkey) - fkeyRank(b.fkey); });
+
+  const bar = document.createElement("div");
+  bar.id = "mcnyFkeyBar";
+  bar.className = "mcny-fkey-bar";               // CSS: display:flex; flex-wrap:wrap; gap: 8px 12px;
+  bar.style.position = "absolute";
+  bar.style.top = topPx + "px";
+  bar.style.left = leftPx + "px";
+  bar.style.right = "6px";
+  found.forEach(function(f) {
+    const btn = document.createElement("input");
+    btn.type = "button"; btn.value = f.text; btn.className = "button";
+    btn.onclick = function() { pressKey(f.fkey); };
+    bar.appendChild(btn);
+  });
+  screenDiv.appendChild(bar);
+}
+```
+
+**Critical: this must be called from `pui.genie.afterInit`, never from `customize()`.** Per the documented event order (`beforeLoad()` → 5250 render → `customize()` → `pui.genie.afterInit` → Designer → `afterLoad()`), Genie converts `"Fnn=Text"` prompts into `<input type=button>` elements as part of what `afterInit` is documented to fire *after*. Code that scans for fkey buttons from inside `customize()` runs before that conversion has happened, finds nothing, and silently does nothing — then Genie creates its (still-crowded, un-hidden) buttons immediately afterward, with no fix left to catch them. See `event-lifecycle.md`'s `pui.genie.afterInit` section for the full symptom/diagnosis writeup; the short version is: if calling your rebuild function manually from the browser console fixes things instantly but it never happens automatically on page load, this is almost always the bug.
+
+The original Hybrid-family vertical side-panel version of this pattern:
 
 ```js
 hybridSkin.createSideMenu = function() {
@@ -95,11 +173,10 @@ hybridSkin.createSideMenu = function() {
   //   create a div/button styled as a link, fkeyLink.onclick = function() { pressKey(buttons[i].fkey); }
 };
 ```
-
-Call this once per screen from `customize()` (or from the one-time `pui.genie.afterInit`/`pui.onload` hook if the panel container itself is part of the static header built once). Key ideas worth reusing:
-- Read function keys straight off the rendered `<input type="button">` elements' `.fkey`/`.value`, don't hardcode a button list.
+Whatever hook this particular skin calls `createSideMenu()` from, call your own version from `pui.genie.afterInit` — don't assume `customize()` works just because it's the more commonly-referenced hook for "per-screen skin logic" in general. Key ideas worth reusing beyond the timing:
+- Read function keys straight off the rendered `<input type="button">` elements' `.fkey`/`.value` (with the fallback above), don't hardcode a button list.
 - Always add a synthetic "Enter → Continue" button if the screen has no explicit Enter key, so the panel is never dead-ended.
-- Distinguish window-format buttons (id contains `"W"`) from main-screen buttons — windows keep their own inline buttons; only main-screen keys get promoted to the side panel.
+- Distinguish window-format buttons (id contains `"W"`) from main-screen buttons — windows keep their own inline buttons; only main-screen keys get promoted to the side panel/bar.
 
 ## 3. Responsive / fixed-width centering for 132-column mode
 

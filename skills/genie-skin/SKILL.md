@@ -15,12 +15,11 @@ createdAt: 2026-07-21T15:33:51.456Z
 createdBy: gjones
 createdByName: Gary Jones
 createdById: user_1767620328397_iectw4bix
-updatedAt: 2026-07-21T15:33:56.295Z
+updatedAt: 2026-07-21T18:07:55.262Z
 updatedBy: gjones
 updatedByName: Gary Jones
 updatedById: user_1767620328397_iectw4bix
 ---
-
 This skill is for editing and creating **Profound Logic Genie skins** — the HTML/CSS/JavaScript bundles that control how every 5250 (green-screen) display file looks and behaves when rendered through Genie (Profound UI's browser-based 5250 emulator).
 
 Use this skill whenever the user uploads or points to a Genie skin folder and asks to change its look, fix a rendering issue, add a widget, restyle a screen, or "make it pop." It applies equally to a brand-new skin and to one copied from an existing skin.
@@ -48,13 +47,24 @@ Read `references/architecture.md` before making structural changes (IFS paths, t
    - Color, spacing, fonts, animations, responsive breakpoints, hover states → `<SkinName>.css`.
 5. **Pick the right lifecycle hook** in `custom.js` (full detail + examples in `references/event-lifecycle.md`):
    - `beforeLoad()` — before the screen renders; adjust `pui.multX`/`pui.multY`, toggle body classes for display size.
-   - `customize()` — runs after every screen renders, before Designer enhancements. This is where 99% of skin logic lives: `detectScreen(...)` to special-case a screen (classically the sign-on screen), hide/reposition/relabel fields, build side menus from function keys, set `pui["loading animation"]`, etc.
-   - `pui.genie.afterInit` — after Genie's own automatic customizations (fkey buttons etc.), before Designer enhancements. Good for injecting one-time DOM structure (headers, logos) that must exist before Designer runs. Guard with `if (pui.genie.afterInit == null) { pui.genie.afterInit = function() {...}; }` since it's a single global, not additive.
+   - `customize()` — runs after every screen renders, before Genie's own automatic customizations and before Designer enhancements. This is where the vast majority of skin logic lives: `detectScreen(...)` to special-case a screen (classically the sign-on screen), hide/reposition/relabel fields, set `pui["loading animation"]`, etc. **Do not read or rebuild function-key buttons here** — see the next bullet.
+   - `pui.genie.afterInit` — fires after Genie's own automatic customizations (including converting `"Fnn=Text"` prompts into `<input type=button>` elements) but before Designer enhancements. **This is the only correct place for any code that reads or rebuilds function-key buttons** (side menus, action panels, fixing crowded/overlapping fkey buttons — see `references/patterns.md` §2) — code that does this from `customize()` instead runs before those buttons exist, finds nothing, and silently does nothing, which is easy to mistake for a caching or deployment problem (see the debugging note below). Also good for injecting other one-time DOM structure (headers, logos) that must exist before Designer runs. Guard the assignment with `if (pui.genie.afterInit == null) { pui.genie.afterInit = function() {...}; }` since it's a single global, not additive — the assigned function itself still fires on every subsequent screen.
    - `afterLoad()` — after everything (including Designer) has rendered. Good for final visual polish, reading `pui.genie.isCustomized`.
    - `pui.genie.onalarm` — fires when the 5250 ALARM keyword was sent on the screen; play a sound or flash something.
    - `pui.onload = function() {...}` at the bottom of `custom.js` (distinct from the per-format `pui.onload(config)` documented for Rich Display Files, which does **not** fire for Genie) is used by real skins as a one-time-per-page-load hook via `setTimeout(fn, 0)` — see the Hybrid skin pattern.
-6. **Use the existing helper API** rather than raw DOM code where one exists — `references/helper-functions.md` catalogs every helper (`detectScreen`, `hideElement(s)`, `changeElementValue/Class`, `moveElement`, `newElement`, `getObj`, `get`, `getRight`, `pressKey`, `applyProperty`, `getOutputFields`, `pui.set`, ...) with real signatures pulled from working skins.
+6. **Use the existing helper API** rather than raw DOM code where one exists — `references/helper-functions.md` catalogs every helper (`detectScreen`, `hideElement(s)`, `changeElementValue/Class`, `moveElement`, `newElement`, `getObj`, `get`, `getRight`, `pressKey`, `applyProperty`, `getOutputFields`, `pui.set`, ...) with real signatures pulled from working skins. Note the `input.fkey` caveat there before writing any function-key-button code — that property isn't guaranteed to exist on every PUI build.
 7. **Build/verify:** these are static web assets (no compiler). "Testing" means: confirm the JS is syntactically valid, confirm `start.html`'s `<script>`/`<link>` ordering rule is intact (`profoundui.css` before `Skin.css`; `genie.js` before `custom.js`), and reason through the `detectScreen(...)` conditions against the actual field IDs/labels on the screen(s) in question. If the user can give you a live Genie session or screen capture, use it to sanity-check field IDs (`D_row_col` for display fields, `I_row_col` for input fields) — these are position-dependent and will NOT match between screens of different sizes/layouts, which is why 132-wide vs 80-wide sign-on customizations in real skins duplicate the whole block with shifted IDs (see `Gradient/adjusted columns custom.js` vs `Gradient/custom.js`).
+
+## When a fix seems to have no effect
+
+You can't run a browser from this environment, so every fix to a live-tested skin depends on the user reporting back what they see — and "no change" has several very different causes that are easy to conflate:
+
+1. **Stale cache.** Some PUI/Apache instances send no cache-control headers for skin `.css`/`.js`, so browsers keep serving a previously-fetched copy after edits. Version-stamp the edited asset URL(s) in `start.html` (`custom.js?v=2`) and bump the number on every further edit to force a re-fetch.
+2. **Wrong deployment target.** This container only edits local skin source — it cannot push files to a live PUI/IFS server. Confirm the user is actually copying to the path the browser is fetching from; folder-naming conventions (e.g. a literal space vs. underscore in `genie skins`/`genie_skins`) can differ between environments and silently send edits to a directory nobody serves from.
+3. **Wrong skin active.** Confirm the session is actually loading the skin you're editing (`?skin=<name>` in the URL, or the Genie Administrator's configured default) — otherwise every edit is invisible by construction, no matter how correct.
+4. **Lifecycle timing, not a logic bug.** Once you've confirmed (e.g. via the browser's DevTools Sources/Network tab) that the exact current file is genuinely loaded and parsed, and the fix *still* does nothing automatically: ask the user to invoke the suspect function **manually from the DevTools console** after the page has fully settled. If it works instantly when called by hand but never fires correctly on its own, suspect a hook-ordering bug (classically: function-key-button code placed in `customize()` instead of `pui.genie.afterInit`, per the callout above) rather than continuing to tweak the function's internals.
+
+Work through these roughly in order — each one fully explains "no visible change" on its own, and confirming/ruling out the cheap ones first (cache, path, active skin) avoids mistakenly rewriting working logic to chase a deployment problem, or vice versa.
 
 ## Making a skin "pop" — modernization checklist
 
@@ -83,5 +93,5 @@ The user wants extra JS to be organized as separate, reusable files rather than 
 - `references/event-lifecycle.md` — full event order and every documented global event (`beforeLoad`, `customize`, `pui.genie.afterInit`, `afterLoad`, `pui.genie.onalarm`, plus the broader `pui.*` event set: `inputfilter`, `onbeforetimeout`, `onoffline`, `onPCCommand`, `onshutdown`, `onsubmit`, `ontimeout`, `onuseractivity`, `overrideSubmitUrl`, `validate`, `beforeRender`/`beforeRespond`/`onload` — noting which do **not** fire for Genie screens) with parameters and real examples.
 - `references/helper-functions.md` — catalog of the `genie.js` runtime helper API actually used across ~30 real skins, with signatures and usage examples.
 - `references/attribute-colors.md` — the 5250 attribute-byte → CSS class table (`A20`–`A3E`, DIV vs INPUT variants) and how/why skins remap them.
-- `references/patterns.md` — worked patterns pulled from real skins: sign-on screen rebuild, function-key → side-menu/action-panel generation, responsive/tablet touch keypad, dynamic vs static logo placement, break-message (`pui["brkmsg..."]`) setup, loading-animation CSS.
+- `references/patterns.md` — worked patterns pulled from real skins: sign-on screen rebuild, function-key → side-menu/action-panel/spaced-bar generation (incl. the crowded-fkey-buttons root cause and fix), responsive/tablet touch keypad, dynamic vs static logo placement, break-message (`pui["brkmsg..."]`) setup, loading-animation CSS.
 - `references/modular-js.md` — how to structure additional, reusable custom JS files across skins.

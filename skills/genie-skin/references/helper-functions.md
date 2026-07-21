@@ -41,6 +41,18 @@ Returns an array of all output-field objects on the current screen. Iterate and 
 ### Field id convention
 5250 field ids follow `D_<row>_<col>` (display/output field) or `I_<row>_<col>` (input field), 0- or 1-based row/col depending on display size — **these ids are screen/layout-specific and will differ between an 80x24 screen and its 132x27 counterpart, or with a differently-numbered password field (128-char password support adds `I_8_x`/`I_9_x` continuation fields).** Never assume an id copied from one screen/skin transfers to another without checking. Window-format fields get an id suffix containing `"W"` (e.g. used to distinguish "is this button inside a window" in side-menu-building code).
 
+### `input.fkey` on function-key buttons — don't trust it blindly
+Genie-generated function-key `<input type="button">` elements are documented/observed (in Hybrid-family code) to carry a `.fkey` JS property (e.g. `"F3"`, `"Enter"`) alongside their visible `value` (e.g. `"F3=Exit"`). On at least one real PUI/Genie build in the wild, `.fkey` was not present on these elements at all, and code gating on `input.fkey == null` silently skipped every button with no error. Since the key is always encoded in the label text anyway, treat `.fkey` as an optimization, not a dependency — prefer it when present, but fall back to parsing `input.value`:
+```js
+let fkey = input.fkey;
+if (fkey == null) {
+  const m = /^(Enter|Help|F\d{1,2})=/.exec(input.value);
+  if (m == null) continue;  // not a recognizable fkey button
+  fkey = m[1];
+}
+```
+Also don't assume these buttons appear in the DOM in ascending/left-to-right order — sort explicitly by parsed F-key number if display order matters (see `patterns.md` §2's `fkeyRank` helper).
+
 ## DOM manipulation
 
 ### `hideElement(id)` / `hideElements(id1, id2, id3, ...)`

@@ -37,7 +37,9 @@ No parameters.
 
 ## `customize()`
 
-Runs after every screen renders, but **before** any Designer enhancements are applied. This is where the vast majority of skin logic lives — special-casing specific screens (most commonly the sign-on screen) via `detectScreen(...)`, hiding/relabeling/repositioning fields, building side menus from function keys, setting loading-animation config, handling 132-wide vs normal-width layout.
+Runs after every screen renders, but **before** Genie's own automatic customizations (including turning function-key prompts into buttons — see the `pui.genie.afterInit` warning immediately below) and **before** any Designer enhancements are applied. This is where the vast majority of skin logic lives — special-casing specific screens (most commonly the sign-on screen) via `detectScreen(...)`, hiding/relabeling/repositioning fields, setting loading-animation config, handling 132-wide vs normal-width layout.
+
+**Do not read or rebuild the auto-generated function-key `<input type="button">` elements from here** — they don't exist yet at this point in the lifecycle. See the callout below.
 
 No parameters. See `patterns.md` for the canonical sign-on-screen rewrite used (with minor variants) across nearly every real skin reviewed.
 
@@ -56,6 +58,10 @@ pui.genie.afterInit = function() {
   }
 };
 ```
+
+**This is the only correct hook for any code that reads or rebuilds Genie's auto-generated function-key buttons** (side menus, action panels, a re-spaced fkey bar — see `patterns.md` §2). Function keys don't get converted from `"Fnn=Text"` screen text into real `<input type="button">` elements until this point in the lifecycle. Code placed in `customize()` instead (an easy mistake, since `customize()` is where "the vast majority of skin logic lives" and it's tempting to just add one more thing to it) will scan for those buttons before they exist, find nothing, and silently do nothing — Genie then creates its buttons immediately afterward with no fix left in place to touch them.
+
+**Diagnosing this bug is confusing because it looks exactly like a caching/deployment problem**: the skin's `.js`/`.css` files can be verified as correctly deployed and loaded (DevTools Sources panel shows the right file/version, breakpoints hit the right line) and the fix still visibly does nothing on a normal page load. The decisive test: invoke the suspect function **manually from the DevTools console** after the page has fully settled. If it works instantly when called manually but never automatically on load, that is this bug — move the call into `pui.genie.afterInit`, not a caching or logic problem to keep chasing in `customize()`.
 
 Because this is a single global function assignment (not additive), and `customize()` runs on *every* screen, real skins guard the assignment so it only happens once:
 
