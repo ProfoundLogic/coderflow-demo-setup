@@ -1,0 +1,35 @@
+{
+  "id": "1787030323707-dde3aded",
+  "name": "Morning PreSales Status Report",
+  "description": "Morning PreSales Status Report",
+  "environment": "ibmi-development",
+  "enabled": true,
+  "schedule": "30 7 * * 1-5",
+  "scmPoll": null,
+  "targetType": "task",
+  "agent": {
+    "name": "claude",
+    "model": "claude-opus-4-5-20251101",
+    "effortLevel": "medium",
+    "reasoningLevel": null
+  },
+  "task": {
+    "name": "Automation - {{date}}",
+    "instructions": "",
+    "taskType": "psact-morning-report",
+    "parameters": {},
+    "skills": []
+  },
+  "deployment": null,
+  "docsPublish": null,
+  "ibmiSync": null,
+  "settings": {
+    "retainHistoryDays": 30,
+    "launchPinned": false,
+    "notifyOnCompletion": false
+  },
+  "createdAt": "2026-08-18T05:18:43.706Z",
+  "createdBy": "gjones",
+  "createdByUserId": "user_1767620328397_iectw4bix",
+  "updatedAt": "2026-08-18T05:18:43.706Z"
+}
