@@ -10,7 +10,7 @@ createdAt: 2026-08-18T05:30:25.673Z
 createdBy: gjones
 createdByName: Gary Jones
 createdById: user_1767620328397_iectw4bix
-updatedAt: 2026-08-18T05:52:17.802Z
+updatedAt: 2026-08-18T16:21:44.130Z
 updatedBy: gjones
 updatedByName: Gary Jones
 updatedById: user_1767620328397_iectw4bix
@@ -61,6 +61,7 @@ forever. Never close one, and never create a new epic without being asked.
 | `PSACT-7` | Education & Enablement | Training given or received, certifications |
 | `PSACT-8` | General / Miscellaneous | Catch-all — see note below |
 | `PSACT-11` | Discovery & Sizing | Architect-and-size work, handed to Services |
+| `PSACT-17` | Partner Enablement | Partner-facing demos, POCs and enablement material |
 
 Boundaries that are easy to get wrong:
 
@@ -71,6 +72,12 @@ Boundaries that are easy to get wrong:
   when the customer's project finishes.
 - **PSACT-8** is legitimate, but if several related tickets accumulate there,
   say so — it usually means a new epic is wanted.
+- **PSACT-17 vs PSACT-1/2/11** — the test is *who we are enabling*, not what we
+  show. Helping a partner sell and demo our products is 17. Anything aimed at a
+  prospect that could close and result in revenue for us stays in 1, 2 or 11,
+  even when a partner is in the room. If a partner engagement produces a named
+  end-customer opportunity we are driving, raise a separate ticket under the
+  customer-facing epic.
 
 ## Issue types
 
@@ -95,6 +102,7 @@ checklist in the description using an ADF `taskList`.
 | Label | When |
 | --- | --- |
 | `customer:<shortname>` | Every customer-facing ticket. Lowercase, hyphenated — `customer:hal-leonard` |
+| `partner:<shortname>` | Every partner-facing ticket (Partner Enablement). Same lowercase, hyphenated style — `partner:taskforce` |
 | `outcome:poc` / `outcome:followup` / `outcome:no-fit` / `outcome:won` | Applied when a demo or POC **closes** |
 | `parked` | Deliberately deferred — suppresses the staleness nudge |
 | `rollup:<project>` | Marks an umbrella placeholder (see below) |
