@@ -10,7 +10,7 @@ createdAt: 2026-08-18T05:30:25.673Z
 createdBy: gjones
 createdByName: Gary Jones
 createdById: user_1767620328397_iectw4bix
-updatedAt: 2026-08-18T05:43:02.795Z
+updatedAt: 2026-08-18T05:52:17.802Z
 updatedBy: gjones
 updatedByName: Gary Jones
 updatedById: user_1767620328397_iectw4bix
@@ -27,11 +27,16 @@ the daily report misreport the team's work.
 
 ## The team
 
+Listed in report order — Brian leads the team, so he comes first.
+
 | Person | Email | Jira account ID |
 | --- | --- | --- |
-| Gary Jones | gjones@profoundlogic.com | `615afb5dd9820f0070a0864e` |
 | Brian May | bmay@profoundlogic.com | `557058:81c3c225-9739-472a-b3ac-079307d00815` |
+| Gary Jones | gjones@profoundlogic.com | `615afb5dd9820f0070a0864e` |
 | Roger Betancourt | rbetancourt@profoundlogic.com | `712020:4494da40-c016-4402-bedb-7195a1bf11f3` |
+
+The order plates appear in is the `TEAM` constant in `psact_report.py`; change it
+there, not in the renderers.
 
 There are **two Brians** in this Jira. Brian **May** (`bmay@`) is on this team.
 Brian **Rees** (`brees@`) is not — never assign PSACT work to him.
