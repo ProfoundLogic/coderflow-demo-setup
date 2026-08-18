@@ -56,6 +56,17 @@
       "importedAt": "2026-05-13T19:55:34.056Z",
       "importedBy": "alex",
       "flags": {}
+    },
+    "ejs-screen-designer": {
+      "source": "@profoundlogic/aitool",
+      "sourceType": "npm",
+      "npmPackage": "@profoundlogic/aitool",
+      "version": "1.1.7",
+      "npmRegistry": null,
+      "catalogId": "ejs-screen-designer",
+      "importedAt": "2026-07-22T13:42:34.458Z",
+      "importedBy": "alex",
+      "flags": {}
     }
   }
 }

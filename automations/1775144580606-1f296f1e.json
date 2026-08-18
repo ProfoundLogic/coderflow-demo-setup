@@ -3,12 +3,13 @@
   "name": "Daily Spool File Analysis",
   "description": "Daily Spool File Analysis - 11:45am",
   "environment": "ibmi-development",
-  "enabled": true,
+  "enabled": false,
   "schedule": "45 11 * * *",
   "scmPoll": null,
   "targetType": "task",
   "agent": {
     "name": "claude",
+    "model": null,
     "effortLevel": null,
     "reasoningLevel": null
   },
@@ -20,10 +21,15 @@
     "skills": []
   },
   "deployment": null,
+  "docsPublish": null,
+  "ibmiSync": null,
   "settings": {
-    "retainHistoryDays": 30
+    "retainHistoryDays": 30,
+    "launchPinned": false,
+    "notifyOnCompletion": false
   },
   "createdAt": "2026-04-02T15:43:00.606Z",
   "createdBy": "rbetancourt",
-  "updatedAt": "2026-05-14T13:46:16.058Z"
+  "createdByUserId": null,
+  "updatedAt": "2026-07-28T14:41:31.842Z"
 }

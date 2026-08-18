@@ -7,7 +7,7 @@
     {
       "name": "ibmi-agentic",
       "url": "https://github.com/ProfoundLogic/ibmi-agentic.git",
-      "branch": "main",
+      "branch": "documentation",
       "allow_branch_selection": true,
       "remote_provider": {
         "provider": "github-coderflow-demo-server",
@@ -16,7 +16,14 @@
       "clone_auto": true,
       "description": "Example repo for traditional 5250 and RPGOA development",
       "ibmiImportEnabled": true,
-      "read_only": false
+      "read_only": false,
+      "docs": {
+        "enabled": true,
+        "path": "docs",
+        "branch": "documentation",
+        "access": "public"
+      },
+      "path": "/workspace/ibmi-agentic/docs"
     }
   ],
   "rebuild_schedule": {
@@ -35,8 +42,10 @@
     "email",
     "confluence",
     "pdf",
+    "ibmi-documentation",
+    "genie-skin",
     "ejs-screen-designer",
-    "ibmi-documentation"
+    "inbox-triage"
   ],
   "external_connections": [
     {
@@ -88,6 +97,7 @@
     "ibmiOutputRequirements": true,
     "ibmiExploratoryVerification": true,
     "ibmiDatabaseSql": true,
+    "ibmiBuild": true,
     "credentialHandling": true
   },
   "memory": {
@@ -105,7 +115,7 @@
   "tasks": {
     "defaultShared": true
   },
-  "updatedAt": "2026-07-14T12:36:52.318Z",
+  "updatedAt": "2026-07-30T14:22:29.861Z",
   "updatedBy": "gjones",
   "updatedByName": "Gary Jones",
   "updatedById": "user_1767620328397_iectw4bix"

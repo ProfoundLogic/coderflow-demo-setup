@@ -28,4 +28,4 @@ Error: [https://cdn-icons-png.flaticon.com/128/9068/9068699.png](https://cdn-ico
 
 Lightbulb: [https://cdn-icons-png.flaticon.com/128/702/702797.png](https://cdn-icons-png.flaticon.com/128/702/702797.png)
 
-Always add a closing statement to contact the department lead or IT department for further assistance in using the applicaiton.
+Always add a closing statement to contact the department lead or IT department for further assistance in using the applicaiton.${source\_file}
