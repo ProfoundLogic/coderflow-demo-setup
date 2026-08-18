@@ -10,12 +10,11 @@ createdAt: 2026-08-18T05:30:25.673Z
 createdBy: gjones
 createdByName: Gary Jones
 createdById: user_1767620328397_iectw4bix
-updatedAt: 2026-08-18T05:30:25.673Z
+updatedAt: 2026-08-18T05:43:02.795Z
 updatedBy: gjones
 updatedByName: Gary Jones
 updatedById: user_1767620328397_iectw4bix
 ---
-
 # PSACT — PreSales Activity Tracker
 
 The runbook for Jira project **PSACT** (`PreSales Activity and Tasks`) on
@@ -165,16 +164,24 @@ them as explicit open questions rather than inventing them.
 ## End-of-day comments
 
 This is the one habit the whole reporting scheme depends on. The daily report
-quotes comments verbatim as the narrative of what happened. Free text is fine —
-no format policing — but this shape works well:
+quotes comments verbatim as the narrative of what happened.
+
+**Start straight in with the detail.** Do not prefix a comment with `Did:` or a
+similar label — the report already presents these under a "what happened"
+heading, so the label is noise. Where it helps, mark what is left with a
+`Next:` partway through:
 
 ```
-Did: ...
-Next: ...
+Reworked the plate layout so each person's falling-behind items lead their
+block. Next: confirm the Confluence append works on an unattended run.
 ```
 
-When someone asks you to log a day's work, write the comment in their voice
-covering what actually moved and what is next. Do not invent progress.
+(The report strips a leading `Did:` on display for comments already written that
+way, but new comments should not include it.)
+
+Free text is fine otherwise — no format policing. When someone asks you to log a
+day's work, write the comment in their voice covering what actually moved and
+what is next. Do not invent progress.
 
 ## The daily report
 
