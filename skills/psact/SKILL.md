@@ -10,7 +10,7 @@ createdAt: 2026-08-18T05:30:25.673Z
 createdBy: gjones
 createdByName: Gary Jones
 createdById: user_1767620328397_iectw4bix
-updatedAt: 2026-08-18T16:21:44.130Z
+updatedAt: 2026-08-19T21:33:45.303Z
 updatedBy: gjones
 updatedByName: Gary Jones
 updatedById: user_1767620328397_iectw4bix
@@ -112,6 +112,12 @@ The `customer:` label is what makes "who did we demo to this quarter" a query
 instead of an afternoon of reading. Do not bury the customer name in the summary
 only.
 
+The daily report renders both `customer:` and `partner:` names as a pill on the
+ticket row — blue for a customer, violet for a partner — so a missing label is a
+visibly nameless row. Lowercase-hyphenated is still the convention, but a label
+that carries capitals is displayed as typed (`partner:TaskForce` reads
+"TaskForce", not "Taskforce").
+
 ## Umbrella tickets — do not duplicate another project
 
 If the work has its own Jira project, PSACT holds **one placeholder** that points
@@ -177,7 +183,9 @@ them as explicit open questions rather than inventing them.
 ## End-of-day comments
 
 This is the one habit the whole reporting scheme depends on. The daily report
-quotes comments verbatim as the narrative of what happened.
+does not quote comments verbatim — it prints a one-line **précis** of them under
+the ticket they belong to — but the précis can only be as good as the comment it
+summarises. A vague comment produces a vague line in front of the whole team.
 
 **Start straight in with the detail.** Do not prefix a comment with `Did:` or a
 similar label — the report already presents these under a "what happened"
@@ -196,6 +204,11 @@ Free text is fine otherwise — no format policing. When someone asks you to log
 day's work, write the comment in their voice covering what actually moved and
 what is next. Do not invent progress.
 
+**Write one comment per ticket per day where you can.** The précis is written
+per ticket, so two comments on the same ticket get merged into one line; a
+comment that opens with what changed and closes with `Next:` survives that
+merge intact.
+
 ## The daily report
 
 Generated at 07:30 on weekdays by the `psact-morning-report` template, from
@@ -203,13 +216,27 @@ Generated at 07:30 on weekdays by the `psact-morning-report` template, from
 them and appends a digest to Confluence. Read that tool's README before changing
 report behaviour.
 
-Two things worth knowing when someone asks why something did or didn't appear:
+Worth knowing when someone asks why something did or didn't appear:
 
 - **Staleness is measured on `updated`, not on comments.** Transitions and edits
   count. Thresholds: In Progress 7 days, Waiting 14, To Do 21. Exempt if the due
   date is in the future or the ticket is labelled `parked`.
 - It is **one shared report**, with a plate per person led by whatever is falling
   behind for them — so the team can offer help. Not three personal reports.
+- **Every ticket appears once.** There is no separate activity section; what
+  moved is written under the ticket on its owner's plate. Work that is not on a
+  team plate — other people's stale tickets, unowned tickets, outsiders'
+  activity — lands in a single *Elsewhere* card at the foot.
+- **"3 moved" on a plate means a comment, a status change, or movement in a
+  rollup's child project** — nothing else. Relabelling, ranking, setting an
+  assignee or editing a summary bumps `updated` but is not movement, so it is not
+  counted. Every counted ticket prints a line saying what moved, so the chip can
+  always be checked against the card below it.
+- **The comment précis is written by the agent running the report**, in a second
+  pass: the first run writes a `.digest.json` of the window's comments, the
+  agent summarises them, and the report is regenerated with `--precis`. Only the
+  second render is sent. Never let a précis claim progress the comments do not
+  state.
 
 To regenerate on demand:
 
@@ -217,7 +244,14 @@ To regenerate on demand:
 cd /workspace/workspace/ibmi-agentic/docs/tools/psact-report
 python3 psact_report.py --outdir /tmp/psact          # today
 python3 psact_report.py --date 2026-08-19 --outdir /tmp/psact
+
+# second pass, once the digest has been summarised
+python3 psact_report.py --outdir /tmp/psact --precis /tmp/psact/precis.json
 ```
+
+A one-off regeneration for reading is fine without the précis pass — each
+ticket falls back to a truncated extract of its comments. Anything **sent** to
+the team should be the second render.
 
 ## Useful queries
 

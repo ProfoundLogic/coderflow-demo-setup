@@ -18,21 +18,66 @@ without output at weekends.
 
 If it prints a weekend message, stop here - there is no report to send.
 
-Read the JSON it prints. It gives you the three output paths and the counts.
+Read the JSON it prints. It gives you the output paths, the counts, and
+`precis.needed` - the tickets whose comments you are about to summarise.
 
-## 2. Sanity-check before sending
+## 2. Write the comment precis
+
+The report does not quote comments verbatim. Each ticket that moved gets a
+one-line precis printed under its own row, and **you write it** - this step is
+the reason an agent runs this job rather than cron.
+
+1. Read the digest: `/task-output/psact-report-<date>.digest.json`. It holds
+   every ticket with comments in the window, the comments in full, and an
+   `instructions` field restating the brief.
+2. For each ticket, write one or two sentences on what the comments say
+   happened, past tense, third person. No ticket key, no author, no date - the
+   report already shows those. If a comment says what is next, end with that.
+   Around 200 characters; 400 is the hard ceiling.
+3. **Say only what the comments say.** Never infer, embellish, or round up
+   progress. A precis that credits work nobody did is worse than no report, and
+   the three people reading it will know.
+4. A ticket carrying a `rollup` block (PSACT-10 for PERP, PSACT-12 for WAT) has
+   no comments of its own - summarise the child project's comments instead, as
+   one line about the project. Do not restate its ticket counts; the report
+   prints those beside your line.
+5. Write the map to a file and regenerate:
+
+```bash
+cat > /task-output/precis.json <<'JSON'
+{
+  "PSACT-16": "Pre-demo call held with TaskForce, who agreed to start from the standard CoderFlow demo. Follow-up demo booked for Wed 26 Aug as PSACT-18.",
+  "PSACT-12": "Sizing pass on the WAT customer-data epic: six tickets written up with scope, schema impact and hours, then closed."
+}
+JSON
+python3 psact_report.py --outdir /task-output --precis /task-output/precis.json
+```
+
+Check the second run reports `precis.supplied` equal to the number of keys you
+wrote. If it reports 0, your keys did not match - fix them and re-run rather
+than sending a report whose narrative fell back to truncated comment text.
+
+**Send the second render, never the first.**
+
+If you genuinely cannot produce a precis, the report still stands: every ticket
+falls back to a truncated extract of its comments. Send it and say so in the
+summary.
+
+## 3. Sanity-check before sending
 
 Open the markdown output and read it. Confirm:
 
 - the date and window in the header are what you expect;
 - the counts in the JSON match what the markdown shows;
+- each precis is supported by the comments you read - no claim you cannot point
+  at a comment for;
 - nothing is obviously broken (empty sections are fine - an empty report is a
   legitimate result on a quiet day, and should still be sent).
 
 If the generator fails outright, do **not** send a partial report. Report the
 error in your summary and stop.
 
-## 3. Email it
+## 4. Email it
 
 Send the email-safe HTML as the body, with the rich HTML attached:
 
@@ -55,7 +100,7 @@ print(subprocess.run(["python3",
     capture_output=True, text=True).stdout[-400:])
 ```
 
-## 4. Append to the Confluence archive
+## 5. Append to the Confluence archive
 
 Append the markdown digest (`<stem>.md`) to the current month's log page, using
 the `confluence` skill. Space **CPP**.
@@ -84,10 +129,10 @@ Steps:
 
 Do not create a new page per day — one page per month, appended to.
 
-## 5. Summary
+## 6. Summary
 
-Write `/task-output/summary.md` covering: the mode and window, the counts, who
-it was emailed to, and the Confluence page updated. Keep it short - this runs
-every weekday and nobody reads a long summary.
+Write `/task-output/summary.md` covering: the mode and window, the counts, how
+many precis you wrote, who it was emailed to, and the Confluence page updated.
+Keep it short - this runs every weekday and nobody reads a long summary.
 
 Do not commit anything to the repository.
