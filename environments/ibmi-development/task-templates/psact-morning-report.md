@@ -28,20 +28,27 @@ one-line precis printed under its own row, and **you write it** - this step is
 the reason an agent runs this job rather than cron.
 
 1. Read the digest: `/task-output/psact-report-<date>.digest.json`. It holds
-   every ticket with comments in the window, the comments in full, and an
-   `instructions` field restating the brief.
-2. For each ticket, write one or two sentences on what the comments say
-   happened, past tense, third person. No ticket key, no author, no date - the
-   report already shows those. If a comment says what is next, end with that.
-   Around 200 characters; 400 is the hard ceiling.
-3. **Say only what the comments say.** Never infer, embellish, or round up
+   every ticket with comments in the window, the comments in full and in
+   chronological order, and an `instructions` field restating the brief.
+2. **One precis per ticket, merging every comment on it** - including comments
+   from more than one person - into a single line. The comments are listed
+   oldest first; summarise them in that order so the line reads as the day
+   happened. One or two sentences, past tense, third person. No ticket key, no
+   date, and do not open with an author's name; name people inline only where
+   who did what matters ("Brian held the call, Gary booked the follow-up"). If a
+   comment says what is next, end with that. Around 200 characters; 400 is the
+   hard ceiling.
+3. **It is a summary, not a transcript.** The reader clicks the ticket for the
+   detail. If your line could be mistaken for the comment itself, it is too
+   long.
+4. **Say only what the comments say.** Never infer, embellish, or round up
    progress. A precis that credits work nobody did is worse than no report, and
    the three people reading it will know.
-4. A ticket carrying a `rollup` block (PSACT-10 for PERP, PSACT-12 for WAT) has
-   no comments of its own - summarise the child project's comments instead, as
-   one line about the project. Do not restate its ticket counts; the report
-   prints those beside your line.
-5. Write the map to a file and regenerate:
+5. A ticket carrying a `rollup` block (PSACT-10 for PERP, PSACT-12 for WAT)
+   usually has no comments of its own - summarise the child project's comments
+   instead, as one line about the project. Do not restate its ticket counts; the
+   report prints those beside your line.
+6. Write the map to a file and regenerate **with `--require-precis`**:
 
 ```bash
 cat > /task-output/precis.json <<'JSON'
@@ -50,18 +57,17 @@ cat > /task-output/precis.json <<'JSON'
   "PSACT-12": "Sizing pass on the WAT customer-data epic: six tickets written up with scope, schema impact and hours, then closed."
 }
 JSON
-python3 psact_report.py --outdir /task-output --precis /task-output/precis.json
+python3 psact_report.py --outdir /task-output \
+    --precis /task-output/precis.json --require-precis
 ```
 
-Check the second run reports `precis.supplied` equal to the number of keys you
-wrote. If it reports 0, your keys did not match - fix them and re-run rather
-than sending a report whose narrative fell back to truncated comment text.
+`--require-precis` refuses to write the report at all if any ticket needing a
+precis does not have one: it prints the missing keys and exits 2. That is the
+whole point - without it, a skipped precis silently ships a truncated extract of
+the raw comments, which is what this replaced. If it exits 2, cover the missing
+keys and run it again. Do not drop the flag to get past it.
 
 **Send the second render, never the first.**
-
-If you genuinely cannot produce a precis, the report still stands: every ticket
-falls back to a truncated extract of its comments. Send it and say so in the
-summary.
 
 ## 3. Sanity-check before sending
 
@@ -71,6 +77,7 @@ Open the markdown output and read it. Confirm:
 - the counts in the JSON match what the markdown shows;
 - each precis is supported by the comments you read - no claim you cannot point
   at a comment for;
+- `precis.missing` is empty and `precis.supplied` matches the keys you wrote;
 - nothing is obviously broken (empty sections are fine - an empty report is a
   legitimate result on a quiet day, and should still be sent).
 
