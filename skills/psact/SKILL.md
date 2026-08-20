@@ -10,10 +10,10 @@ createdAt: 2026-08-18T05:30:25.673Z
 createdBy: gjones
 createdByName: Gary Jones
 createdById: user_1767620328397_iectw4bix
-updatedAt: 2026-08-19T21:33:45.303Z
-updatedBy: gjones
-updatedByName: Gary Jones
-updatedById: user_1767620328397_iectw4bix
+updatedAt: 2026-08-20T15:22:27.484Z
+updatedBy: rbetancourt
+updatedByName: Roger Betancourt
+updatedById: user_1767620468211_32t18oh94
 ---
 # PSACT — PreSales Activity Tracker
 
@@ -53,7 +53,7 @@ forever. Never close one, and never create a new epic without being asked.
 | Epic | Name | What belongs there |
 | --- | --- | --- |
 | `PSACT-1` | Customer Demos | One ticket per demo engagement |
-| `PSACT-2` | Proofs of Concept | POCs, usually born from a demo |
+| `PSACT-2` | Proofs of Concept | POCs, usually born from a demo — **and pre-sales customer support**: hands-on technical help for a customer or prospect standing up our products |
 | `PSACT-3` | RFPs & Questionnaires | Bid responses, security questionnaires |
 | `PSACT-4` | Events & Webinars | Conferences, user groups, webinars |
 | `PSACT-5` | Demo Environments & Assets | Demo estate upkeep, reusable demo material |
@@ -62,11 +62,19 @@ forever. Never close one, and never create a new epic without being asked.
 | `PSACT-8` | General / Miscellaneous | Catch-all — see note below |
 | `PSACT-11` | Discovery & Sizing | Architect-and-size work, handed to Services |
 | `PSACT-17` | Partner Enablement | Partner-facing demos, POCs and enablement material |
+| `PSACT-21` | Marketing & Content Support | Content reviews, video production, technical material for Marketing |
 
 Boundaries that are easy to get wrong:
 
 - **PSACT-5 vs PSACT-6** — keeping the lights on and building demo assets go in
   5; building *new internal capability* goes in 6.
+- **PSACT-2 vs PSACT-7** — the test is *fixing versus teaching*. Getting our
+  product working in a customer's environment — config help, troubleshooting,
+  unblocking an install or an integration — is pre-sales customer support and
+  belongs in 2, alongside POCs. Teaching someone how to use it, or training we
+  receive, is 7. Customer config help is **not** PSACT-8; it has a named home now.
+  Support work is **one ticket per issue, not one per email or call** — log each
+  exchange as a comment on the same ticket.
 - **PSACT-1 vs PSACT-11** — a demo shows the product; a discovery architects and
   sizes a customer's system. A discovery closes at **handover to Services**, not
   when the customer's project finishes.
@@ -78,6 +86,12 @@ Boundaries that are easy to get wrong:
   even when a partner is in the room. If a partner engagement produces a named
   end-customer opportunity we are driving, raise a separate ticket under the
   customer-facing epic.
+- **PSACT-21 vs PSACT-4/5** — the test is whether we are *producing content for
+  Marketing to publish* or *presenting at an event*. Reviewing a datasheet or
+  recording a product video is 21; preparing and delivering a webinar is 4, even
+  when Marketing owns the event. A recording made for Marketing to publish is
+  21; the demo estate it was recorded from is still 5. Content built for one
+  named prospect belongs on that opportunity's ticket under 1, 2 or 11.
 
 ## Issue types
 
@@ -111,6 +125,12 @@ checklist in the description using an ADF `taskList`.
 The `customer:` label is what makes "who did we demo to this quarter" a query
 instead of an afternoon of reading. Do not bury the customer name in the summary
 only.
+
+Internal-facing epics — Marketing & Content Support, Efficiency & Improvements —
+normally carry **neither** label, so their report rows show no pill. That is
+correct, not an omission. Add `customer:` on a marketing ticket only when the
+item is genuinely about a named customer, such as a case study or a reference
+video.
 
 The daily report renders both `customer:` and `partner:` names as a pill on the
 ticket row — blue for a customer, violet for a partner — so a missing label is a
