@@ -3,7 +3,10 @@
   "name": "Morning PreSales Status Report",
   "description": "Morning PreSales Status Report",
   "environment": "ibmi-development",
-  "enabled": true,
+  "scope": "environment",
+  "ownerUserId": null,
+  "timezone": null,
+  "enabled": false,
   "schedule": "30 7 * * 1-5",
   "scmPoll": null,
   "targetType": "task",
@@ -23,13 +26,16 @@
   "deployment": null,
   "docsPublish": null,
   "ibmiSync": null,
+  "managed": null,
+  "documentationRefresh": null,
   "settings": {
     "retainHistoryDays": 30,
     "launchPinned": false,
-    "notifyOnCompletion": false
+    "notifyOnCompletion": false,
+    "shareResults": true
   },
   "createdAt": "2026-08-18T05:18:43.706Z",
   "createdBy": "gjones",
   "createdByUserId": "user_1767620328397_iectw4bix",
-  "updatedAt": "2026-08-18T05:18:43.706Z"
+  "updatedAt": "2026-08-21T20:38:28.612Z"
 }

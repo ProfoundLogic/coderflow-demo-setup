@@ -1,0 +1,8 @@
+{
+  "name": "dspf-to-ejs",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Convert 5250 display files into branded Profound UI EJS Rich Display screens",
+  "scripts": { "test": "node scripts/selftest.js --corpus examples/dspf" },
+  "dependencies": { "ejs": "^3.1.10", "playwright-core": "^1.49.0" }
+}

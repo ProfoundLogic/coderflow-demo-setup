@@ -1,0 +1,32 @@
+{
+  "prefix": "tg",
+  "name": "The Taylor Group, Inc.",
+  "tagline": "We engineer and build what you need · Since 1927",
+  "unit": "Taylor Machine Works",
+  "appName": "Customer Portal",
+  "footerLeft": "© The Taylor Group, Inc. · Louisville, Mississippi",
+  "footerRight": "Sudden Service · Faith · Vision · Work",
+  "logo": "taylor_logo.png",
+  "logoOnDark": "taylor_logo_white.png",
+  "texture": "diamond",
+  "watermark": true,
+  "colors": {
+    "accent": "#d60000",
+    "ink": "#212832",
+    "inkDeep": "#121212",
+    "slate": "#363d47",
+    "slate2": "#4a515b",
+    "muted": "#a7aeb8",
+    "lineStrong": "#d4dae3",
+    "line": "#e0e5ec",
+    "surfaceAlt": "#f2f6fc",
+    "ok": "#00ac69",
+    "warn": "#f4a100",
+    "bad": "#e81500"
+  },
+  "fonts": {
+    "display": "\"Barlow Condensed\", \"Arial Narrow\", \"Segoe UI\", Arial, sans-serif",
+    "body": "\"Barlow\", \"Segoe UI\", Roboto, Arial, Helvetica, sans-serif",
+    "import": "https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&display=swap"
+  }
+}

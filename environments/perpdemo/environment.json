@@ -1,27 +1,42 @@
 {
-  "name": "ibmi-agentic",
+  "name": "perpdemo",
   "description": "IBM i agentic coding test environment",
-  "image_name": "ibmi-development",
+  "image_name": "perpdemo",
   "default_agent": "claude",
   "repos": [
     {
       "name": "ibmi-agentic",
       "url": "https://github.com/ProfoundLogic/ibmi-agentic.git",
-      "branch": "documentation",
+      "branch": "main",
       "allow_branch_selection": true,
       "remote_provider": {
         "provider": "github-coderflow-demo-server",
         "credential_mode": "app"
       },
       "clone_auto": true,
-      "description": "Example repo for traditional 5250 and RPGOA development",
+      "description": "PreSales ERP Demo Build",
       "ibmiImportEnabled": true,
       "read_only": false,
       "docs": {
-        "enabled": true,
+        "enabled": false,
         "path": "docs",
         "branch": "documentation",
         "access": "public"
+      },
+      "path": "workspace/ibmi-agentic/docs"
+    },
+    {
+      "name": "PERPDemo",
+      "branch": "main",
+      "allow_branch_selection": true,
+      "read_only": false,
+      "description": "PreSales Demo ERP Development",
+      "url": "https://github.com/ProfoundLogic/PERPDemo.git",
+      "clone_auto": true,
+      "ibmiImportEnabled": false,
+      "remote_provider": {
+        "provider": "github-coderflow-demo-server",
+        "credential_mode": "app"
       }
     }
   ],
@@ -45,8 +60,7 @@
     "genie-skin",
     "ejs-screen-designer",
     "inbox-triage",
-    "psact",
-    "dspf-to-ejs"
+    "psact"
   ],
   "external_connections": [
     {
@@ -118,8 +132,12 @@
   "tasks": {
     "defaultShared": true
   },
-  "updatedAt": "2026-08-28T16:42:06.539Z",
-  "updatedBy": "alex",
-  "updatedByName": "Alex Roytman",
-  "updatedById": "user_1767330741764_x72j25doe"
+  "updatedAt": "2026-09-02T02:31:32.531Z",
+  "updatedBy": "bmay",
+  "updatedByName": "Brian May",
+  "updatedById": "user_1767620279635_lw6uhpnxl",
+  "createdAt": "2026-08-19T19:58:42.398Z",
+  "createdBy": "gjones",
+  "createdByName": "Gary Jones",
+  "createdById": "user_1767620328397_iectw4bix"
 }

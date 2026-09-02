@@ -1,0 +1,12 @@
+{
+  "title": "PSACT Morning Report",
+  "description": "Generate the presales activity report from Jira PSACT, email it to the team, and append it to the Confluence monthly archive. Runs weekdays at 07:30.",
+  "createdAt": "2026-08-18T04:43:45.693Z",
+  "createdBy": "gjones",
+  "createdById": "user_1767620328397_iectw4bix",
+  "createdByName": "Gary Jones",
+  "updatedAt": "2026-08-18T04:58:33.325Z",
+  "updatedBy": "gjones",
+  "updatedByName": "Gary Jones",
+  "updatedById": "user_1767620328397_iectw4bix"
+}
