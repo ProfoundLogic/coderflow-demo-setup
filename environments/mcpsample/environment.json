@@ -1,30 +1,9 @@
 {
-  "name": "ibmi-agentic",
+  "name": "mcpsample",
   "description": "IBM i agentic coding test environment",
-  "image_name": "ibmi-development",
+  "image_name": "mcpsample",
   "default_agent": "claude",
-  "repos": [
-    {
-      "name": "ibmi-agentic",
-      "url": "https://github.com/ProfoundLogic/ibmi-agentic.git",
-      "branch": "documentation",
-      "allow_branch_selection": true,
-      "remote_provider": {
-        "provider": "github-coderflow-demo-server",
-        "credential_mode": "app"
-      },
-      "clone_auto": true,
-      "description": "Example repo for traditional 5250 and RPGOA development",
-      "ibmiImportEnabled": true,
-      "read_only": false,
-      "docs": {
-        "enabled": true,
-        "path": "docs",
-        "branch": "documentation",
-        "access": "public"
-      }
-    }
-  ],
+  "repos": [],
   "rebuild_schedule": {
     "enabled": true,
     "cron": "57 3 * * *"
@@ -118,8 +97,27 @@
   "tasks": {
     "defaultShared": true
   },
-  "updatedAt": "2026-09-09T18:17:18.357Z",
+  "updatedAt": "2026-09-10T01:06:12.607Z",
   "updatedBy": "gjones",
   "updatedByName": "Gary Jones",
-  "updatedById": "user_1767620328397_iectw4bix"
+  "updatedById": "user_1767620328397_iectw4bix",
+  "createdAt": "2026-09-10T00:58:12.995Z",
+  "createdBy": "gjones",
+  "createdByName": "Gary Jones",
+  "createdById": "user_1767620328397_iectw4bix",
+  "mcp_servers": [
+    {
+      "name": "northwind",
+      "transport": "http",
+      "enabled": true,
+      "description": "Northwind DB MCP Server",
+      "url": "https://presales.profoundlogic.com:8685/mcp/northwind      ]"
+    }
+  ],
+  "instructionsAttribution": {
+    "updatedAt": "2026-09-10T01:06:11.656Z",
+    "updatedBy": "gjones",
+    "updatedByName": "Gary Jones",
+    "updatedById": "user_1767620328397_iectw4bix"
+  }
 }

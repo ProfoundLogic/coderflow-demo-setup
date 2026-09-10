@@ -1,0 +1,207 @@
+{
+  "name": "coderflow_import_1fdaf97227b5",
+  "displayName": "IBM i source import — ibmi-agentic",
+  "kind": "ibmi-import",
+  "description": "Managed automatically from the latest IBM i source import.",
+  "branch": "documentation",
+  "selections": [
+    {
+      "library": "GJONES",
+      "mode": "explicit-members",
+      "members": [
+        {
+          "file": "QCLSRC",
+          "member": "MENUC",
+          "type": "CLLE"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "CLAIM01DG1",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "CUSTP",
+          "type": "PF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "HELLOD",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "MAINTD",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "MENUD",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "OFFICE1D",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "PRODDESC1D",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "SFL1D",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "SFL2D",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "SFL3D",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "SQLGRIDD",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "WRKCUST1D",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "WRKCUST1DO",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "WRKCUST1EO",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "WRKCUSTD",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "WRKCUSTEO",
+          "type": "DSPF"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "AMREF1R",
+          "type": "RPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "CUSTNAME",
+          "type": "RPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "DSPARMS",
+          "type": "RPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "GETPRODR",
+          "type": "RPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "HELLOR",
+          "type": "RPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "MAINTR",
+          "type": "RPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "MENUR",
+          "type": "RPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "OFFICE1",
+          "type": "SQLRPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "PRODDESC1R",
+          "type": "RPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "PRODUCTSRV",
+          "type": "RPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "SFL1R",
+          "type": "RPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "SFL2R",
+          "type": "RPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "SFL3R",
+          "type": "RPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "SQLGRIDR",
+          "type": "RPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "STORE05R",
+          "type": "RPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "TESTLCMR",
+          "type": "RPGLE"
+        },
+        {
+          "file": "SRC",
+          "member": "WRKCUSTD",
+          "type": "DSPF"
+        },
+        {
+          "file": "SRC",
+          "member": "WRKCUSTR",
+          "type": "RPGLE"
+        }
+      ]
+    },
+    {
+      "library": "ALEXR",
+      "mode": "full-library"
+    }
+  ],
+  "options": {
+    "insertMbrText": true,
+    "objxLibrary": "PLOBJX"
+  },
+  "managed": {
+    "type": "coderflow-source-import",
+    "version": 1,
+    "repository": "ibmi-agentic"
+  },
+  "createdAt": "2026-09-09T19:13:34.026Z",
+  "createdBy": "CoderFlow source import",
+  "updatedAt": "2026-09-09T19:13:34.026Z",
+  "updatedBy": "CoderFlow source import"
+}
