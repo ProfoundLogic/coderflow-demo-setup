@@ -2,17 +2,17 @@
 
 **DO NOT MAKE ANY SOURCE CHANGES - THIS IS A DOCUMENTATION TASK ONLY**
 
-**Create your files in `task-output`** **in a new folder you create called `documentation`.**
+**Create your files in `task-output`** **in a new folder you create called `documentation`.**
 
 ## Produce Technical Documentation
 
 Produce technical documentation of the selected program `${source_file}`.
 
-Use the `ibmi-program-documentation` skill for details on the documentation to produce. 
+Use the `ibmi-program-documentation` skill for details on the documentation to produce. 
 
 Produce User Documentation
 
-Only perform this step if the selected program `${source_file}` has user interaction; a dependent UI, a display file (DSPF) for example.
+Only perform this step if the selected program `${source_file}` has user interaction; a dependent UI, a display file (DSPF) for example.
 
 Understand the program flow.
 
@@ -28,4 +28,4 @@ Error: [https://cdn-icons-png.flaticon.com/128/9068/9068699.png](https://cdn-ico
 
 Lightbulb: [https://cdn-icons-png.flaticon.com/128/702/702797.png](https://cdn-icons-png.flaticon.com/128/702/702797.png)
 
-Always add a closing statement to contact the department lead or IT department for further assistance in using the applicaiton.${source\_file}
+Always add a closing statement to contact the department lead or IT department for further assistance in using the applicaiton.
