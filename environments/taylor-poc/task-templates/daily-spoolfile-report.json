@@ -1,0 +1,5 @@
+{
+  "title": "Daily Spool File Analysis Report",
+  "description": "Queries output queues, analyzes top 3 by spool file count, identifies worst offender users, generates insights and recommendations, produces PDF report, and emails to gjones@profoundlogic.com",
+  "parameters": {}
+}

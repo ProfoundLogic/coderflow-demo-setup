@@ -1,0 +1,23 @@
+{
+  "title": "Document a Program",
+  "description": "Produce markdown documentation of an RPG or CL Program",
+  "parameters": {
+    "source_file": {
+      "required": true,
+      "type": "files",
+      "label": "Select RPG or CL source to document",
+      "description": "Source to be documented",
+      "prompt": {
+        "type": "files",
+        "label": "Select RPG or CL source to document",
+        "multiSelect": true,
+        "path": "ibmi-agentic/cfdemo/qrpglesrc/",
+        "pattern": "*.{rpg,rpgle,sqlrpgle,cl,clle}"
+      }
+    }
+  },
+  "updatedAt": "2026-09-10T18:21:51.752Z",
+  "updatedBy": "rbetancourt",
+  "updatedByName": "Roger Betancourt",
+  "updatedById": "user_1767620468211_32t18oh94"
+}
