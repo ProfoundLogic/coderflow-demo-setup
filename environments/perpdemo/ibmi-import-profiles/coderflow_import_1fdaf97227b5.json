@@ -1,0 +1,449 @@
+{
+  "name": "coderflow_import_1fdaf97227b5",
+  "displayName": "IBM i source import — ibmi-agentic",
+  "kind": "ibmi-import",
+  "description": "Managed automatically from the latest IBM i source import.",
+  "branch": "main",
+  "preferredConnectionId": "44e3d948-61a6-4782-84d4-c94586b5757d",
+  "selections": [
+    {
+      "library": "PERPDEMO",
+      "mode": "explicit-members",
+      "members": [
+        {
+          "file": "BUILD",
+          "member": "PERP",
+          "type": "BNDDIR"
+        },
+        {
+          "file": "CFDEMO",
+          "member": "MENU",
+          "type": "MSGF"
+        },
+        {
+          "file": "PERP",
+          "member": "PERP",
+          "type": "BNDDIR"
+        },
+        {
+          "file": "PERP",
+          "member": "PERPDIAG",
+          "type": "MSGF"
+        },
+        {
+          "file": "PERP",
+          "member": "PERPMNU",
+          "type": "MSGF"
+        },
+        {
+          "file": "PERP",
+          "member": "PERPREQM",
+          "type": "MSGF"
+        },
+        {
+          "file": "QCLSRC",
+          "member": "PERPJRN",
+          "type": "CLLE"
+        },
+        {
+          "file": "QCLSRC",
+          "member": "PERPSJPF",
+          "type": "CLLE"
+        },
+        {
+          "file": "QDDLSRC",
+          "member": "COMPANY",
+          "type": "SQL"
+        },
+        {
+          "file": "QDDLSRC",
+          "member": "ITEM",
+          "type": "SQL"
+        },
+        {
+          "file": "QDDLSRC",
+          "member": "ITEM_CLASS",
+          "type": "SQL"
+        },
+        {
+          "file": "QDDLSRC",
+          "member": "ITEM_LOT",
+          "type": "SQL"
+        },
+        {
+          "file": "QDDLSRC",
+          "member": "PERP_USER",
+          "type": "SQL"
+        },
+        {
+          "file": "QDDLSRC",
+          "member": "UOM",
+          "type": "SQL"
+        },
+        {
+          "file": "QDDLSRC",
+          "member": "VENDOR",
+          "type": "SQL"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "ITMPRM2D",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "ITMPRMTD",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "MENU",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "PERPDIAG",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "PERPINVM",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "PERPMNU",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "PERPPOM",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "PERPRCVM",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "PERPREQM",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "PERPSELD",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "PERPSYSM",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "PERPVNDM",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "POBRWD",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "POENTD",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "POPRMTD",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "POREQD",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "POSCHD",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "RCNBRWD",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "RCVENTD",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "REQAPRD",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "REQENTD",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "VNDPRMTD",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "WLMD",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "WRKCMD",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "WRKCNVD",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "WRKICLD",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "WRKITMD",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "WRKIVND",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "WRKIVPD",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "WRKLOTD",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "WRKUOMD",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "WRKUSRD",
+          "type": "DSPF"
+        },
+        {
+          "file": "QDDSSRC",
+          "member": "WRKVNDD",
+          "type": "DSPF"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "DOCSEQ",
+          "type": "SQLRPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "DOCSEQSMK",
+          "type": "SQLRPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "DOCSEQ_PR",
+          "type": "RPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "ITMPRMT",
+          "type": "SQLRPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "ITMVPRCQ",
+          "type": "SQLRPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "IVPRCQSMK",
+          "type": "SQLRPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "PERPSELR",
+          "type": "SQLRPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "POBRWR",
+          "type": "SQLRPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "POENTR",
+          "type": "SQLRPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "POPRMT",
+          "type": "SQLRPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "POREQR",
+          "type": "SQLRPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "POSCHR",
+          "type": "SQLRPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "RCVENTR",
+          "type": "SQLRPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "REQAPRR",
+          "type": "SQLRPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "REQAUTO",
+          "type": "SQLRPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "REQAUTOSMK",
+          "type": "SQLRPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "REQAUTO_PR",
+          "type": "RPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "REQENTR",
+          "type": "SQLRPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "VNDPRMT",
+          "type": "SQLRPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "WHCOORD",
+          "type": "SQLRPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "WHCOORD_PR",
+          "type": "RPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "WLMR",
+          "type": "SQLRPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "WRKCMR",
+          "type": "SQLRPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "WRKCNVR",
+          "type": "SQLRPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "WRKICLR",
+          "type": "SQLRPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "WRKITMR",
+          "type": "SQLRPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "WRKIVNR",
+          "type": "SQLRPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "WRKIVPR",
+          "type": "SQLRPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "WRKLOTR",
+          "type": "SQLRPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "WRKUOMR",
+          "type": "SQLRPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "WRKUSRR",
+          "type": "SQLRPGLE"
+        },
+        {
+          "file": "QRPGLESRC",
+          "member": "WRKVNDR",
+          "type": "SQLRPGLE"
+        },
+        {
+          "file": "QSRVSRC",
+          "member": "DOCSEQ",
+          "type": "BND"
+        },
+        {
+          "file": "QSRVSRC",
+          "member": "ITMVPRCQ",
+          "type": "BND"
+        },
+        {
+          "file": "QSRVSRC",
+          "member": "REQAUTO",
+          "type": "BND"
+        },
+        {
+          "file": "QSRVSRC",
+          "member": "WHCOORD",
+          "type": "BND"
+        }
+      ]
+    }
+  ],
+  "options": {
+    "insertMbrText": true,
+    "objxLibrary": "PLOBJX"
+  },
+  "managed": {
+    "type": "coderflow-source-import",
+    "version": 1,
+    "repository": "ibmi-agentic"
+  },
+  "createdAt": "2026-09-24T13:16:33.367Z",
+  "createdBy": "CoderFlow source import",
+  "updatedAt": "2026-09-24T13:16:33.367Z",
+  "updatedBy": "CoderFlow source import"
+}

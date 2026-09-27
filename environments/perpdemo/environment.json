@@ -23,7 +23,8 @@
         "branch": "documentation",
         "access": "public"
       },
-      "path": "workspace/ibmi-agentic/docs"
+      "path": "workspace/ibmi-agentic/docs",
+      "git_depth": 50
     },
     {
       "name": "PERPDemo",
@@ -37,7 +38,8 @@
       "remote_provider": {
         "provider": "github-coderflow-demo-server",
         "credential_mode": "app"
-      }
+      },
+      "git_depth": 50
     }
   ],
   "rebuild_schedule": {
@@ -60,7 +62,9 @@
     "genie-skin",
     "ejs-screen-designer",
     "inbox-triage",
-    "psact"
+    "psact",
+    "dspf-to-ejs",
+    "pui-rdf-designer"
   ],
   "external_connections": [
     {
@@ -101,10 +105,7 @@
     ],
     "enabled": true,
     "name": "",
-    "qa_url": "https://idev.profoundlogic.com:8103",
-    "basic_auth": {
-      "user_property": "gjones"
-    }
+    "qa_url": "https://idev.profoundlogic.com:8103"
   },
   "standardInstructions": {
     "outputRequirements": true,
@@ -132,12 +133,18 @@
   "tasks": {
     "defaultShared": true
   },
-  "updatedAt": "2026-09-02T02:36:52.990Z",
-  "updatedBy": "bmay",
-  "updatedByName": "Brian May",
-  "updatedById": "user_1767620279635_lw6uhpnxl",
+  "updatedAt": "2026-09-24T15:44:01.087Z",
+  "updatedBy": "rbetancourt",
+  "updatedByName": "Roger Betancourt",
+  "updatedById": "user_1767620468211_32t18oh94",
   "createdAt": "2026-08-19T19:58:42.398Z",
   "createdBy": "gjones",
   "createdByName": "Gary Jones",
-  "createdById": "user_1767620328397_iectw4bix"
+  "createdById": "user_1767620328397_iectw4bix",
+  "instructionsAttribution": {
+    "updatedAt": "2026-09-24T15:44:01.087Z",
+    "updatedBy": "rbetancourt",
+    "updatedByName": "Roger Betancourt",
+    "updatedById": "user_1767620468211_32t18oh94"
+  }
 }

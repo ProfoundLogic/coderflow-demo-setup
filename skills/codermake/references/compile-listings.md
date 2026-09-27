@@ -87,9 +87,9 @@ For ILE CL (`CRTBNDCL`, `CRTCLMOD`), the listing structure is similar to RPG -- 
 
 For OPM CL (`CRTCLPGM`), the output is typically shorter and errors reference source sequence numbers.
 
-## DDS listings (.dspf, .pf, .lf, .prtf)
+## DDS listings (.dspf, .pf, .lf, .prtf, and their System/38 `.dspf38`/`.pf38`/`.lf38`/`.prtf38` variants)
 
-DDS compilation errors from `CRTDSPF`, `CRTPF`, `CRTLF`, or `CRTPRTF` produce `CPD` messages:
+DDS compilation errors from `CRTDSPF`, `CRTPF`, `CRTLF`, or `CRTPRTF` produce `CPD` messages. The System/38 `.dspf38`, `.pf38`, `.lf38`, and `.prtf38` variants use the corresponding `QSYS38/...` commands.
 
 ```
 CPD7302   30   Record format SCREEN1 not found in file referenced.
@@ -98,7 +98,7 @@ CPD7344   30   Keyword REF not valid for this type of file.
 
 DDS errors typically reference a specific record format and line within the source.
 
-## SQL DDL listings (.table.sql, .index.sql, .view.sql, .proc.sql)
+## SQL DDL listings (.table.sql, .index.sql, .view.sql, .proc.sql, .udf.sql, .trg.sql)
 
 SQL DDL statements executed via `RUNSQLSTM` produce SQL messages:
 
@@ -110,6 +110,7 @@ SQL7905   10   Module *N in *N not found.
 
 - Severity 30+ means the statement failed.
 - Severity 20 warnings (like "already exists") may or may not be a problem depending on context.
+- `.proc.sql` builds a `*PGM` (or a `*SRVPGM` with `PROGRAM TYPE SUB`), `.udf.sql` builds a `*SRVPGM`, and `.trg.sql` builds a trigger `*PGM`; IBM i creates these objects from the SQL statement, so align the SQL routine/trigger name or trigger `PROGRAM NAME` with the build target.
 
 ## Message files and binding directories (.msgf, .bnddir)
 

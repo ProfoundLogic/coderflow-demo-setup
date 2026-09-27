@@ -1,6 +1,10 @@
 ---
 name: sql
 description: Execute SQL statements against database systems
+updatedAt: 2026-09-24T12:55:18.074Z
+updatedBy: rbetancourt
+updatedById: user_1767620468211_32t18oh94
+updatedByName: Roger Betancourt
 ---
 
 ## Quick Start

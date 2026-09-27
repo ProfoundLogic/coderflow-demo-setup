@@ -1,6 +1,10 @@
 ---
 name: ibmi-interactive-session
 description: Run an IBM i interactive session to execute and test applications.
+updatedAt: 2026-09-24T12:55:17.063Z
+updatedBy: rbetancourt
+updatedById: user_1767620468211_32t18oh94
+updatedByName: Roger Betancourt
 ---
 
 # IBM i Interactive Sessions
@@ -128,15 +132,22 @@ Use `jq` to parse the screen data from the `./genie_get.sh` script:
 
 **Screen Size:** TN5250 screens are either 24x80 (24 rows, 80 columns) or 27x132. Properties `width` and `height` on the `.["5250"].layers` elements give the main screen and window sizes.
 
+**Layer Origin (windows):** For window layers (index > 0), properties `row` and `col` on the layer give its top-left origin in absolute screen coordinates. The main layer (index 0) has origin row=1, col=1.
+
 **Screen Buffer:** The screen buffer at `.["5250"].buffer[]` contains a text representation of the screen.
 This helps to quickly visualize what is on screen, but does not include information such as entry field locations
 or display attributes.
 
-**Fields:** Array at `.["5250"].layers[0].fields[]` has information about screen fields.
+**Fields:** Array at `.["5250"].layers[N].fields[]` has information about screen fields for layer N.
 
 **Field Types:** `"O"` (Output/constant text), `"I"` (Input/entry field)
 
-**Key Field Properties:** `row`/`col` (position), `data` (content), `idx` (entry field number for POST data), `attr` (display attribute), `wrapped` (field wraps screen edge)
+**Key Field Properties:** `row`/`col` (position, see below), `data` (content), `idx` (entry field number for POST data), `attr` (display attribute), `wrapped` (field wraps screen edge)
+
+**Field `row`/`col` Coordinate System:** A field's `row` and `col` are **relative to its layer's origin**, not absolute screen coordinates. For the main layer (index 0) they happen to equal absolute screen coordinates because its origin is (1,1). For window layers, you must translate to absolute screen coordinates before using them as `crow`/`ccol` in POST data:
+
+- `screen_row = layer.row + field.row`
+- `screen_col = layer.col + field.col`
 
 **Example:** Entry field with `"idx": 0` → send data as `0=value` in POST data.
 
@@ -158,7 +169,7 @@ Error messages appear in the screen buffer or at `.["5250"].error` in the JSON (
 
 Each response requires POST fields:
 
-- **crow/ccol**: Required. These must be set to a valid row/col within the top-most layer. Some screens implement field-specific function key behavior using these values. Typically this is used with `F4=Prompt` or `Help` keys. If field-specific behavior is not needed, then any valid row/col position within the top-most layer can be used.
+- **crow/ccol**: Required. **These are absolute screen coordinates.** They must land within the bounds of the top-most layer — i.e., between `layer.row` and `layer.row + layer.height - 1` for the row, and similarly for the column. If you are targeting a specific field on a window layer, translate the field's layer-relative `row`/`col` to absolute coordinates with `crow = layer.row + field.row` and `ccol = layer.col + field.col`. Some screens implement field-specific function key behavior using these values. Typically this is used with `F4=Prompt` or `Help` keys. If field-specific behavior is not needed, then any valid row/col position within the top-most layer can be used.
 - **aid**: Required. Response key code.
 - **entry field values** Optional. Given as `<idx>=<value>`, using the `idx` number from the entry field item.
 
@@ -196,6 +207,23 @@ crow=1&ccol=1&aid=51
 ```
 0=MYLIB&1=MYFILE&crow=10&ccol=5&aid=241
 ```
+
+### Prompt / Lookup Windows
+
+A common pattern after pressing `F4=Prompt` on an entry field is that the application displays a window listing selectable options. These appear as an additional layer (e.g., `layers[1]`). There are two variants:
+
+**Typical variant — input field per row.** The window has a short entry field (usually size 1 or 2) at the start of each row. On-screen text indicates the selection character (e.g., `Type option, press Enter — 1=Select`). To select an item:
+
+1. Read `.["5250"].layers[N].fields[]` for the top-most layer and find the input field (`type=="I"`) on the target row.
+2. Submit the selection character via `<idx>=<value>` using that field's `idx`.
+3. Set `crow`/`ccol` to that field's translated absolute screen coordinates (`crow = layer.row + field.row`, `ccol = layer.col + field.col`).
+4. Press Enter (`aid=241`).
+
+**Edge variant — no input fields, cursor-row selection.** Some prompt windows have no input fields at all; the selection is driven purely by the cursor's row when Enter is pressed. To handle this:
+
+1. Confirm the top-most layer has no input fields (`.fields[] | select(.type=="I")` returns empty).
+2. Find the output field (`type=="O"`) whose `data` matches the item you want to select.
+3. Translate its `row`/`col` to absolute screen coordinates and submit as `crow`/`ccol` with `aid=241`.
 
 ### Response Key Codes (aid values)
 

@@ -6,7 +6,7 @@
   "scope": "environment",
   "ownerUserId": null,
   "timezone": "America/New_York",
-  "enabled": true,
+  "enabled": false,
   "schedule": "0 7 * * 1-5",
   "scmPoll": null,
   "targetType": "task",
@@ -26,6 +26,7 @@
   "deployment": null,
   "docsPublish": null,
   "ibmiSync": null,
+  "managed": null,
   "settings": {
     "retainHistoryDays": 30,
     "launchPinned": false,
@@ -35,5 +36,5 @@
   "createdAt": "2026-09-15T19:44:12.255Z",
   "createdBy": "gjones",
   "createdByUserId": "user_1767620328397_iectw4bix",
-  "updatedAt": "2026-09-15T19:45:38.595Z"
+  "updatedAt": "2026-09-21T16:14:58.960Z"
 }

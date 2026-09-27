@@ -1,6 +1,10 @@
 ---
 name: PUI Rich Display File Designer
 description: Reference for creating and editing traditional Profound UI Rich Display Files (RDFs) — `.json` source for the PUI runtime. Use this skill when authoring or modifying RDF JSON for RPG/Open Access programs (the format the PUI Visual Designer produces). For EJS-based screens, use the `ejs-screen-designer` skill instead.
+updatedAt: 2026-09-24T12:55:17.595Z
+updatedBy: rbetancourt
+updatedById: user_1767620468211_32t18oh94
+updatedByName: Roger Betancourt
 ---
 
 # PUI Rich Display File Designer

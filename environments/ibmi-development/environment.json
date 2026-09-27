@@ -22,7 +22,8 @@
         "path": "docs",
         "branch": "documentation",
         "access": "public"
-      }
+      },
+      "git_depth": 50
     }
   ],
   "rebuild_schedule": {
@@ -46,7 +47,8 @@
     "ejs-screen-designer",
     "inbox-triage",
     "psact",
-    "dspf-to-ejs"
+    "dspf-to-ejs",
+    "pui-rdf-designer"
   ],
   "external_connections": [
     {
@@ -87,10 +89,7 @@
     ],
     "enabled": true,
     "name": "",
-    "qa_url": "https://idev.profoundlogic.com:8103",
-    "basic_auth": {
-      "user_property": "gjones"
-    }
+    "qa_url": "https://idev.profoundlogic.com:8103"
   },
   "standardInstructions": {
     "outputRequirements": true,
@@ -118,8 +117,8 @@
   "tasks": {
     "defaultShared": true
   },
-  "updatedAt": "2026-09-18T14:45:46.482Z",
-  "updatedBy": "drusso",
-  "updatedByName": "David Russo",
-  "updatedById": "user_1767130459835_24a7h6o02"
+  "updatedAt": "2026-09-24T13:00:06.751Z",
+  "updatedBy": "rbetancourt",
+  "updatedByName": "Roger Betancourt",
+  "updatedById": "user_1767620468211_32t18oh94"
 }

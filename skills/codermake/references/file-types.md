@@ -34,6 +34,63 @@ mypgm.pgm: mypgm.cblle
 
 **CL command:** `CRTBNDCBL PGM(LIB/MYPGM) SRCSTMF('src/mypgm.cblle')`
 
+COBOL `COPY` statements are resolved at compile time — see
+[COBOL copy sources](#cobol-copy-sources) below.
+
+### SQL ILE COBOL program from .sqlcblle
+
+Compiles an ILE COBOL source file with embedded SQL into a bound program. Two-phase compilation: SQL precompile, then COBOL compile (whose parameters are passed through `COMPILEOPT`).
+
+```makefile
+mypgm.pgm: mypgm.sqlcblle
+```
+
+**CL command:** `CRTSQLCBLI OBJ(LIB/MYPGM) OBJTYPE(*PGM) SRCSTMF('src/mypgm.sqlcblle')`
+
+The SQL precompiler does not expand `COPY` statements, so host variables must be declared in the program itself (or pulled in with `EXEC SQL INCLUDE`).
+
+### OPM COBOL program from .cbl
+
+OPM COBOL cannot compile from stream files, so the source is staged as a member in
+`QCBLSRC` first, then compiled with `CRTCBLPGM`. `COPY` statements reference source
+members; list each copybook as a prerequisite so codermake creates it as a source
+member too (in the source file named by the prereq's parent directory, in the
+program's library — or, in multi-library output mode, the library mapped from the
+prereq's leading library-directory segment).
+
+```makefile
+mypgm.pgm: mypgm.cbl
+mycpy.pgm: mycpy.cbl qcpysrc/cpybook.cpy    # COPY CPYBOOK OF QCPYSRC staged as QCPYSRC/CPYBOOK
+```
+
+**CL command:** `CRTCBLPGM PGM(LIB/MYPGM) SRCFILE(LIB/QCBLSRC) SRCMBR(MYPGM) OPTION(*SOURCE) REPLACE(*YES)`
+
+### System/38 COBOL program from .cbl38
+
+Like `.cbl`, but compiled with `QSYS38/CRTCBLPGM` and the staged member is tagged
+`CBL38`. `QSYS38/CRTCBLPGM` has no `REPLACE` parameter, so the recipe deletes any
+existing program object first. `COPY` members are handled the same way as `.cbl`.
+The System/38 compiler is ANSI 74 COBOL, so its reserved word list differs from
+ILE COBOL's.
+
+```makefile
+mypgm.pgm: mypgm.cbl38
+```
+
+**CL command:** `QSYS38/CRTCBLPGM PGM(LIB/MYPGM) SRCFILE(LIB/QCBLSRC) SRCMBR(MYPGM) OPTION(*SOURCE)`
+
+### OPM COBOL program with embedded SQL from .sqlcbl
+
+`CRTSQLCBL` has no `SRCSTMF` parameter either, so the source is staged as a member
+in `QLBLSRC` (the command's own default source file), with `COPY` prerequisites
+staged as members.
+
+```makefile
+mypgm.pgm: mypgm.sqlcbl
+```
+
+**CL command:** `CRTSQLCBL PGM(LIB/MYPGM) SRCFILE(LIB/QLBLSRC) SRCMBR(MYPGM) OPTION(*SOURCE) REPLACE(*YES)`
+
 ### ILE CL program from .clle
 
 Compiles an ILE CL source file into a bound program.
@@ -54,15 +111,70 @@ mypgm.pgm: mypgm.clp
 
 **CL command:** `CRTCLPGM PGM(LIB/MYPGM) SRCFILE(LIB/QCLSRC)`
 
+### System/38 OPM CL program from .clp38
+
+System/38 compatible OPM CL. Like `.clp`, it compiles from a source member (`QCLSRC`).
+`QSYS38/CRTCLPGM` has no `REPLACE` parameter, so the recipe deletes any existing
+program object first.
+
+```makefile
+mycl38.pgm: mycl38.clp38
+```
+
+**CL command:** `QSYS38/CRTCLPGM PGM(LIB/MYCL38) SRCFILE(LIB/QCLSRC) SRCMBR(MYCL38) OPTION(*SOURCE)`
+
+### RPG/400 (RPG III) program from .rpg
+
+RPG III cannot compile from stream files, so the source is staged as a member in
+`QRPGSRC` first, then compiled with `CRTRPGPGM`. `/COPY` directives always
+reference source members; list each `/COPY` target as a prerequisite so codermake
+creates it as a source member too (in the source file named by the prereq's parent
+directory, in the program's library — or, in multi-library output mode, the library
+mapped from the prereq's leading library-directory segment). RPG III has no
+`/INCLUDE` directive and defaults the source file to `QRPGSRC` when unqualified.
+
+```makefile
+myrpg.pgm: myrpg.rpg
+mycpy.pgm: mycpy.rpg qcpysrc/shared.rpg    # /COPY QCPYSRC,SHARED staged as QCPYSRC/SHARED
+```
+
+**CL command:** `CRTRPGPGM PGM(LIB/MYRPG) SRCFILE(LIB/QRPGSRC) SRCMBR(MYRPG) OPTION(*SOURCE) REPLACE(*YES)`
+
+### System/38 RPG III program from .rpg38
+
+Like `.rpg`, but compiled with `QSYS38/CRTRPGPGM` and the staged member is tagged
+`RPG38`. `QSYS38/CRTRPGPGM` has no `REPLACE` parameter, so the recipe deletes any
+existing program object first. `/COPY` members are handled the same way as `.rpg`.
+
+```makefile
+myrpg38.pgm: myrpg38.rpg38
+```
+
+**CL command:** `QSYS38/CRTRPGPGM PGM(LIB/MYRPG38) SRCFILE(LIB/QRPGSRC) SRCMBR(MYRPG38) OPTION(*SOURCE)`
+
 ### SQL procedure from .proc.sql
 
-Runs a SQL DDL script that creates a stored procedure. The resulting object appears as a program.
+Runs a SQL DDL script that creates a stored procedure. With the default `PROGRAM TYPE MAIN`, the resulting object is a program (`*PGM`).
 
 ```makefile
 getcount.pgm: getcount.proc.sql
 ```
 
 **CL command:** `RUNSQLSTM SRCSTMF('src/getcount.proc.sql') COMMIT(*NONE) DFTRDBCOL(LIB)`
+
+A `.proc.sql` whose routine uses `PROGRAM TYPE SUB`, and a `.udf.sql` SQL function, are backed by `*SRVPGM` objects instead — see [SQL service programs](#sql-service-programs-from-procsql--udfsql) under Service programs.
+
+### SQL trigger program from .trg.sql
+
+Runs a SQL DDL script that creates a trigger. IBM i creates the generated trigger program object (`*PGM`) when `CREATE TRIGGER` runs.
+
+```makefile
+emptrg.pgm: emptrg.trg.sql employee.file empaudit.file
+```
+
+**CL command:** `RUNSQLSTM SRCSTMF('src/emptrg.trg.sql') COMMIT(*NONE) DFTRDBCOL(LIB)`
+
+Use the trigger name or `PROGRAM NAME` in the source so the generated program object matches the `.pgm` build target.
 
 ### Program from modules
 
@@ -106,6 +218,14 @@ mymod.module: mymod.cblle
 
 **CL command:** `CRTCBLMOD MODULE(LIB/MYMOD) SRCSTMF('src/mymod.cblle')`
 
+### SQL ILE COBOL module from .sqlcblle
+
+```makefile
+mymod.module: mymod.sqlcblle
+```
+
+**CL command:** `CRTSQLCBLI OBJ(LIB/MYMOD) OBJTYPE(*MODULE) SRCSTMF('src/mymod.sqlcblle')`
+
 ### ILE CL module from .clle
 
 ```makefile
@@ -147,6 +267,22 @@ mysrvpgm.srvpgm: mymod.module mysrvpgm.exports dep.srvpgm
 ```
 
 This appends `BNDSRVPGM(DEP)` to the CRTSRVPGM command. `.bnddir` prerequisites (normal or order-only) append `BNDDIR(name)`.
+
+### SQL service programs from .proc.sql / .udf.sql
+
+A service program can also be created from SQL source via `RUNSQLSTM`, with no modules or export list:
+
+- **`.proc.sql` → `.srvpgm`** — `CREATE PROCEDURE ... LANGUAGE SQL PROGRAM TYPE SUB` is backed by a `*SRVPGM`.
+- **`.udf.sql` → `.srvpgm`** — `CREATE FUNCTION ... LANGUAGE SQL` (SQL UDF) is backed by a `*SRVPGM`.
+
+```makefile
+getcounts.srvpgm: getcounts.proc.sql employee.file   # PROGRAM TYPE SUB
+getname.srvpgm: getname.udf.sql employee.file         # SQL UDF
+```
+
+**CL command:** `RUNSQLSTM SRCSTMF('src/getcounts.proc.sql') COMMIT(*NONE) DFTRDBCOL(LIB)`
+
+codermake only runs the SQL statement; IBM i creates the `*SRVPGM` and derives its object name from the SQL routine. Name the routine (and its `SPECIFIC` name where applicable) to match the build target so the generated object name lines up with the rule.
 
 ### .exports / .bnd file format
 
@@ -214,6 +350,25 @@ report.file: report.prtf
 ```
 
 **CL command:** `CRTPRTF FILE(LIB/REPORT) SRCFILE(LIB/QDDSSRC)`
+
+### System/38 compatible DDS (.pf38, .lf38, .dspf38, .prtf38)
+
+System/38 compatible versions of `.pf`, `.lf`, `.dspf`, and `.prtf`. They build
+through dedicated recipes that qualify the compile command from `QSYS38`. The
+parameters currently match the base DDS recipes, but the commands are
+`QSYS38/CRTPF`, `QSYS38/CRTLF`, `QSYS38/CRTDSPF`, and `QSYS38/CRTPRTF`. The
+temporary source member's source type is derived from the file extension:
+`.pf38` → `PF38`, `.lf38` → `LF38`, `.dspf38` → `DSPF38`, `.prtf38` → `PRTF38`.
+Use these when a source member must retain its System/38 source type.
+
+```makefile
+custp38.file: custp38.pf38                 # QSYS38/CRTPF,   PF38 member
+custl38.file: custl38.lf38 custp38.file    # QSYS38/CRTLF,   LF38 member
+hello38.file: hello38.dspf38               # QSYS38/CRTDSPF, DSPF38 member
+rpt38.file: rpt38.prtf38                   # QSYS38/CRTPRTF, PRTF38 member
+```
+
+**CL commands:** `QSYS38/CRTPF` / `QSYS38/CRTLF` / `QSYS38/CRTDSPF` / `QSYS38/CRTPRTF`
 
 ### SQL table from .table.sql
 
@@ -296,3 +451,32 @@ ADDBNDDIRE BNDDIR($LIBRARY/$NAME) OBJ(($LIBRARY/MYSRVPGM *SRVPGM))
 ```
 
 Binding directories are almost always used as order-only prerequisites (`|`) because they must exist at compile time but should not trigger rebuilds when their content changes.
+
+## COBOL copy sources
+
+COBOL copybooks (`.cpy`, or any COBOL source extension) are resolved differently
+by the two compiler families, but the rule you write is the same: **list the
+copybook as a prerequisite**. That is what ships it to IBM i for a remote build
+and what makes a change to it rebuild the program.
+
+**ILE COBOL** (`.cblle`, `.sqlcblle`) compiles from a stream file and resolves
+`COPY` against the compile-time include path:
+
+```makefile
+# COPY 'qcpysrc/cpybook.cpy'.   <- IFS style, used as written
+# COPY CPYBOOK OF QCPYSRC.      <- source member style, rewritten to the path above
+mypgm.pgm: mypgm.cblle qcpysrc/cpybook.cpy
+```
+
+**OPM COBOL** (`.cbl`, `.cbl38`, `.sqlcbl`) compiles from a source member, so the
+`COPY` statement is left exactly as written and codermake creates the member it
+names (`QCPYSRC/CPYBOOK` for the example below) before compiling:
+
+```makefile
+# COPY CPYBOOK OF QCPYSRC.
+mypgm.pgm: mypgm.cbl qcpysrc/cpybook.cpy
+```
+
+A bare `COPY NAME.` is never rewritten: ILE COBOL resolves it against the include
+path on its own. Use the `OF`/`IN` form when the copybook lives in a source file
+directory.

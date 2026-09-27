@@ -13,7 +13,8 @@
       },
       "read_only": false,
       "clone_auto": true,
-      "ibmiImportEnabled": true
+      "ibmiImportEnabled": true,
+      "git_depth": 50
     }
   ],
   "standardInstructions": {
@@ -21,12 +22,46 @@
     "screenshotGuidelines": false,
     "ibmiOutputRequirements": false,
     "ibmiExploratoryVerification": false,
-    "ibmiDatabaseSql": false
+    "ibmiDatabaseSql": false,
+    "ibmiBuild": true,
+    "credentialHandling": true,
+    "userPreferences": true
   },
   "description": "Demo",
-  "skills": [],
+  "skills": [
+    "codermake",
+    "ibmi-interactive-session"
+  ],
   "memory": {
     "enabled": false
   },
-  "external_connections": []
+  "external_connections": [
+    {
+      "name": "idev",
+      "type": "ibmi",
+      "description": "idev",
+      "available_for": [
+        "tasks"
+      ],
+      "config": {
+        "host": "idev.profoundlogic.com",
+        "user": "AIDEMO",
+        "features": [
+          "build",
+          "interactive"
+        ],
+        "pui_base_url": "https://idev.profoundlogic.com:8103",
+        "build_repo": "drusso-ibmi-source",
+        "build_library_prefix": "AITSK"
+      },
+      "id": "6a0f9fcc-24f1-4d0c-b0e3-d14113392b30"
+    }
+  ],
+  "updatedAt": "2026-09-18T19:55:52.628Z",
+  "updatedBy": "drusso",
+  "updatedByName": "David Russo",
+  "updatedById": "user_1767130459835_24a7h6o02",
+  "tasks": {
+    "defaultShared": true
+  }
 }
