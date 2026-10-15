@@ -133,10 +133,10 @@
   "tasks": {
     "defaultShared": true
   },
-  "updatedAt": "2026-09-24T15:44:01.087Z",
-  "updatedBy": "rbetancourt",
-  "updatedByName": "Roger Betancourt",
-  "updatedById": "user_1767620468211_32t18oh94",
+  "updatedAt": "2026-10-14T20:18:03.387Z",
+  "updatedBy": "bmay",
+  "updatedByName": "Brian May",
+  "updatedById": "user_1767620279635_lw6uhpnxl",
   "createdAt": "2026-08-19T19:58:42.398Z",
   "createdBy": "gjones",
   "createdByName": "Gary Jones",
@@ -146,5 +146,13 @@
     "updatedBy": "rbetancourt",
     "updatedByName": "Roger Betancourt",
     "updatedById": "user_1767620468211_32t18oh94"
+  },
+  "portal_access": true,
+  "portal_report_sharing": true,
+  "portal_authoring": {
+    "enabled": true,
+    "agent": "claude",
+    "model": "claude-sonnet-5-5",
+    "level": "medium"
   }
 }

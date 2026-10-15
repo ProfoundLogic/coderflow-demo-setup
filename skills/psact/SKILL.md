@@ -10,10 +10,10 @@ createdAt: 2026-08-18T05:30:25.673Z
 createdBy: gjones
 createdByName: Gary Jones
 createdById: user_1767620328397_iectw4bix
-updatedAt: 2026-08-20T15:22:27.484Z
-updatedBy: rbetancourt
-updatedByName: Roger Betancourt
-updatedById: user_1767620468211_32t18oh94
+updatedAt: 2026-10-02T12:02:17.390Z
+updatedBy: gjones
+updatedByName: Gary Jones
+updatedById: user_1767620328397_iectw4bix
 ---
 # PSACT — PreSales Activity Tracker
 
@@ -45,10 +45,87 @@ Brian **Rees** (`brees@`) is not — never assign PSACT work to him.
 daily report as having no owner. If the requester does not say who owns it,
 assume the person asking.
 
-## Epics — always set a parent
+## Epics — every ticket has one, no exceptions
 
 Epics are **permanent containers**, not units of work. They sit in In Progress
 forever. Never close one, and never create a new epic without being asked.
+
+**Every ticket sits under an epic. There are no exceptions and there is no
+"parent it later".** Set `parent` in the same call that creates the ticket. A
+ticket that reaches Jira without one is a defect to go back and fix, not a
+state it is allowed to pass through.
+
+Nothing will catch this for you. Jira accepts a parentless Task without
+complaint, and the daily report does not crash on one — it renders an em-dash
+where the epic chip should be, which is quiet enough that tickets can sit
+orphaned for weeks. The only defence is not creating them.
+
+### If you are not sure which epic, stop and ask
+
+Do not guess, and **do not reach for `PSACT-8` to avoid the question.**
+`PSACT-8` is for work that has been *judged* to fit nowhere else. That is a
+different thing from work nobody has judged yet, and using it as a soft landing
+for uncertainty quietly destroys the signal the runbook asks you to watch for —
+growth in `PSACT-8` is supposed to mean "we need a new epic", not "someone
+didn't ask".
+
+A wrong epic is worse than a question, because it is invisible afterwards. The
+ticket looks correctly filed, nobody re-reads it, and the miscount propagates
+into the monthly commercial-team deck and the quarterly rollups.
+
+Ask with the candidates named and the distinction drawn, so the answer can be
+one word:
+
+> PSACT-90 is about rebuilding the Genie skin preview harness. I'd put it under
+> PSACT-5 (demo-estate upkeep) or PSACT-6 (new internal tooling) — which?
+
+Being unsure is the uncommon case. Where the epic is obvious, just set it and
+carry on; this is not an invitation to ask about every ticket.
+
+### Auditing for orphans
+
+Worth running after any bulk import or when picking the project back up.
+`jira.sh search` **cannot** do this — its fixed field list omits `parent`, so
+every ticket comes back looking unparented. Page the API directly:
+
+```bash
+python3 - <<'PY'
+import os, json, urllib.request, base64
+base = os.environ['JIRA_BASE_URL'].rstrip('/')
+auth = base64.b64encode(
+    f"{os.environ['JIRA_EMAIL']}:{os.environ['JIRA_API_TOKEN']}".encode()).decode()
+
+def post(path, payload):
+    req = urllib.request.Request(base + path, data=json.dumps(payload).encode(),
+        headers={'Authorization': 'Basic ' + auth,
+                 'Content-Type': 'application/json',
+                 'Accept': 'application/json'}, method='POST')
+    with urllib.request.urlopen(req) as r:
+        return json.load(r)
+
+issues, token = [], None
+while True:
+    body = {"jql": "project = PSACT ORDER BY key ASC", "maxResults": 100,
+            "fields": ["summary", "status", "assignee", "issuetype", "parent"]}
+    if token:
+        body["nextPageToken"] = token
+    d = post("/rest/api/3/search/jql", body)
+    issues += d.get("issues", [])
+    token = d.get("nextPageToken")
+    if not token or d.get("isLast"):
+        break
+
+for i in issues:
+    f = i["fields"]
+    if f["issuetype"]["name"] != "Epic" and not f.get("parent"):
+        print(i["key"], "|", f["status"]["name"], "|", f["summary"])
+PY
+```
+
+Read the credentials from the environment as above — never put a token on a
+command line. Report what the audit finds and propose an epic for each hit, but
+apply the obvious ones and **ask about anything genuinely ambiguous** rather
+than clearing the list for the sake of a clean result.
 
 | Epic | Name | What belongs there |
 | --- | --- | --- |
@@ -59,7 +136,7 @@ forever. Never close one, and never create a new epic without being asked.
 | `PSACT-5` | Demo Environments & Assets | Demo estate upkeep, reusable demo material |
 | `PSACT-6` | Efficiency & Improvements | Internal tooling, automation, process |
 | `PSACT-7` | Education & Enablement | Training given or received, certifications |
-| `PSACT-8` | General / Miscellaneous | Catch-all — see note below |
+| `PSACT-8` | General / Miscellaneous | Work judged to fit none of the others — **not** a bucket for "not sure yet"; see note below |
 | `PSACT-11` | Discovery & Sizing | Architect-and-size work, handed to Services |
 | `PSACT-17` | Partner Enablement | Partner-facing demos, POCs and enablement material |
 | `PSACT-21` | Marketing & Content Support | Content reviews, video production, technical material for Marketing |
@@ -78,8 +155,10 @@ Boundaries that are easy to get wrong:
 - **PSACT-1 vs PSACT-11** — a demo shows the product; a discovery architects and
   sizes a customer's system. A discovery closes at **handover to Services**, not
   when the customer's project finishes.
-- **PSACT-8** is legitimate, but if several related tickets accumulate there,
-  say so — it usually means a new epic is wanted.
+- **PSACT-8** is legitimate for work that genuinely fits nowhere else, but it is
+  never the answer to "I don't know which epic" — ask instead. If several
+  related tickets do accumulate there, say so; it usually means a new epic is
+  wanted.
 - **PSACT-17 vs PSACT-1/2/11** — the test is *who we are enabling*, not what we
   show. Helping a partner sell and demo our products is 17. Anything aimed at a
   prospect that could close and result in revenue for us stays in 1, 2 or 11,
@@ -162,6 +241,8 @@ single epic of another project.
 ## Creating a ticket
 
 Set at minimum: project, `parent` (the epic), issuetype Task, summary, assignee.
+**`parent` is mandatory** — if you cannot name the epic with confidence, ask
+before creating the ticket rather than creating it bare and tidying up later.
 Add a due date whenever a real date exists — a demo date, an RFP deadline. A
 future due date also exempts the ticket from the staleness nudge, which is
 correct: it is scheduled, not stalled.
