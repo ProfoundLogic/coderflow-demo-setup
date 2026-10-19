@@ -88,7 +88,7 @@
           "ejs-display-files"
         ],
         "sync_credentials": "prompt",
-        "pui_base_url": "https://idev.profoundlogic.com:8098",
+        "pui_base_url": "http://idev.profoundlogic.com:8098",
         "pui_htdocs_path": "/www/puicfdemo/htdocs",
         "build_repo": "ibmi-agentic",
         "build_library_prefix": "AITSK"
@@ -138,7 +138,7 @@
   "tasks": {
     "defaultShared": true
   },
-  "updatedAt": "2026-10-19T16:03:01.491Z",
+  "updatedAt": "2026-10-19T16:11:53.188Z",
   "updatedBy": "bmay",
   "updatedByName": "Brian May",
   "updatedById": "user_1767620279635_lw6uhpnxl",
