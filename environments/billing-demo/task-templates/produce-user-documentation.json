@@ -1,0 +1,108 @@
+{
+  "title": "Produce User Documentation",
+  "description": "Produce a state-of-the-art, step-by-step end-user guide (PDF + Markdown) for an RPG or CL program, with annotated screenshots captured from a live IBM i session. User documentation only - no technical documentation.",
+  "parameters": {
+    "source_file": {
+      "required": true,
+      "type": "files",
+      "label": "Select RPG or CL source to document",
+      "description": "Program to write the user guide for. Select more than one to produce a separate guide per program.",
+      "prompt": {
+        "type": "files",
+        "label": "Select RPG or CL source to document",
+        "multiSelect": true,
+        "path": "ibmi-agentic/cfdemo/qrpglesrc/",
+        "pattern": "*.{rpg,rpgle,sqlrpgle,cl,clle}"
+      }
+    },
+    "audience_level": {
+      "required": true,
+      "type": "list",
+      "label": "Who is the guide for?",
+      "description": "Sets the reading level and how much background the guide explains.",
+      "default": "First-time user",
+      "prompt": {
+        "type": "list",
+        "label": "Select the intended reader",
+        "options": [
+          {
+            "value": "First-time user",
+            "label": "First-time user",
+            "description": "Assumes no prior 5250 experience - includes sign-on and navigation basics"
+          },
+          {
+            "value": "Everyday user",
+            "label": "Everyday user",
+            "description": "Knows the menus, needs the tasks for this program"
+          },
+          {
+            "value": "Power user or supervisor",
+            "label": "Power user / supervisor",
+            "description": "Shortcuts, edge cases, error recovery and data-integrity notes"
+          }
+        ]
+      }
+    },
+    "output_format": {
+      "required": true,
+      "type": "list",
+      "label": "Output format",
+      "description": "Which files to produce in /task-output/documentation/",
+      "default": "PDF and Markdown",
+      "prompt": {
+        "type": "list",
+        "label": "Select output format",
+        "options": [
+          {
+            "value": "PDF and Markdown",
+            "label": "PDF and Markdown",
+            "description": "Recommended - printable guide plus a wiki-ready copy"
+          },
+          {
+            "value": "PDF only",
+            "label": "PDF only",
+            "description": "Finished, printable guide only"
+          },
+          {
+            "value": "Markdown only",
+            "label": "Markdown only",
+            "description": "For Confluence or a wiki - screenshots still produced as PNG files"
+          }
+        ]
+      }
+    },
+    "application_name": {
+      "required": false,
+      "type": "string",
+      "label": "Application / product name",
+      "description": "Business name shown on the cover page, e.g. \"Customer Master\". Leave blank to let the agent derive one from the program."
+    },
+    "entry_path": {
+      "required": false,
+      "type": "string",
+      "label": "How users reach this program",
+      "description": "Known menu path, option number or command, e.g. \"Main Menu, option 1\". Leave blank and the agent will work it out and verify it live."
+    },
+    "brand_company": {
+      "required": false,
+      "type": "string",
+      "label": "Organisation name",
+      "description": "Shown on the cover page and in the Getting Help section."
+    },
+    "doc_language": {
+      "required": false,
+      "type": "string",
+      "label": "Document language",
+      "description": "Language the guide is written in.",
+      "default": "English"
+    }
+  },
+  "createdAt": "2026-09-25T18:12:10.720Z",
+  "createdBy": "rbetancourt",
+  "createdByName": "Roger Betancourt",
+  "createdById": "user_1767620468211_32t18oh94",
+  "updatedAt": "2026-09-25T18:12:10.720Z",
+  "updatedBy": "rbetancourt",
+  "updatedByName": "Roger Betancourt",
+  "updatedById": "user_1767620468211_32t18oh94"
+}

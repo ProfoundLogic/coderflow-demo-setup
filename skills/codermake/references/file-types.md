@@ -1,6 +1,6 @@
 # File Types Reference
 
-Complete reference for all source and object types supported by codermake. Each entry shows the Rules.mk syntax and the IBM i CL command used to compile it.
+Complete reference for all source and object types supported by codermake. Each entry shows the Rules.mk syntax and the IBM i CL command used to compile it. Examples are written for a library-level Rules.mk (`mylib/Rules.mk`), so source paths such as `qrpglesrc/mypgm.rpgle` are relative to the library directory.
 
 ## Programs (.pgm)
 
@@ -9,30 +9,30 @@ Complete reference for all source and object types supported by codermake. Each 
 Compiles an ILE RPG source file into a bound program.
 
 ```makefile
-mypgm.pgm: mypgm.rpgle
+mypgm.pgm: qrpglesrc/mypgm.rpgle
 ```
 
-**CL command:** `CRTBNDRPG PGM(LIB/MYPGM) SRCSTMF('src/mypgm.rpgle')`
+**CL command:** `CRTBNDRPG PGM(LIB/MYPGM) SRCSTMF('mylib/qrpglesrc/mypgm.rpgle')`
 
 ### SQL RPG program from .sqlrpgle
 
 Compiles an RPG source file with embedded SQL into a bound program. Two-phase compilation: SQL precompile, then RPG compile.
 
 ```makefile
-mypgm.pgm: mypgm.sqlrpgle
+mypgm.pgm: qrpglesrc/mypgm.sqlrpgle
 ```
 
-**CL command:** `CRTSQLRPGI OBJ(LIB/MYPGM) OBJTYPE(*PGM) SRCSTMF('src/mypgm.sqlrpgle')`
+**CL command:** `CRTSQLRPGI OBJ(LIB/MYPGM) OBJTYPE(*PGM) SRCSTMF('mylib/qrpglesrc/mypgm.sqlrpgle')`
 
 ### ILE COBOL program from .cblle
 
 Compiles an ILE COBOL source file into a bound program.
 
 ```makefile
-mypgm.pgm: mypgm.cblle
+mypgm.pgm: qcbllesrc/mypgm.cblle
 ```
 
-**CL command:** `CRTBNDCBL PGM(LIB/MYPGM) SRCSTMF('src/mypgm.cblle')`
+**CL command:** `CRTBNDCBL PGM(LIB/MYPGM) SRCSTMF('mylib/qcbllesrc/mypgm.cblle')`
 
 COBOL `COPY` statements are resolved at compile time — see
 [COBOL copy sources](#cobol-copy-sources) below.
@@ -42,10 +42,10 @@ COBOL `COPY` statements are resolved at compile time — see
 Compiles an ILE COBOL source file with embedded SQL into a bound program. Two-phase compilation: SQL precompile, then COBOL compile (whose parameters are passed through `COMPILEOPT`).
 
 ```makefile
-mypgm.pgm: mypgm.sqlcblle
+mypgm.pgm: qcbllesrc/mypgm.sqlcblle
 ```
 
-**CL command:** `CRTSQLCBLI OBJ(LIB/MYPGM) OBJTYPE(*PGM) SRCSTMF('src/mypgm.sqlcblle')`
+**CL command:** `CRTSQLCBLI OBJ(LIB/MYPGM) OBJTYPE(*PGM) SRCSTMF('mylib/qcbllesrc/mypgm.sqlcblle')`
 
 The SQL precompiler does not expand `COPY` statements, so host variables must be declared in the program itself (or pulled in with `EXEC SQL INCLUDE`).
 
@@ -55,12 +55,12 @@ OPM COBOL cannot compile from stream files, so the source is staged as a member 
 `QCBLSRC` first, then compiled with `CRTCBLPGM`. `COPY` statements reference source
 members; list each copybook as a prerequisite so codermake creates it as a source
 member too (in the source file named by the prereq's parent directory, in the
-program's library — or, in multi-library output mode, the library mapped from the
-prereq's leading library-directory segment).
+program's library — or, in multi-library output mode, the library the prereq's
+library directory is mapped to, when it has a map entry).
 
 ```makefile
-mypgm.pgm: mypgm.cbl
-mycpy.pgm: mycpy.cbl qcpysrc/cpybook.cpy    # COPY CPYBOOK OF QCPYSRC staged as QCPYSRC/CPYBOOK
+mypgm.pgm: qcblsrc/mypgm.cbl
+mycpy.pgm: qcblsrc/mycpy.cbl qcpysrc/cpybook.cpy    # COPY CPYBOOK OF QCPYSRC staged as QCPYSRC/CPYBOOK
 ```
 
 **CL command:** `CRTCBLPGM PGM(LIB/MYPGM) SRCFILE(LIB/QCBLSRC) SRCMBR(MYPGM) OPTION(*SOURCE) REPLACE(*YES)`
@@ -74,7 +74,7 @@ The System/38 compiler is ANSI 74 COBOL, so its reserved word list differs from
 ILE COBOL's.
 
 ```makefile
-mypgm.pgm: mypgm.cbl38
+mypgm.pgm: qcblsrc/mypgm.cbl38
 ```
 
 **CL command:** `QSYS38/CRTCBLPGM PGM(LIB/MYPGM) SRCFILE(LIB/QCBLSRC) SRCMBR(MYPGM) OPTION(*SOURCE)`
@@ -86,7 +86,7 @@ in `QLBLSRC` (the command's own default source file), with `COPY` prerequisites
 staged as members.
 
 ```makefile
-mypgm.pgm: mypgm.sqlcbl
+mypgm.pgm: qlblsrc/mypgm.sqlcbl
 ```
 
 **CL command:** `CRTSQLCBL PGM(LIB/MYPGM) SRCFILE(LIB/QLBLSRC) SRCMBR(MYPGM) OPTION(*SOURCE) REPLACE(*YES)`
@@ -96,17 +96,17 @@ mypgm.pgm: mypgm.sqlcbl
 Compiles an ILE CL source file into a bound program.
 
 ```makefile
-mypgm.pgm: mypgm.clle
+mypgm.pgm: qclsrc/mypgm.clle
 ```
 
-**CL command:** `CRTBNDCL PGM(LIB/MYPGM) SRCSTMF('src/mypgm.clle')`
+**CL command:** `CRTBNDCL PGM(LIB/MYPGM) SRCSTMF('mylib/qclsrc/mypgm.clle')`
 
 ### OPM CL program from .clp or .cl
 
 Compiles an OPM CL source file into a program. Uses source members (not stream files). OPM CL cannot be compiled to modules.
 
 ```makefile
-mypgm.pgm: mypgm.clp
+mypgm.pgm: qclsrc/mypgm.clp
 ```
 
 **CL command:** `CRTCLPGM PGM(LIB/MYPGM) SRCFILE(LIB/QCLSRC)`
@@ -118,7 +118,7 @@ System/38 compatible OPM CL. Like `.clp`, it compiles from a source member (`QCL
 program object first.
 
 ```makefile
-mycl38.pgm: mycl38.clp38
+mycl38.pgm: qclsrc/mycl38.clp38
 ```
 
 **CL command:** `QSYS38/CRTCLPGM PGM(LIB/MYCL38) SRCFILE(LIB/QCLSRC) SRCMBR(MYCL38) OPTION(*SOURCE)`
@@ -130,12 +130,12 @@ RPG III cannot compile from stream files, so the source is staged as a member in
 reference source members; list each `/COPY` target as a prerequisite so codermake
 creates it as a source member too (in the source file named by the prereq's parent
 directory, in the program's library — or, in multi-library output mode, the library
-mapped from the prereq's leading library-directory segment). RPG III has no
+the prereq's library directory is mapped to, when it has a map entry). RPG III has no
 `/INCLUDE` directive and defaults the source file to `QRPGSRC` when unqualified.
 
 ```makefile
-myrpg.pgm: myrpg.rpg
-mycpy.pgm: mycpy.rpg qcpysrc/shared.rpg    # /COPY QCPYSRC,SHARED staged as QCPYSRC/SHARED
+myrpg.pgm: qrpgsrc/myrpg.rpg
+mycpy.pgm: qrpgsrc/mycpy.rpg qcpysrc/shared.rpg    # /COPY QCPYSRC,SHARED staged as QCPYSRC/SHARED
 ```
 
 **CL command:** `CRTRPGPGM PGM(LIB/MYRPG) SRCFILE(LIB/QRPGSRC) SRCMBR(MYRPG) OPTION(*SOURCE) REPLACE(*YES)`
@@ -147,7 +147,7 @@ Like `.rpg`, but compiled with `QSYS38/CRTRPGPGM` and the staged member is tagge
 existing program object first. `/COPY` members are handled the same way as `.rpg`.
 
 ```makefile
-myrpg38.pgm: myrpg38.rpg38
+myrpg38.pgm: qrpgsrc/myrpg38.rpg38
 ```
 
 **CL command:** `QSYS38/CRTRPGPGM PGM(LIB/MYRPG38) SRCFILE(LIB/QRPGSRC) SRCMBR(MYRPG38) OPTION(*SOURCE)`
@@ -157,10 +157,10 @@ myrpg38.pgm: myrpg38.rpg38
 Runs a SQL DDL script that creates a stored procedure. With the default `PROGRAM TYPE MAIN`, the resulting object is a program (`*PGM`).
 
 ```makefile
-getcount.pgm: getcount.proc.sql
+getcount.pgm: qsqlsrc/getcount.proc.sql
 ```
 
-**CL command:** `RUNSQLSTM SRCSTMF('src/getcount.proc.sql') COMMIT(*NONE) DFTRDBCOL(LIB)`
+**CL command:** `RUNSQLSTM SRCSTMF('mylib/qsqlsrc/getcount.proc.sql') COMMIT(*NONE) DFTRDBCOL(LIB)`
 
 A `.proc.sql` whose routine uses `PROGRAM TYPE SUB`, and a `.udf.sql` SQL function, are backed by `*SRVPGM` objects instead — see [SQL service programs](#sql-service-programs-from-procsql--udfsql) under Service programs.
 
@@ -169,10 +169,10 @@ A `.proc.sql` whose routine uses `PROGRAM TYPE SUB`, and a `.udf.sql` SQL functi
 Runs a SQL DDL script that creates a trigger. IBM i creates the generated trigger program object (`*PGM`) when `CREATE TRIGGER` runs.
 
 ```makefile
-emptrg.pgm: emptrg.trg.sql employee.file empaudit.file
+emptrg.pgm: qsqlsrc/emptrg.trg.sql employee.file empaudit.file
 ```
 
-**CL command:** `RUNSQLSTM SRCSTMF('src/emptrg.trg.sql') COMMIT(*NONE) DFTRDBCOL(LIB)`
+**CL command:** `RUNSQLSTM SRCSTMF('mylib/qsqlsrc/emptrg.trg.sql') COMMIT(*NONE) DFTRDBCOL(LIB)`
 
 Use the trigger name or `PROGRAM NAME` in the source so the generated program object matches the `.pgm` build target.
 
@@ -197,42 +197,42 @@ Modules are intermediate compile units that are linked into programs or service 
 ### RPG module from .rpgle
 
 ```makefile
-mymod.module: mymod.rpgle
+mymod.module: qrpglesrc/mymod.rpgle
 ```
 
-**CL command:** `CRTRPGMOD MODULE(LIB/MYMOD) SRCSTMF('src/mymod.rpgle')`
+**CL command:** `CRTRPGMOD MODULE(LIB/MYMOD) SRCSTMF('mylib/qrpglesrc/mymod.rpgle')`
 
 ### SQL RPG module from .sqlrpgle
 
 ```makefile
-mymod.module: mymod.sqlrpgle
+mymod.module: qrpglesrc/mymod.sqlrpgle
 ```
 
-**CL command:** `CRTSQLRPGI OBJ(LIB/MYMOD) OBJTYPE(*MODULE) SRCSTMF('src/mymod.sqlrpgle')`
+**CL command:** `CRTSQLRPGI OBJ(LIB/MYMOD) OBJTYPE(*MODULE) SRCSTMF('mylib/qrpglesrc/mymod.sqlrpgle')`
 
 ### ILE COBOL module from .cblle
 
 ```makefile
-mymod.module: mymod.cblle
+mymod.module: qcbllesrc/mymod.cblle
 ```
 
-**CL command:** `CRTCBLMOD MODULE(LIB/MYMOD) SRCSTMF('src/mymod.cblle')`
+**CL command:** `CRTCBLMOD MODULE(LIB/MYMOD) SRCSTMF('mylib/qcbllesrc/mymod.cblle')`
 
 ### SQL ILE COBOL module from .sqlcblle
 
 ```makefile
-mymod.module: mymod.sqlcblle
+mymod.module: qcbllesrc/mymod.sqlcblle
 ```
 
-**CL command:** `CRTSQLCBLI OBJ(LIB/MYMOD) OBJTYPE(*MODULE) SRCSTMF('src/mymod.sqlcblle')`
+**CL command:** `CRTSQLCBLI OBJ(LIB/MYMOD) OBJTYPE(*MODULE) SRCSTMF('mylib/qcbllesrc/mymod.sqlcblle')`
 
 ### ILE CL module from .clle
 
 ```makefile
-mymod.module: mymod.clle
+mymod.module: qclsrc/mymod.clle
 ```
 
-**CL command:** `CRTCLMOD MODULE(LIB/MYMOD) SRCSTMF('src/mymod.clle')`
+**CL command:** `CRTCLMOD MODULE(LIB/MYMOD) SRCSTMF('mylib/qclsrc/mymod.clle')`
 
 ## Service programs (.srvpgm)
 
@@ -241,18 +241,18 @@ A service program is created from one or more modules, optionally with an export
 ### With export list
 
 ```makefile
-mymod.module: mymod.rpgle
-mysrvpgm.srvpgm: mymod.module mysrvpgm.exports
+mymod.module: qrpglesrc/mymod.rpgle
+mysrvpgm.srvpgm: mymod.module qsrvsrc/mysrvpgm.exports
 ```
 
-**CL command:** `CRTSRVPGM SRVPGM(LIB/MYSRVPGM) MODULE(LIB/MYMOD) EXPORT(*SRCFILE) SRCSTMF('src/mysrvpgm.exports')`
+**CL command:** `CRTSRVPGM SRVPGM(LIB/MYSRVPGM) MODULE(LIB/MYMOD) EXPORT(*SRCFILE) SRCSTMF('mylib/qsrvsrc/mysrvpgm.exports')`
 
 ### Without export list (export all)
 
 When no `.exports` or `.bnd` file is listed, all procedures are exported:
 
 ```makefile
-mymod.module: mymod.rpgle
+mymod.module: qrpglesrc/mymod.rpgle
 mysrvpgm.srvpgm: mymod.module
 ```
 
@@ -263,7 +263,7 @@ mysrvpgm.srvpgm: mymod.module
 Service programs can also depend on other service programs or binding directories for automatic binding:
 
 ```makefile
-mysrvpgm.srvpgm: mymod.module mysrvpgm.exports dep.srvpgm
+mysrvpgm.srvpgm: mymod.module qsrvsrc/mysrvpgm.exports dep.srvpgm
 ```
 
 This appends `BNDSRVPGM(DEP)` to the CRTSRVPGM command. `.bnddir` prerequisites (normal or order-only) append `BNDDIR(name)`.
@@ -276,11 +276,11 @@ A service program can also be created from SQL source via `RUNSQLSTM`, with no m
 - **`.udf.sql` → `.srvpgm`** — `CREATE FUNCTION ... LANGUAGE SQL` (SQL UDF) is backed by a `*SRVPGM`.
 
 ```makefile
-getcounts.srvpgm: getcounts.proc.sql employee.file   # PROGRAM TYPE SUB
-getname.srvpgm: getname.udf.sql employee.file         # SQL UDF
+getcounts.srvpgm: qsqlsrc/getcounts.proc.sql employee.file   # PROGRAM TYPE SUB
+getname.srvpgm: qsqlsrc/getname.udf.sql employee.file         # SQL UDF
 ```
 
-**CL command:** `RUNSQLSTM SRCSTMF('src/getcounts.proc.sql') COMMIT(*NONE) DFTRDBCOL(LIB)`
+**CL command:** `RUNSQLSTM SRCSTMF('mylib/qsqlsrc/getcounts.proc.sql') COMMIT(*NONE) DFTRDBCOL(LIB)`
 
 codermake only runs the SQL statement; IBM i creates the `*SRVPGM` and derives its object name from the SQL routine. Name the routine (and its `SPECIFIC` name where applicable) to match the build target so the generated object name lines up with the rule.
 
@@ -306,17 +306,17 @@ The `.file` target extension covers several distinct IBM i object types, differe
 Creates a display file from DDS source.
 
 ```makefile
-myscreen.file: myscreen.dspf
+myscreen.file: qddssrc/myscreen.dspf
 ```
 
 **CL command:** `CRTDSPF FILE(LIB/MYSCREEN) SRCFILE(LIB/QDDSSRC)`
 
-### Rich Display File from .json
+### Rich or Universal Display File from .json
 
-Creates a display file from Profound UI Rich Display File JSON. The JSON is converted to DDS before compilation.
+Creates a display file from Profound UI Rich Display File or Universal Display File JSON. The JSON is converted to DDS before compilation.
 
 ```makefile
-myscreen.file: myscreen.json
+myscreen.file: qddssrc/myscreen.json
 ```
 
 **CL command:** `CRTDSPF FILE(LIB/MYSCREEN) SRCFILE(LIB/QDDSSRC) ENHDSP(*YES)`
@@ -326,7 +326,7 @@ myscreen.file: myscreen.json
 Creates a physical file from DDS source.
 
 ```makefile
-custdata.file: custdata.pf
+custdata.file: qddssrc/custdata.pf
 ```
 
 **CL command:** `CRTPF FILE(LIB/CUSTDATA) SRCFILE(LIB/QDDSSRC)`
@@ -336,7 +336,7 @@ custdata.file: custdata.pf
 Creates a logical file (view/index over a physical file) from DDS source. Typically depends on the physical file it references.
 
 ```makefile
-custview.file: custview.lf custdata.file
+custview.file: qddssrc/custview.lf custdata.file
 ```
 
 **CL command:** `CRTLF FILE(LIB/CUSTVIEW) SRCFILE(LIB/QDDSSRC)`
@@ -346,7 +346,7 @@ custview.file: custview.lf custdata.file
 Creates a printer file from DDS source.
 
 ```makefile
-report.file: report.prtf
+report.file: qddssrc/report.prtf
 ```
 
 **CL command:** `CRTPRTF FILE(LIB/REPORT) SRCFILE(LIB/QDDSSRC)`
@@ -362,10 +362,10 @@ temporary source member's source type is derived from the file extension:
 Use these when a source member must retain its System/38 source type.
 
 ```makefile
-custp38.file: custp38.pf38                 # QSYS38/CRTPF,   PF38 member
-custl38.file: custl38.lf38 custp38.file    # QSYS38/CRTLF,   LF38 member
-hello38.file: hello38.dspf38               # QSYS38/CRTDSPF, DSPF38 member
-rpt38.file: rpt38.prtf38                   # QSYS38/CRTPRTF, PRTF38 member
+custp38.file: qddssrc/custp38.pf38                 # QSYS38/CRTPF,   PF38 member
+custl38.file: qddssrc/custl38.lf38 custp38.file    # QSYS38/CRTLF,   LF38 member
+hello38.file: qddssrc/hello38.dspf38               # QSYS38/CRTDSPF, DSPF38 member
+rpt38.file: qddssrc/rpt38.prtf38                   # QSYS38/CRTPRTF, PRTF38 member
 ```
 
 **CL commands:** `QSYS38/CRTPF` / `QSYS38/CRTLF` / `QSYS38/CRTDSPF` / `QSYS38/CRTPRTF`
@@ -375,30 +375,30 @@ rpt38.file: rpt38.prtf38                   # QSYS38/CRTPRTF, PRTF38 member
 Creates a SQL table by running a DDL script.
 
 ```makefile
-employee.file: employee.table.sql
+employee.file: qsqlsrc/employee.table.sql
 ```
 
-**CL command:** `RUNSQLSTM SRCSTMF('src/employee.table.sql') COMMIT(*NONE) DFTRDBCOL(LIB)`
+**CL command:** `RUNSQLSTM SRCSTMF('mylib/qsqlsrc/employee.table.sql') COMMIT(*NONE) DFTRDBCOL(LIB)`
 
 ### SQL index from .index.sql
 
 Creates a SQL index by running a DDL script. Typically depends on the table it indexes.
 
 ```makefile
-empname.file: empname.index.sql employee.file
+empname.file: qsqlsrc/empname.index.sql employee.file
 ```
 
-**CL command:** `RUNSQLSTM SRCSTMF('src/empname.index.sql') COMMIT(*NONE) DFTRDBCOL(LIB)`
+**CL command:** `RUNSQLSTM SRCSTMF('mylib/qsqlsrc/empname.index.sql') COMMIT(*NONE) DFTRDBCOL(LIB)`
 
 ### SQL view from .view.sql
 
 Creates a SQL view by running a DDL script. Typically depends on the tables it references.
 
 ```makefile
-empview.file: empview.view.sql employee.file
+empview.file: qsqlsrc/empview.view.sql employee.file
 ```
 
-**CL command:** `RUNSQLSTM SRCSTMF('src/empview.view.sql') COMMIT(*NONE) DFTRDBCOL(LIB)`
+**CL command:** `RUNSQLSTM SRCSTMF('mylib/qsqlsrc/empview.view.sql') COMMIT(*NONE) DFTRDBCOL(LIB)`
 
 ## Menus (.menu)
 
@@ -422,7 +422,7 @@ appmsg.msgf: appmsg.msgf
 mymenu.menu: mymenu.file appmsg.msgf
 ```
 
-**Typical source content (src/appmsg.msgf):**
+**Typical source content (mylib/appmsg.msgf):**
 
 ```cl
 CRTMSGF MSGF($LIBRARY/$NAME)
@@ -440,10 +440,10 @@ Binding directories also use the dual-purpose pattern. The source file contains 
 mybnddir.bnddir: mybnddir.bnddir | mysrvpgm.srvpgm
 
 # Use as order-only dependency
-mypgm.pgm: mypgm.rpgle mysrvpgm.srvpgm | mybnddir.bnddir
+mypgm.pgm: qrpglesrc/mypgm.rpgle mysrvpgm.srvpgm | mybnddir.bnddir
 ```
 
-**Typical source content (src/mybnddir.bnddir):**
+**Typical source content (mylib/mybnddir.bnddir):**
 
 ```cl
 CRTBNDDIR BNDDIR($LIBRARY/$NAME)
@@ -463,9 +463,9 @@ and what makes a change to it rebuild the program.
 `COPY` against the compile-time include path:
 
 ```makefile
-# COPY 'qcpysrc/cpybook.cpy'.   <- IFS style, used as written
+# COPY 'mylib/qcpysrc/cpybook.cpy'.   <- IFS style, relative to the project root, used as written
 # COPY CPYBOOK OF QCPYSRC.      <- source member style, rewritten to the path above
-mypgm.pgm: mypgm.cblle qcpysrc/cpybook.cpy
+mypgm.pgm: qcbllesrc/mypgm.cblle qcpysrc/cpybook.cpy
 ```
 
 **OPM COBOL** (`.cbl`, `.cbl38`, `.sqlcbl`) compiles from a source member, so the
@@ -474,7 +474,7 @@ names (`QCPYSRC/CPYBOOK` for the example below) before compiling:
 
 ```makefile
 # COPY CPYBOOK OF QCPYSRC.
-mypgm.pgm: mypgm.cbl qcpysrc/cpybook.cpy
+mypgm.pgm: qcblsrc/mypgm.cbl qcpysrc/cpybook.cpy
 ```
 
 A bare `COPY NAME.` is never rewritten: ILE COBOL resolves it against the include

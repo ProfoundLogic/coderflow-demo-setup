@@ -1,0 +1,118 @@
+{
+  "name": "billing-demo",
+  "description": "IBM i agentic coding test environment",
+  "image_name": "billing-demo",
+  "default_agent": "claude",
+  "repos": [],
+  "rebuild_schedule": {
+    "enabled": true,
+    "cron": "57 3 * * *"
+  },
+  "skills": [
+    "sql",
+    "codermake",
+    "ibmi-interactive-session",
+    "ibmi-clcmd",
+    "jira",
+    "ibmi-documentation",
+    "ejs-screen-designer"
+  ],
+  "external_connections": [
+    {
+      "name": "dev",
+      "type": "ibmi",
+      "description": "IBM i Development Server",
+      "available_for": [
+        "tasks"
+      ],
+      "config": {
+        "host": "idev.profoundlogic.com",
+        "user": "AIDEMO",
+        "preflight_required": true,
+        "features": [
+          "sql",
+          "build",
+          "interactive",
+          "portal-applications",
+          "ssh",
+          "sync",
+          "ejs-display-files"
+        ],
+        "sync_credentials": "prompt",
+        "pui_base_url": "http://idev.profoundlogic.com:8098",
+        "pui_htdocs_path": "/www/puicfdemo/htdocs",
+        "build_repo": "ibmi-agentic",
+        "build_library_prefix": "AITSK"
+      },
+      "id": "44e3d948-61a6-4782-84d4-c94586b5757d",
+      "personal_identity": "2434880b-85a0-4c11-94a6-8a775f05455e"
+    }
+  ],
+  "application_server": {
+    "launch_urls": [
+      {
+        "name": "Genie (5250 Skin)",
+        "path": "/profoundui/auth/genie?skin=classic",
+        "description": "Genie w/Classic Skin"
+      },
+      {
+        "name": "Genie (Hybrid Skin)",
+        "path": "/profoundui/auth/genie?skin=hybrid",
+        "description": "Genie w/Hybrid Skin"
+      }
+    ],
+    "enabled": true,
+    "name": "",
+    "qa_url": "https://idev.profoundlogic.com:8103"
+  },
+  "standardInstructions": {
+    "outputRequirements": true,
+    "screenshotGuidelines": false,
+    "ibmiOutputRequirements": true,
+    "ibmiExploratoryVerification": true,
+    "ibmiDatabaseSql": true,
+    "ibmiBuild": true,
+    "credentialHandling": true,
+    "userPreferences": true
+  },
+  "memory": {
+    "enabled": false
+  },
+  "template_order": [
+    "daily-spoolfile-report.md",
+    "migrate-net-option-to-ibm-i.md",
+    "document-a-program.md",
+    "psact-morning-report.md",
+    "produce-user-documentation.md"
+  ],
+  "deployment_profile_order": [
+    "build-and-promote"
+  ],
+  "timezone": "gjones",
+  "tasks": {
+    "defaultShared": true
+  },
+  "updatedAt": "2026-10-20T20:10:39.351Z",
+  "updatedBy": "alex",
+  "updatedByName": "Alex Roytman",
+  "updatedById": "user_1767330741764_x72j25doe",
+  "portal_access": true,
+  "portal_report_sharing": true,
+  "portal_authoring": {
+    "enabled": true,
+    "agent": "codex",
+    "model": "gpt-6.1-sol"
+  },
+  "createdAt": "2026-10-20T12:50:53.563Z",
+  "createdBy": "alex",
+  "createdByName": "Alex Roytman",
+  "createdById": "user_1767330741764_x72j25doe",
+  "portal_scheduled_questions": true,
+  "portal_scheduled_questions_hourly": true,
+  "instructionsAttribution": {
+    "updatedAt": "2026-10-20T18:51:05.092Z",
+    "updatedBy": "alex",
+    "updatedByName": "Alex Roytman",
+    "updatedById": "user_1767330741764_x72j25doe"
+  }
+}

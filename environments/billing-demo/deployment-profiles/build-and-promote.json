@@ -1,0 +1,20 @@
+{
+  "description": "Build source and promote objects to target libraries",
+  "parameters": {
+    "TARGET": {
+      "required": true,
+      "label": "Target",
+      "type": "select",
+      "options": [
+        "DEV",
+        "STAGING",
+        "PRODUCTION"
+      ]
+    },
+    "NOTIFY_TEAM": {
+      "required": false,
+      "label": "Send Slack notification on completion",
+      "type": "boolean"
+    }
+  }
+}

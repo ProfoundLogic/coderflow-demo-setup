@@ -3,7 +3,7 @@
     {
       "id": "5f77e9b226965baba36f092a653be338",
       "name": "System Maintenance",
-      "order": 0,
+      "order": 1,
       "parentId": null,
       "allow": {
         "everyone": true,
@@ -15,7 +15,7 @@
     {
       "id": "64ee95b193724c6a85e58fe7817e5d9f",
       "name": "Inventory Master",
-      "order": 1,
+      "order": 2,
       "parentId": null,
       "allow": {
         "everyone": true,
@@ -27,7 +27,7 @@
     {
       "id": "c3ed20520ff8909d0decee6c84433c35",
       "name": "Vendors & Pricing",
-      "order": 2,
+      "order": 3,
       "parentId": null,
       "allow": {
         "everyone": true,
@@ -39,7 +39,7 @@
     {
       "id": "0473ebcb101b51c98e990196274ad4c7",
       "name": "Requisitioning",
-      "order": 3,
+      "order": 4,
       "parentId": null,
       "allow": {
         "everyone": true,
@@ -51,7 +51,7 @@
     {
       "id": "03af9aed1ef3f30e0f1a899bcfd57584",
       "name": "Purchasing",
-      "order": 4,
+      "order": 5,
       "parentId": null,
       "allow": {
         "everyone": true,
@@ -63,7 +63,19 @@
     {
       "id": "791e50ef025dfd9d26f39687f57fdf01",
       "name": "Receiving",
-      "order": 5,
+      "order": 6,
+      "parentId": null,
+      "allow": {
+        "everyone": true,
+        "teams": [],
+        "users": []
+      },
+      "icon": "folder"
+    },
+    {
+      "id": "8cbc000446fbb58955a5814da899398f",
+      "name": "Demos",
+      "order": 0,
       "parentId": null,
       "allow": {
         "everyone": true,
@@ -490,6 +502,44 @@
       "connection": "44e3d948-61a6-4782-84d4-c94586b5757d",
       "program": "PLRCNBRWR",
       "library": "PERPDEMO"
+    },
+    {
+      "id": "b6bbedb9f694bb8c21ed7dc59c202ffc",
+      "name": "Work with Customer (Genie)",
+      "order": 0,
+      "folderId": "8cbc000446fbb58955a5814da899398f",
+      "allow": {
+        "everyone": true,
+        "teams": [],
+        "users": []
+      },
+      "icon": "terminal",
+      "description": "",
+      "keywords": [],
+      "openOnce": true,
+      "kind": "genie",
+      "connection": "44e3d948-61a6-4782-84d4-c94586b5757d",
+      "program": "WRKCUSTR",
+      "library": "CFDEMO"
+    },
+    {
+      "id": "fb22df986a7e89db48ec4d1e30f5927c",
+      "name": "Work with Customer (Agentic)",
+      "order": 1,
+      "folderId": "8cbc000446fbb58955a5814da899398f",
+      "allow": {
+        "everyone": true,
+        "teams": [],
+        "users": []
+      },
+      "icon": "terminal",
+      "description": "",
+      "keywords": [],
+      "openOnce": true,
+      "kind": "genie",
+      "connection": "44e3d948-61a6-4782-84d4-c94586b5757d",
+      "program": "WRKCUSTEOC",
+      "library": "CFDEMO"
     }
   ]
 }

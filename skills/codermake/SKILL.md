@@ -1,7 +1,7 @@
 ---
 name: codermake
 description: Build IBM i objects from source code.
-updatedAt: 2026-09-24T12:55:15.549Z
+updatedAt: 2026-10-21T20:52:28.465Z
 updatedBy: rbetancourt
 updatedById: user_1767620468211_32t18oh94
 updatedByName: Roger Betancourt
@@ -26,7 +26,7 @@ Run codermake from the project root:
 codermake
 
 # Build a single target
-codermake <target>          # e.g. codermake mypgm.pgm
+codermake <target>          # e.g. codermake mylib/mypgm.pgm (or the bare mypgm.pgm)
 
 # Dry run (show the commands, without running them)
 codermake -n
@@ -52,9 +52,19 @@ building remotely from Linux or macOS; running codermake locally on IBM i it is
 refused, because there are no build markers to compare against. Each line reports one
 object with its type, target library, source, and why it is affected:
 
-- `changed` — one of the object's own sources is newer
-- `dependent` — affected only because something it depends on is being rebuilt
+- `changed` — one of the object's **own** sources changed: what it is compiled
+  from, a `/COPY` member or copybook it includes, its export list
+- `dependent` — it only needs building because **another object in the build**
+  changed: a module it is bound from, a file it compiles against, or a file whose
+  DDS it references for field definitions
 - `missing` — the object does not exist yet
+
+The `changed` rows are the objects that were edited and the `dependent` rows their
+reach, so editing one field reference physical file's DDS reports that file as
+`changed` and every file built over it as `dependent`. A shared source that no rule
+builds into an object — a `/COPY` member — has no object to attribute the change
+to, so every program that lists it is `changed`. Every listed object needs
+rebuilding whatever its reason.
 
 Use it to confirm that an edit reaches the objects intended before running a
 build, and to see the blast radius of a change to shared source such as a `/COPY`
@@ -64,27 +74,41 @@ nothing, so it is always safe to run.
 After a successful build the list is empty, which makes it a quick check that
 everything intended was actually built.
 
+## Project layout
+
+Every top-level directory of the project is an IBM i library directory. It holds one directory per source physical file, with one file per member (`mylib/qrpglesrc/mypgm.rpgle`), and can hold source files directly (`mylib/app.bnddir`). A library that receives objects has a `Rules.mk` declaring them — `mylib/Rules.mk`, or a `Rules.mk` inside one of its source-file directories (`mylib/qrpglesrc/Rules.mk`). Source can live in one library and its objects in another: a source-only library has no `Rules.mk`, and an object library's `Rules.mk` names its source with cross-library paths (`srclib/qrpglesrc/mypgm.rpgle`). A `Rules.mk` at the project root is an error.
+
 ## Rules.mk syntax
 
-Each source directory contains a `Rules.mk` file that declares build targets and their prerequisites. codermake automatically adds path prefixes (`src/`, `build/`, etc.) based on file extensions -- you write only bare filenames.
+A `Rules.mk` declares build targets and their prerequisites. Names are resolved against the library the `Rules.mk` belongs to; codermake adds the output prefixes (`build/`, `/qsys.lib/...`) itself:
+
+| Written as | Means |
+|---|---|
+| `mypgm.rpgle` | A source file in the Rules.mk's own directory |
+| `qrpglesrc/mypgm.rpgle` | A source file in this library |
+| `srclib/qrpglesrc/mypgm.rpgle` | A source file in another library directory |
+| `myscreen.file` | An object in this library |
+| `dtalib/custp.file` | An object in another library directory |
+
+The examples below are written for a library-level `Rules.mk` (`mylib/Rules.mk`).
 
 ### Basic rules
 
 ```makefile
 # program from RPG source
-mypgm.pgm: mypgm.rpgle
+mypgm.pgm: qrpglesrc/mypgm.rpgle
 
 # program from RPG source, depends on a display file
-mypgm.pgm: mypgm.rpgle myscreen.file
+mypgm.pgm: qrpglesrc/mypgm.rpgle myscreen.file
 
 # display file from DDS
-myscreen.file: myscreen.dspf
+myscreen.file: qddssrc/myscreen.dspf
 
 # physical file from DDS
-custdata.file: custdata.pf
+custdata.file: qddssrc/custdata.pf
 
 # ILE CL program
-setup.pgm: setup.clle
+setup.pgm: qclsrc/setup.clle
 ```
 
 **The first normal prerequisite is the source** that creates the object, and it is what selects the compile command. Normal prerequisites after it are dependencies: they force a rebuild when they change but never change the command.
@@ -94,7 +118,7 @@ setup.pgm: setup.clle
 Use `|` for objects that must exist before building the target but should not trigger a rebuild when they change. This is typical for binding directories and database files.
 
 ```makefile
-mypgm.pgm: mypgm.rpgle mysrvpgm.srvpgm | mybnddir.bnddir mytable.file
+mypgm.pgm: qrpglesrc/mypgm.rpgle mysrvpgm.srvpgm | mybnddir.bnddir mytable.file
 ```
 
 ### File objects that depend on other files
@@ -103,66 +127,65 @@ IBM i `*FILE` objects often depend on other files, and often on more than one: a
 
 ```makefile
 # Field reference physical file
-fldref.file: fldref.pf
+fldref.file: qddssrc/fldref.pf
 
 # Physical files whose fields come from the field reference file (REF)
-custp.file: custp.pf fldref.pf | fldref.file
-ordp.file: ordp.pf fldref.pf | fldref.file
+custp.file: qddssrc/custp.pf qddssrc/fldref.pf | fldref.file
+ordp.file: qddssrc/ordp.pf qddssrc/fldref.pf | fldref.file
 
 # Logical file over one physical file
-custl.file: custl.lf custp.pf | custp.file
+custl.file: qddssrc/custl.lf qddssrc/custp.pf | custp.file
 
 # Join logical file over two physical files
-custjoin.file: custjoin.lf custp.pf ordp.pf | custp.file ordp.file
+custjoin.file: qddssrc/custjoin.lf qddssrc/custp.pf qddssrc/ordp.pf | custp.file ordp.file
 
 # Display file with field references to two physical files (REF and REFFLD)
-custd.file: custd.dspf fldref.pf ordp.pf | fldref.file ordp.file
+custd.file: qddssrc/custd.dspf qddssrc/fldref.pf qddssrc/ordp.pf | fldref.file ordp.file
 
-# SQL view over a DDS physical file in another source directory
-custvw.file: custvw.view.sql qddssrc/custp.pf | custp.file
+# SQL view over a DDS physical file
+custvw.file: qsqlsrc/custvw.view.sql qddssrc/custp.pf | custp.file
 ```
 
 Keep the creating source first: `custl.file` compiles with `CRTLF` because `custl.lf` is the first prerequisite, not because of where `.pf` appears. This works for every source type that can create a `*FILE` (`.dspf`, `.pf`, `.lf`, `.prtf`, their System/38 `*38` variants, `.json`, and `.table.sql`/`.index.sql`/`.view.sql`).
 
 `CRTPF`/`CRTLF`/`CRTDSPF`/`CRTPRTF` have no `REPLACE` parameter, so rebuilding a file whose object already exists fails with `CPF5813` — delete the object or run `codermake clean` first.
 
-### Cross-directory references
+### Cross-library references
 
-Files with a path separator are treated as relative to the project root (not the Rules.mk directory):
-
-```makefile
-# In app/Rules.mk -- reference an exports file in the common/ directory
-mysrvpgm.srvpgm: mymod.module common/api.exports
-```
-
-In a multi-library project (sources organized under library-equivalent directories like `LIBA/qrpglesrc/`), two-segment paths whose first segment is a known library directory and whose second segment is a bare object filename with an output extension are recognized as **cross-library object qualifiers**:
+A path with a separator is relative to the Rules.mk's library directory, unless its first segment names a library directory — then it is a path into that library:
 
 ```makefile
-# In LIBA/qrpglesrc/Rules.mk -- depend on a srvpgm in LIBB
-crossbnd.pgm: crossbnd.rpgle | LIBB/utils.srvpgm
-
-# Library-qualified target: source in LIBA's tree, output lands in LIBB
-LIBB/installer.pgm: installer.rpgle
+# In LIBA/Rules.mk -- source in LIBA and in another library, LIBB
+mysrvpgm.srvpgm: mymod.module qsrvsrc/api.exports
+crosspgm.pgm: qrpglesrc/crosspgm.rpgle LIBB/qcpysrc/shared.rpgle
 ```
 
-Two-segment paths whose second segment has a *source* extension, or three-or-more-segment paths, are cross-library *source* passthroughs (e.g. `LIBB/qcpysrc/shared.rpgle`).
+A two-segment name whose first segment is a library directory and whose second segment is an object filename (output extension) is a **cross-library object qualifier**:
 
-A library qualifier whose first segment is not a known library directory is an error — codermake will tell you which token failed validation.
+```makefile
+# In LIBA/Rules.mk -- depend on a srvpgm in LIBB
+crossbnd.pgm: qrpglesrc/crossbnd.rpgle | LIBB/utils.srvpgm
+
+# Library-qualified target: source in LIBA, output lands in LIBB
+LIBB/installer.pgm: qrpglesrc/installer.rpgle
+```
+
+A library qualifier whose first segment is not a library directory is an error — codermake will tell you which token failed validation.
 
 ### Message files and binding directories (dual-purpose pattern)
 
 The `.msgf` and `.bnddir` extensions serve double duty -- as source when they are the first prerequisite of a matching target type, and as built objects everywhere else:
 
 ```makefile
-# Build a message file (source file -> object)
+# Build a message file (source file mylib/appmsg.msgf -> object)
 appmsg.msgf: appmsg.msgf
 
-# Build a binding directory (source file -> object)
+# Build a binding directory (source file mylib/mybnddir.bnddir -> object)
 mybnddir.bnddir: mybnddir.bnddir
 
 # Use them as dependencies (treated as built objects)
 mymenu.menu: mymenu.file appmsg.msgf
-setup.pgm: setup.rpgle | mybnddir.bnddir
+setup.pgm: qrpglesrc/setup.rpgle | mybnddir.bnddir
 ```
 
 The `.msgf` source file contains CL commands (`CRTMSGF`, `ADDMSGD`, etc.). The `.bnddir` source file contains CL commands (`CRTBNDDIR`, `ADDBNDDIRE`, etc.).
@@ -171,7 +194,7 @@ The `.msgf` source file contains CL commands (`CRTMSGF`, `ADDMSGD`, etc.). The `
 
 ```makefile
 # Compile source to a module
-mymod.module: mymod.rpgle
+mymod.module: qrpglesrc/mymod.rpgle
 
 # Link modules into a program
 mypgm.pgm: mod1.module mod2.module
@@ -183,7 +206,7 @@ calc.pgm: calc.module utils.srvpgm
 calcd.pgm: calcd.module | app.bnddir
 
 # Create a service program from modules + export list
-mysrvpgm.srvpgm: mymod.module mymod.exports
+mysrvpgm.srvpgm: mymod.module qsrvsrc/mymod.exports
 
 # Create a service program without export list (exports all procedures)
 mysrvpgm.srvpgm: mymod.module
@@ -250,26 +273,26 @@ For full details on every type, see [references/file-types.md](references/file-t
 
 Follow this procedure when adding a new object to the build:
 
-1. **Create the source file** in the appropriate source directory (e.g., `src/newpgm.rpgle`).
-2. **Add a rule to `Rules.mk`** in that directory:
+1. **Create the source file** in the appropriate library and source-file directory (e.g., `mylib/qrpglesrc/newpgm.rpgle`).
+2. **Add a rule to the `Rules.mk`** of the library the object belongs in (e.g., `mylib/Rules.mk`):
    ```makefile
-   newpgm.pgm: newpgm.rpgle
+   newpgm.pgm: qrpglesrc/newpgm.rpgle
    ```
 3. **Declare dependencies** on any objects that must exist first:
    ```makefile
-   newpgm.pgm: newpgm.rpgle myscreen.file mysrvpgm.srvpgm | mybnddir.bnddir
+   newpgm.pgm: qrpglesrc/newpgm.rpgle myscreen.file mysrvpgm.srvpgm | mybnddir.bnddir
    ```
 4. **Build and verify:**
    ```bash
-   codermake newpgm.pgm
+   codermake mylib/newpgm.pgm
    ```
 5. **Check logs on failure:** `tmp/logs/newpgm.pgm.log`
 
 If the target is a module destined for a service program or multi-module program, also add the downstream rule:
 
 ```makefile
-newmod.module: newmod.rpgle
-existing.srvpgm: existing_mod.module newmod.module existing.exports
+newmod.module: qrpglesrc/newmod.rpgle
+existing.srvpgm: existing_mod.module newmod.module qsrvsrc/existing.exports
 ```
 
 ## Troubleshooting
@@ -284,9 +307,11 @@ Build logs are in `tmp/logs/<target>.log`. In multi-library output mode (when `C
 
 Common errors:
 
-- **`Invalid library qualifier '<lib>/<obj>.<ext>': '<lib>' is not a known library directory.`** — the first segment of a two-segment qualifier doesn't match any discovered library directory. Either fix the typo or add the missing directory to the project layout.
+- **`Invalid library qualifier '<lib>/<obj>.<ext>': '<lib>' is not a known library directory.`** — the first segment of a two-segment qualifier doesn't match any top-level library directory. Either fix the typo or add the missing library directory.
+- **`Rules.mk at the project root is not supported.`** — rules belong to a library. Move them into the `Rules.mk` of the library the objects belong to, writing source paths relative to that library directory.
+- **`Source member not found: <member> in <lib>/<file>/ ...`** (RPG) or **`Copy member not found: ...`** (COBOL) — a member-style `/COPY` or `COPY` names a member no library directory holds. The message lists the libraries searched; check the member's file name and source-file directory.
 - **`<envvar> and CODERMAKE_LIBRARY_MAP are mutually exclusive.`** — only one output-mode variable can be set. Pick `BUILD_LIBRARY`/`IBMI_BUILD_LIBRARY` (single library) **or** `CODERMAKE_LIBRARY_MAP` (per-library output).
-- **`CODERMAKE_LIBRARY_MAP is missing entries for: <dir1>, <dir2>`** — every depth-1 directory with a `Rules.mk` must appear in an explicit map (sibling dirs without a `Rules.mk` are not required). Add the missing entries, or switch to `CODERMAKE_LIBRARY_MAP=auto` for natural mapping.
+- **`CODERMAKE_LIBRARY_MAP is missing entries for: <dir1>, <dir2>`** — every library directory with a `Rules.mk` must appear in an explicit map (source-only library directories are not required). Add the missing entries, or switch to `CODERMAKE_LIBRARY_MAP=auto` for natural mapping.
 
 For detailed guidance on reading compile listings, see [references/compile-listings.md](references/compile-listings.md).
 
@@ -311,14 +336,20 @@ codermake reads its configuration from environment variables (typically set in a
 
 ### Multi-library output (alternative to BUILD_LIBRARY / IBMI_BUILD_LIBRARY)
 
-When the project has a multi-library layout, `CODERMAKE_LIBRARY_MAP` enables per-library output — each library-equivalent source directory builds into a distinct IBM i library. Mutually exclusive with `BUILD_LIBRARY` / `IBMI_BUILD_LIBRARY`.
+`CODERMAKE_LIBRARY_MAP` enables per-library output — each library directory with a `Rules.mk` builds into its own IBM i library. Mutually exclusive with `BUILD_LIBRARY` / `IBMI_BUILD_LIBRARY`.
 
 | Variable | Description |
 |---|---|
 | `CODERMAKE_LIBRARY_MAP` | Either `auto` (natural mapping: dir name → library name) or explicit `LIBA=APPLIBA LIBB=APPLIBB` pairs. Mutually exclusive with `BUILD_LIBRARY` / `IBMI_BUILD_LIBRARY`. |
-| `CODERMAKE_LIBRARY_LIST` | Optional. Space-separated, ordered IBM i library list. Replaces the user portion of the build job's library list. Only valid alongside `CODERMAKE_LIBRARY_MAP`. |
+| `CODERMAKE_LIBRARY_LIST` | Optional. Space-separated, ordered IBM i library list. Replaces the user portion of the build job's library list. Also valid in single-library output mode, where the build library stays at the front, ahead of the list. |
 
-When using multi-library output, refer to objects in another library with the qualifier syntax `<libraryDir>/<bareobj>.<ext>` (see *Cross-directory references* above).
+Refer to objects in another library with the qualifier syntax `<libraryDir>/<bareobj>.<ext>` (see *Cross-library references* above); it works in both output modes.
+
+### Copy member search
+
+| Variable | Description |
+|---|---|
+| `CODERMAKE_INCLUDE_PATH` | Optional. Space-separated, ordered library directories searched for unqualified member-style RPG `/COPY`/`/INCLUDE` and COBOL `COPY ... OF` references. Without it, every library directory is searched. |
 
 ## Compile options
 

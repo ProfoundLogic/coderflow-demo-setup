@@ -5,7 +5,7 @@ createdAt: 2026-07-22T13:42:34.458Z
 createdBy: alex
 createdById: user_1767330741764_x72j25doe
 createdByName: Alex Roytman
-updatedAt: 2026-09-24T12:55:14.546Z
+updatedAt: 2026-10-21T20:52:27.533Z
 updatedBy: rbetancourt
 updatedById: user_1767620468211_32t18oh94
 updatedByName: Roger Betancourt
@@ -36,6 +36,13 @@ The `<display>` directory is typically the display file name (e.g., `wrkcuste`).
 The JSON source file is typically placed alongside other source members (e.g., in a `src/` directory), but this varies by project.
 
 **Check the existing project structure** before creating files — follow whatever conventions the repository already uses for source and htdocs paths.
+
+### Choosing the Destination Repository
+
+- **Identify the intended application/build repository first.** A task may attach other repositories (sample apps, libraries, documentation) for reference only. Do not create or edit files in a reference repository just because it contains similar code — write to the repository that owns the application being built or changed.
+- **New assets for CoderFlow preview:** CoderFlow's preview lookup (as currently implemented) searches `htdocs/profoundui/userdata/ui/` at the **root of a repository**. It does not search a nested build directory's htdocs, such as `ibmi/htdocs/profoundui/userdata/ui/`. Place new templates, CSS, and JS at `<repo-root>/htdocs/profoundui/userdata/ui/<display>/` unless the project has an established mapping that serves them from elsewhere.
+- **Preserve established serving/deployment mappings.** If existing screens already live in another location and the project's build, deployment, or server configuration maps that location to `/profoundui/userdata/ui/`, follow that convention. Do not blindly move existing files to match the default.
+- **Browser URLs omit `htdocs` and repository names.** The file `<repo-root>/htdocs/profoundui/userdata/ui/hellodsp/main.ejs` is requested as `/profoundui/userdata/ui/hellodsp/main.ejs`, and that is the path to use in the JSON source `template`, `css`, and `js` entries.
 
 ## Rich Display JSON Source Format
 
@@ -79,6 +86,26 @@ The JSON source file defines the display file that `codermake` compiles into DDS
 - Subfile `clear` names an indicator field that the RPG program sets before re-loading the subfile.
 - A single JSON source file can contain **multiple formats**. Each format gets its own template and CSS.
 - If the display has multiple formats, they typically share the same `<display>` directory but have separate `<format>.ejs` and `<format>.css` files.
+
+## RPG Integration: Open Access Handler
+
+An EJS screen is only rendered when the RPG program performs its display I/O through the Profound UI Open Access handler. **Every workstation file declaration used for a rich display must include the `HANDLER` keyword.** Without it, the program compiles and runs, but it uses ordinary 5250 display I/O and the user sees a plain green screen instead of the EJS template.
+
+```rpgle
+dcl-f HELLODSP workstn handler('PROFOUNDUI(HANDLER)');
+```
+
+- Use the program's actual display file name in place of `HELLODSP`.
+- In `HANDLER('PROFOUNDUI(HANDLER)')`, `PROFOUNDUI` is the service program and `HANDLER` is its exported procedure. Normally leave the service program unqualified and ensure the intended Profound UI installation library is on the job's library list. Do not substitute a library name for `PROFOUNDUI`.
+- **Preserve every keyword the declaration already needs**, such as `SFILE`, `EXTFILE`, `USROPN`, or `INDDS`. Add `HANDLER`; do not replace the declaration. For example:
+
+  ```rpgle
+  dcl-f WRKCUSTD workstn sfile(custsfl:rrn) extfile('MYLIB/WRKCUSTD') handler('PROFOUNDUI(HANDLER)');
+  ```
+
+- In fixed-format F specs, add `HANDLER('PROFOUNDUI(HANDLER)')` as a keyword on the workstation F spec (using a continuation line if needed).
+- **`DFTACTGRP(*NO)`:** Open Access programs created with `CRTBNDRPG` cannot run in the default activation group. Add `ctl-opt dftactgrp(*no);` (fixed format: `H DFTACTGRP(*NO)`) unless the project's existing build rules already supply it, for example as a `CRTBNDRPG` command parameter or a shared control-spec copybook. Merge with any existing `ctl-opt` rather than adding a conflicting one. This is not needed for modules created with `CRTRPGMOD`.
+- **RPG changes are not hot-reloaded.** Template hot reload (see below) applies only to `.ejs`, `.css`, and `.js` assets. After changing RPG source, rebuild the program using the project's build tooling and run it again from a fresh call. Changes to the JSON source likewise require rebuilding the display file, and recompiling the programs that use it if its record formats change.
 
 ## EJS Template Conventions
 
@@ -165,7 +192,7 @@ Use `pui.submit()` with an object argument to set field values (typically `actio
 ```
 
 - The object keys are field names (lowercase); values override the form data.
-- `data-fkey="F3"` binds the keyboard F3 key to trigger this button's click.
+- `data-fkey="F3"` binds the keyboard F3 key to trigger this button's click. F3 for Exit is shown here as an example; use the function keys and exit/back conventions of the application you are working on.
 - Supported fkeys: `F1` through `F24`, `Enter`, `PageUp`, `PageDown`.
 - The Profound UI runtime only sends **changed** field values to RPG (change tracking).
 
@@ -236,11 +263,31 @@ When CoderFlow is serving EJS Rich Display assets (`.ejs`, `.js`, `.css` under `
 
 Subfile reloads within the same screen continue to use the cached template (no network round-trip), so this hot-reload is only triggered on actual screen transitions.
 
+Hot reload does not apply to RPG or display file changes — see [RPG Integration](#rpg-integration-open-access-handler).
+
+## Verifying a Working Application
+
+When the task is to deliver a working application (not only to edit template files), verify observable behavior using the tools available, such as the `ibmi-interactive-session` skill or a browser preview. Compiling the program or launching it in Genie is not sufficient on its own. Confirm that:
+
+1. **The rich screen renders** — the EJS template appears with the expected data, not a 5250 screen.
+2. **Input and actions are handled** — enter a value or press a button/F-key and confirm the RPG program responds as expected (for example, the next screen or an updated message appears).
+3. **Exit/navigation works** — verify the application's intended way to leave the screen or return to its caller. Use F3 only when that is the application's convention.
+
+If live testing is unavailable (no IBM i connection, no interactive session, no preview), say so explicitly in your summary and list which checks were not performed. Do not report the application as verified.
+
+**Diagnose by symptom:**
+
+| Symptom | Likely cause |
+|---------|--------------|
+| A plain 5250 screen appears (the session state has a `"5250"` data stream rather than RDF `"layers"`) | The workstation file is missing the `HANDLER` keyword, or the rebuilt program was not the one called. Check the `dcl-f`, rebuild, and run again. |
+| A Profound UI rich display is active (RDF `"layers"`), but the template is blank, missing, or reports a load error | Check the asset requests' status and response, then inspect browser console errors, template data, and CSS. Verify the JSON source `template`/`css`/`js` paths against the served files (see [File Locations](#file-locations)). A blank screen alone does not establish a template-fetch failure. |
+| The template loads but shows an EJS error | A template syntax or data error. Run `aitool ejs-validate` against the template. |
+
 ## Important Notes
 
 - Field names are always lowercase in templates and JSON source. The Profound UI runtime provides both lowercase and uppercase versions as template variables.
 - The `action` hidden field is the standard pattern for routing button presses. RPG reads `ACTION` to decide what to do.
-- Every screen should have at minimum an Exit button bound to F3.
+- Give each screen a way to exit, go back, or navigate onward that follows the application's existing conventions (for example, F3 for Exit is a common convention, not a universal requirement).
 - Subfile option fields (e.g., `sopt`) are typically 2-char fields where the user types an option code.
 - Do not use `subfiles.xxx` to access subfile data — it is a top-level variable.
 - Templates render client-side via the EJS library. Syntax errors show in the browser but are invisible to autonomous agents. Use `aitool ejs-validate` to pre-flight test templates before deploying — it renders the template with sample data and reports any errors.
