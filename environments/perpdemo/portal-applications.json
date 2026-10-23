@@ -1,0 +1,24 @@
+{
+  "folders": [],
+  "items": [
+    {
+      "id": "9dbf9a8bdfafc5ba68277ae7d7f7069b",
+      "name": "test",
+      "order": 0,
+      "folderId": null,
+      "allow": {
+        "everyone": true,
+        "teams": [],
+        "users": []
+      },
+      "icon": "terminal",
+      "description": "",
+      "keywords": [],
+      "openOnce": true,
+      "kind": "genie",
+      "connection": "44e3d948-61a6-4782-84d4-c94586b5757d",
+      "program": "PLPOREQR",
+      "library": "PERPDEMO"
+    }
+  ]
+}
