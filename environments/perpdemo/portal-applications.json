@@ -3,7 +3,7 @@
     {
       "id": "5f77e9b226965baba36f092a653be338",
       "name": "System Maintenance",
-      "order": 1,
+      "order": 0,
       "parentId": null,
       "allow": {
         "everyone": true,
@@ -15,7 +15,7 @@
     {
       "id": "64ee95b193724c6a85e58fe7817e5d9f",
       "name": "Inventory Master",
-      "order": 2,
+      "order": 1,
       "parentId": null,
       "allow": {
         "everyone": true,
@@ -27,7 +27,7 @@
     {
       "id": "c3ed20520ff8909d0decee6c84433c35",
       "name": "Vendors & Pricing",
-      "order": 3,
+      "order": 2,
       "parentId": null,
       "allow": {
         "everyone": true,
@@ -39,7 +39,7 @@
     {
       "id": "0473ebcb101b51c98e990196274ad4c7",
       "name": "Requisitioning",
-      "order": 4,
+      "order": 3,
       "parentId": null,
       "allow": {
         "everyone": true,
@@ -51,7 +51,7 @@
     {
       "id": "03af9aed1ef3f30e0f1a899bcfd57584",
       "name": "Purchasing",
-      "order": 5,
+      "order": 4,
       "parentId": null,
       "allow": {
         "everyone": true,
@@ -63,7 +63,7 @@
     {
       "id": "791e50ef025dfd9d26f39687f57fdf01",
       "name": "Receiving",
-      "order": 6,
+      "order": 5,
       "parentId": null,
       "allow": {
         "everyone": true,
@@ -74,25 +74,6 @@
     }
   ],
   "items": [
-    {
-      "id": "9dbf9a8bdfafc5ba68277ae7d7f7069b",
-      "name": "test",
-      "order": 0,
-      "folderId": null,
-      "allow": {
-        "everyone": true,
-        "teams": [],
-        "users": []
-      },
-      "icon": "terminal",
-      "description": "",
-      "keywords": [],
-      "openOnce": true,
-      "kind": "genie",
-      "connection": "44e3d948-61a6-4782-84d4-c94586b5757d",
-      "program": "PLPOREQR",
-      "library": "PERPDEMO"
-    },
     {
       "id": "b9f5795719781c52c82601e6caaacc1d",
       "name": "Work with System Codes",
@@ -182,6 +163,332 @@
       "kind": "genie",
       "connection": "44e3d948-61a6-4782-84d4-c94586b5757d",
       "program": "PLWRKCNVR",
+      "library": "PERPDEMO"
+    },
+    {
+      "id": "880dc2a96b252cfc909686146e4ca45d",
+      "name": "Work with Item Classes",
+      "order": 2,
+      "folderId": "64ee95b193724c6a85e58fe7817e5d9f",
+      "allow": {
+        "everyone": true,
+        "teams": [],
+        "users": []
+      },
+      "icon": "clipboard-list",
+      "description": "",
+      "keywords": [
+        "item",
+        "class",
+        "classes"
+      ],
+      "openOnce": true,
+      "kind": "genie",
+      "connection": "44e3d948-61a6-4782-84d4-c94586b5757d",
+      "program": "PLWRKICLR",
+      "library": "PERPDEMO"
+    },
+    {
+      "id": "a9b8a59421d94e594dd0b0f1037ade92",
+      "name": "Work with Items",
+      "order": 3,
+      "folderId": "64ee95b193724c6a85e58fe7817e5d9f",
+      "allow": {
+        "everyone": true,
+        "teams": [],
+        "users": []
+      },
+      "icon": "package",
+      "description": "",
+      "keywords": [
+        "item",
+        "items"
+      ],
+      "openOnce": true,
+      "kind": "genie",
+      "connection": "44e3d948-61a6-4782-84d4-c94586b5757d",
+      "program": "PLWRKITMR",
+      "library": "PERPDEMO"
+    },
+    {
+      "id": "612870dcad76530a15822bb83f7556c7",
+      "name": "Work with Item Lots",
+      "order": 4,
+      "folderId": "64ee95b193724c6a85e58fe7817e5d9f",
+      "allow": {
+        "everyone": true,
+        "teams": [],
+        "users": []
+      },
+      "icon": "container",
+      "description": "",
+      "keywords": [
+        "item",
+        "items",
+        "lot",
+        "lots"
+      ],
+      "openOnce": true,
+      "kind": "genie",
+      "connection": "44e3d948-61a6-4782-84d4-c94586b5757d",
+      "program": "PLWRKLOTR",
+      "library": "PERPDEMO"
+    },
+    {
+      "id": "ae56b1276fe2ee5917420aff9c4112ee",
+      "name": "Work with Warehouse Layout",
+      "order": 5,
+      "folderId": "64ee95b193724c6a85e58fe7817e5d9f",
+      "allow": {
+        "everyone": true,
+        "teams": [],
+        "users": []
+      },
+      "icon": "landmark",
+      "description": "",
+      "keywords": [
+        "warehouse",
+        "layout",
+        "3d"
+      ],
+      "openOnce": true,
+      "kind": "genie",
+      "connection": "44e3d948-61a6-4782-84d4-c94586b5757d",
+      "program": "PLWLMR",
+      "library": "PERPDEMO"
+    },
+    {
+      "id": "fcb07208ed0becea9e3947908673561b",
+      "name": "Work with Vendors",
+      "order": 0,
+      "folderId": "c3ed20520ff8909d0decee6c84433c35",
+      "allow": {
+        "everyone": true,
+        "teams": [],
+        "users": []
+      },
+      "icon": "receipt",
+      "description": "",
+      "keywords": [
+        "vendor",
+        "vendors"
+      ],
+      "openOnce": true,
+      "kind": "genie",
+      "connection": "44e3d948-61a6-4782-84d4-c94586b5757d",
+      "program": "PLWRKVNDR",
+      "library": "PERPDEMO"
+    },
+    {
+      "id": "c6a90b5f8e26800d8e9cb171718b3fdc",
+      "name": "Work with Item-Vendor Profiles",
+      "order": 1,
+      "folderId": "c3ed20520ff8909d0decee6c84433c35",
+      "allow": {
+        "everyone": true,
+        "teams": [],
+        "users": []
+      },
+      "icon": "package",
+      "description": "",
+      "keywords": [
+        "item",
+        "vendor",
+        "profile"
+      ],
+      "openOnce": true,
+      "kind": "genie",
+      "connection": "44e3d948-61a6-4782-84d4-c94586b5757d",
+      "program": "PLWRKIVNR",
+      "library": "PERPDEMO"
+    },
+    {
+      "id": "0e175c35eb263aa28121bd0e4a324db2",
+      "name": "Work with Item-Vendor Prices",
+      "order": 2,
+      "folderId": "c3ed20520ff8909d0decee6c84433c35",
+      "allow": {
+        "everyone": true,
+        "teams": [],
+        "users": []
+      },
+      "icon": "dollar-sign",
+      "description": "",
+      "keywords": [
+        "item",
+        "vendor",
+        "price"
+      ],
+      "openOnce": true,
+      "kind": "genie",
+      "connection": "44e3d948-61a6-4782-84d4-c94586b5757d",
+      "program": "PLWRKIVPR",
+      "library": "PERPDEMO"
+    },
+    {
+      "id": "24f8b0d2153ed2b9515eb98557a20ad2",
+      "name": "Enter/Submit Requisitions",
+      "order": 0,
+      "folderId": "0473ebcb101b51c98e990196274ad4c7",
+      "allow": {
+        "everyone": true,
+        "teams": [],
+        "users": []
+      },
+      "icon": "list-todo",
+      "description": "",
+      "keywords": [
+        "requisition"
+      ],
+      "openOnce": true,
+      "kind": "genie",
+      "connection": "44e3d948-61a6-4782-84d4-c94586b5757d",
+      "program": "PLREQENTR",
+      "library": "PERPDEMO"
+    },
+    {
+      "id": "f3a1307807c1c8128d2f6f50bb0bdee3",
+      "name": "Approve/Reject Requisitions",
+      "order": 1,
+      "folderId": "0473ebcb101b51c98e990196274ad4c7",
+      "allow": {
+        "everyone": true,
+        "teams": [],
+        "users": []
+      },
+      "icon": "square-check-big",
+      "description": "",
+      "keywords": [],
+      "openOnce": true,
+      "kind": "genie",
+      "connection": "44e3d948-61a6-4782-84d4-c94586b5757d",
+      "program": "PLREQAPRR",
+      "library": "PERPDEMO"
+    },
+    {
+      "id": "f0ef90747f98618d1f65d6cf794abc3d",
+      "name": "Manual PO Entry",
+      "order": 0,
+      "folderId": "03af9aed1ef3f30e0f1a899bcfd57584",
+      "allow": {
+        "everyone": true,
+        "teams": [],
+        "users": []
+      },
+      "icon": "clipboard-list",
+      "description": "",
+      "keywords": [
+        "PO",
+        "purchase order",
+        "order"
+      ],
+      "openOnce": true,
+      "kind": "genie",
+      "connection": "44e3d948-61a6-4782-84d4-c94586b5757d",
+      "program": "PLPOENTR",
+      "library": "PERPDEMO"
+    },
+    {
+      "id": "32143c97ccf5eb3005899336aed7b3ea",
+      "name": "Create POs from Requisitions",
+      "order": 1,
+      "folderId": "03af9aed1ef3f30e0f1a899bcfd57584",
+      "allow": {
+        "everyone": true,
+        "teams": [],
+        "users": []
+      },
+      "icon": "receipt",
+      "description": "",
+      "keywords": [
+        "PO",
+        "purchase order",
+        "requisition"
+      ],
+      "openOnce": true,
+      "kind": "genie",
+      "connection": "44e3d948-61a6-4782-84d4-c94586b5757d",
+      "program": "PLPOREQR",
+      "library": "PERPDEMO"
+    },
+    {
+      "id": "623f0aeb02804ad1ca0bd56516ebaadb",
+      "name": "PO Schedule Maintenance",
+      "order": 2,
+      "folderId": "03af9aed1ef3f30e0f1a899bcfd57584",
+      "allow": {
+        "everyone": true,
+        "teams": [],
+        "users": []
+      },
+      "icon": "grid-2x2",
+      "description": "",
+      "keywords": [
+        "PO",
+        "schedule",
+        "maintenance"
+      ],
+      "openOnce": true,
+      "kind": "genie",
+      "connection": "44e3d948-61a6-4782-84d4-c94586b5757d",
+      "program": "PLPOSCHR",
+      "library": "PERPDEMO"
+    },
+    {
+      "id": "c12d6299ea636748234a12f7be7cbc67",
+      "name": "Browse POs",
+      "order": 3,
+      "folderId": "03af9aed1ef3f30e0f1a899bcfd57584",
+      "allow": {
+        "everyone": true,
+        "teams": [],
+        "users": []
+      },
+      "icon": "eye",
+      "description": "",
+      "keywords": [],
+      "openOnce": true,
+      "kind": "genie",
+      "connection": "44e3d948-61a6-4782-84d4-c94586b5757d",
+      "program": "PLPOBRWR",
+      "library": "PERPDEMO"
+    },
+    {
+      "id": "be35a5841bcaaf44920bf9591fccafe6",
+      "name": "Receive PO",
+      "order": 0,
+      "folderId": "791e50ef025dfd9d26f39687f57fdf01",
+      "allow": {
+        "everyone": true,
+        "teams": [],
+        "users": []
+      },
+      "icon": "download",
+      "description": "",
+      "keywords": [],
+      "openOnce": true,
+      "kind": "genie",
+      "connection": "44e3d948-61a6-4782-84d4-c94586b5757d",
+      "program": "PLRCVENTR",
+      "library": "PERPDEMO"
+    },
+    {
+      "id": "c60178e05fabac5458266933b51e14c6",
+      "name": "Reconciliation Log",
+      "order": 1,
+      "folderId": "791e50ef025dfd9d26f39687f57fdf01",
+      "allow": {
+        "everyone": true,
+        "teams": [],
+        "users": []
+      },
+      "icon": "notebook",
+      "description": "",
+      "keywords": [],
+      "openOnce": true,
+      "kind": "genie",
+      "connection": "44e3d948-61a6-4782-84d4-c94586b5757d",
+      "program": "PLRCNBRWR",
       "library": "PERPDEMO"
     }
   ]
