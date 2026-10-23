@@ -92,6 +92,11 @@
         "name": "Genie (Hybrid Skin)",
         "path": "/profoundui/auth/genie?skin=hybrid",
         "description": "Genie w/Hybrid Skin"
+      },
+      {
+        "name": "Genie (PLModern)",
+        "path": "/profoundui/auth/genie?skin=PLModern",
+        "description": "Genie w/PL Modern"
       }
     ],
     "enabled": true,
@@ -125,10 +130,10 @@
   "tasks": {
     "defaultShared": true
   },
-  "updatedAt": "2026-10-12T17:23:50.495Z",
-  "updatedBy": "alex",
-  "updatedByName": "Alex Roytman",
-  "updatedById": "user_1767330741764_x72j25doe",
+  "updatedAt": "2026-10-23T12:31:33.071Z",
+  "updatedBy": "rbetancourt",
+  "updatedByName": "Roger Betancourt",
+  "updatedById": "user_1767620468211_32t18oh94",
   "portal_access": true,
   "portal_report_sharing": true,
   "portal_authoring": {
@@ -136,5 +141,7 @@
     "agent": "claude",
     "model": "claude-sonnet-5-5",
     "level": "medium"
-  }
+  },
+  "portal_scheduled_questions": false,
+  "portal_scheduled_questions_hourly": false
 }

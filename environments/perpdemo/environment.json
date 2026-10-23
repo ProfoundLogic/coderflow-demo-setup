@@ -72,27 +72,32 @@
       "type": "ibmi",
       "description": "IBM i Development Server",
       "available_for": [
-        "tasks"
+        "tasks",
+        "automation"
       ],
       "config": {
         "host": "idev.profoundlogic.com",
-        "user": "aidemo",
+        "user": "AIDEMO",
         "preflight_required": true,
         "features": [
           "sql",
           "build",
           "interactive",
+          "portal-applications",
           "ssh",
           "sync",
           "ejs-display-files"
         ],
         "sync_credentials": "prompt",
-        "pui_base_url": "https://idev.profoundlogic.com:8103",
-        "pui_htdocs_path": "/home/DRUSSO/puidist/htdocs",
+        "pui_base_url": "http://idev.profoundlogic.com:8098",
+        "pui_render_path": "/profoundui/genie",
+        "pui_launch_path": "/profoundui/auth/genie",
+        "pui_htdocs_path": "/www/puicfdemo/htdocs",
         "build_repo": "ibmi-agentic",
         "build_library_prefix": "AITSK"
       },
-      "id": "44e3d948-61a6-4782-84d4-c94586b5757d"
+      "id": "44e3d948-61a6-4782-84d4-c94586b5757d",
+      "personal_identity": "16f3959a-05a4-4083-9fc0-563a5c4243bc"
     }
   ],
   "application_server": {
@@ -133,7 +138,7 @@
   "tasks": {
     "defaultShared": true
   },
-  "updatedAt": "2026-10-14T20:18:03.387Z",
+  "updatedAt": "2026-10-23T13:59:09.801Z",
   "updatedBy": "bmay",
   "updatedByName": "Brian May",
   "updatedById": "user_1767620279635_lw6uhpnxl",
