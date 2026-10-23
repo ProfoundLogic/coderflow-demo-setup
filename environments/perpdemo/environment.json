@@ -90,8 +90,8 @@
         ],
         "sync_credentials": "prompt",
         "pui_base_url": "http://idev.profoundlogic.com:8098",
-        "pui_render_path": "/profoundui/genie?skin=plmodern",
-        "pui_launch_path": "/profoundui/auth/genie?skin=plmodern",
+        "pui_render_path": "/profoundui/genie",
+        "pui_launch_path": "/profoundui/auth/genie",
         "pui_htdocs_path": "/www/puicfdemo/htdocs",
         "build_repo": "ibmi-agentic",
         "build_library_prefix": "AITSK"
@@ -138,7 +138,7 @@
   "tasks": {
     "defaultShared": true
   },
-  "updatedAt": "2026-10-23T14:24:27.212Z",
+  "updatedAt": "2026-10-23T15:32:01.688Z",
   "updatedBy": "bmay",
   "updatedByName": "Brian May",
   "updatedById": "user_1767620279635_lw6uhpnxl",

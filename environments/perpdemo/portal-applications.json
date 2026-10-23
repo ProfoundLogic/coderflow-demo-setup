@@ -1,5 +1,78 @@
 {
-  "folders": [],
+  "folders": [
+    {
+      "id": "5f77e9b226965baba36f092a653be338",
+      "name": "System Maintenance",
+      "order": 1,
+      "parentId": null,
+      "allow": {
+        "everyone": true,
+        "teams": [],
+        "users": []
+      },
+      "icon": "folder"
+    },
+    {
+      "id": "64ee95b193724c6a85e58fe7817e5d9f",
+      "name": "Inventory Master",
+      "order": 2,
+      "parentId": null,
+      "allow": {
+        "everyone": true,
+        "teams": [],
+        "users": []
+      },
+      "icon": "folder"
+    },
+    {
+      "id": "c3ed20520ff8909d0decee6c84433c35",
+      "name": "Vendors & Pricing",
+      "order": 3,
+      "parentId": null,
+      "allow": {
+        "everyone": true,
+        "teams": [],
+        "users": []
+      },
+      "icon": "folder"
+    },
+    {
+      "id": "0473ebcb101b51c98e990196274ad4c7",
+      "name": "Requisitioning",
+      "order": 4,
+      "parentId": null,
+      "allow": {
+        "everyone": true,
+        "teams": [],
+        "users": []
+      },
+      "icon": "folder"
+    },
+    {
+      "id": "03af9aed1ef3f30e0f1a899bcfd57584",
+      "name": "Purchasing",
+      "order": 5,
+      "parentId": null,
+      "allow": {
+        "everyone": true,
+        "teams": [],
+        "users": []
+      },
+      "icon": "folder"
+    },
+    {
+      "id": "791e50ef025dfd9d26f39687f57fdf01",
+      "name": "Receiving",
+      "order": 6,
+      "parentId": null,
+      "allow": {
+        "everyone": true,
+        "teams": [],
+        "users": []
+      },
+      "icon": "folder"
+    }
+  ],
   "items": [
     {
       "id": "9dbf9a8bdfafc5ba68277ae7d7f7069b",
@@ -18,6 +91,97 @@
       "kind": "genie",
       "connection": "44e3d948-61a6-4782-84d4-c94586b5757d",
       "program": "PLPOREQR",
+      "library": "PERPDEMO"
+    },
+    {
+      "id": "b9f5795719781c52c82601e6caaacc1d",
+      "name": "Work with System Codes",
+      "order": 0,
+      "folderId": "5f77e9b226965baba36f092a653be338",
+      "allow": {
+        "everyone": true,
+        "teams": [],
+        "users": []
+      },
+      "icon": "cpu",
+      "description": "",
+      "keywords": [
+        "System Codes",
+        "Codes"
+      ],
+      "openOnce": true,
+      "kind": "genie",
+      "connection": "44e3d948-61a6-4782-84d4-c94586b5757d",
+      "program": "PLWRKCMR",
+      "library": "PERPDEMO"
+    },
+    {
+      "id": "e44b251766f71891e0fa006ea8d26cd0",
+      "name": "Work with PERP Users",
+      "order": 1,
+      "folderId": "5f77e9b226965baba36f092a653be338",
+      "allow": {
+        "everyone": true,
+        "teams": [],
+        "users": []
+      },
+      "icon": "users",
+      "description": "",
+      "keywords": [
+        "user"
+      ],
+      "openOnce": true,
+      "kind": "genie",
+      "connection": "44e3d948-61a6-4782-84d4-c94586b5757d",
+      "program": "PLWRKUSRR",
+      "library": "PERPDEMO"
+    },
+    {
+      "id": "1618f7b7efe9785c70cc200ea40c059f",
+      "name": "Work with Units of Measure",
+      "order": 0,
+      "folderId": "64ee95b193724c6a85e58fe7817e5d9f",
+      "allow": {
+        "everyone": true,
+        "teams": [],
+        "users": []
+      },
+      "icon": "wrench",
+      "description": "",
+      "keywords": [
+        "UOM",
+        "unit",
+        "units",
+        "measure"
+      ],
+      "openOnce": true,
+      "kind": "genie",
+      "connection": "44e3d948-61a6-4782-84d4-c94586b5757d",
+      "program": "PLWRKUOMR",
+      "library": "PERPDEMO"
+    },
+    {
+      "id": "ec5e1e7b4df35e94f271b15a0a925653",
+      "name": "Work with Item UOM Conversions",
+      "order": 1,
+      "folderId": "64ee95b193724c6a85e58fe7817e5d9f",
+      "allow": {
+        "everyone": true,
+        "teams": [],
+        "users": []
+      },
+      "icon": "wrench",
+      "description": "",
+      "keywords": [
+        "Item",
+        "UOM",
+        "unit",
+        "units"
+      ],
+      "openOnce": true,
+      "kind": "genie",
+      "connection": "44e3d948-61a6-4782-84d4-c94586b5757d",
+      "program": "PLWRKCNVR",
       "library": "PERPDEMO"
     }
   ]
