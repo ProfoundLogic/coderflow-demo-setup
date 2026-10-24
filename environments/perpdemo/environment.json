@@ -138,7 +138,7 @@
   "tasks": {
     "defaultShared": true
   },
-  "updatedAt": "2026-10-23T22:37:43.577Z",
+  "updatedAt": "2026-10-24T04:10:12.181Z",
   "updatedBy": "bmay",
   "updatedByName": "Brian May",
   "updatedById": "user_1767620279635_lw6uhpnxl",
@@ -162,5 +162,5 @@
   },
   "portal_scheduled_questions": false,
   "portal_scheduled_questions_hourly": false,
-  "portal_genie_skin": "PLModern"
+  "portal_genie_skin": "plmodern"
 }
