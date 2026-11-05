@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "lists": [
+    {
+      "id": "perpdemo",
+      "label": "PERPDEMO",
+      "libraries": [
+        "PERPDEMO"
+      ],
+      "subjects": [
+        "*"
+      ]
+    }
+  ]
+}

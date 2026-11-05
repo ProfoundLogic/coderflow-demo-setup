@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "default": "deny",
+  "rules": [
+    {
+      "id": "allow-perpdemo",
+      "effect": "allow",
+      "subjects": [
+        "*"
+      ],
+      "objects": [
+        "PERPDEMO.*"
+      ]
+    }
+  ]
+}
