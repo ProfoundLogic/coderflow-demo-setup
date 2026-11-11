@@ -9,8 +9,7 @@
         "*"
       ],
       "objects": [
-        "PERPDEMO.*",
-        "PRFDEMOLIB.*"
+        "PERPDEMO.*"
       ]
     }
   ]

@@ -5,8 +5,7 @@
       "id": "perpdemo",
       "label": "PERPDEMO",
       "libraries": [
-        "PERPDEMO",
-        "PRFDEMOLIB"
+        "PERPDEMO"
       ],
       "subjects": [
         "*"
